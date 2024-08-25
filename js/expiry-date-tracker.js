@@ -5,7 +5,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const takePhotoBtn = document.getElementById('takePhotoBtn');
     const barcodeImg = document.getElementById('barcodeImg');
     const fileInput = document.getElementById('fileInput');
-    const alertElement = document.getElementById('alerts');
     const uploadBarcodeBtn = document.getElementById('uploadBarcode');
     const scanBarcodeBtn = document.getElementById('scanBarcode');
     const uploadReceiptBtn = document.getElementById('uploadReceipt');
@@ -16,6 +15,10 @@ document.addEventListener("DOMContentLoaded", function () {
     const close = document.getElementsByClassName("close")[0];
     const resultElement = document.getElementById('result');
     const productElement = document.getElementById('product');
+
+    const criticalFood = document.getElementById('criticalFood');
+    const foodList = document.getElementById('foodList');
+    const identifiedFood = document.getElementById('identifiedFood');
 
     let barcodeDetector;
     let mediaStream = null;
@@ -32,13 +35,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     popupBtn.onclick = function () {
         popup.style.display = "flex";
-        options.style.display = 'block';
-        canvas.style.display = 'none';
-        video.style.display = 'none';
-        takePhotoBtn.style.display = 'none';
-        fileInput.style.display = 'none';
-        resultElement.innerHTML = '';
-        productElement.innerHTML = '';
+        reset()
     }
 
     close.onclick = function () {
@@ -51,32 +48,43 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
+    function reset() {
+        options.style.display = 'block';
+        canvas.style.display = 'none';
+        video.style.display = 'none';
+        takePhotoBtn.style.display = 'none';
+        fileInput.style.display = 'none';
+        resultElement.innerHTML = '';
+        productElement.innerHTML = '';
+    }
+
     // Barcode
     uploadBarcodeBtn.addEventListener('click', function () {
         console.log("Upload Barcode");
         options.style.display = 'none';
         fileInput.style.display = 'block';
-    })
+        fileInput.focus();
+    });
 
     scanBarcodeBtn.addEventListener('click', function () {
         console.log("Scan Barcode");
         takePhotoBtn.style.display = 'block';
         startCamera();
         options.style.display = 'none';
-    })
+    });
 
     // Receipt
     uploadReceiptBtn.addEventListener('click', function () {
         console.log("Upload Receipt");
         options.style.display = 'none';
-    })
+    });
 
     scanReceiptBtn.addEventListener('click', function () {
         console.log("Scan Receipt");
         takePhotoBtn.style.display = 'block';
         startCamera();
         options.style.display = 'none';
-    })
+    });
 
     // Take Photo
     takePhotoBtn.addEventListener('click', function () {
@@ -146,7 +154,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     if (barcodes.length > 0) {
                         const barcode = barcodes[0].rawValue;
                         console.log("Detected Barcode: ", barcode);
-                        resultElement.textContent = `\nDetected Barcode: ${barcode}`;
+                        resultElement.textContent = `Loading...`;
                         fetchProductInfo(barcode);
                     } else {
                         console.log("No barcodes detected.");
@@ -183,17 +191,19 @@ document.addEventListener("DOMContentLoaded", function () {
                     productElement.innerHTML += `Brand: ${brandName}<br>`;
                     productElement.innerHTML += `Expiration Date: ${expirationDate}<br>`;
 
-                    // Store the product information in local storage
+                    const uniqueKey = generateUniqueKey();
+
                     const productInfo = {
                         productName: productName,
                         brandName: brandName,
                         expirationDate: expirationDate,
                     };
 
-                    localStorage.setItem(barcode, JSON.stringify(productInfo));
-                    console.log(`Stored in local storage: ${barcode}`, productInfo);
+                    localStorage.setItem(uniqueKey, JSON.stringify(productInfo));
+                    console.log(`Stored in local storage: ${uniqueKey}`, productInfo);
+                    popup.style.display = "none";
                     displayIdentifiedFoodItem(productInfo);
-                    // listAllStoredProducts();
+                    listAllStoredProducts();
                 } else {
                     productElement.innerHTML = "No product information found.";
                 }
@@ -204,42 +214,72 @@ document.addEventListener("DOMContentLoaded", function () {
             });
     }
 
-    // Function to display the identified food item
+    // Function to generate a unique key
+    function generateUniqueKey() {
+        const timestamp = Date.now().toString();
+        const randomString = Math.random().toString(36).substring(2, 10);
+        return `${timestamp}-${randomString}`;
+    }
+
     function displayIdentifiedFoodItem(productInfo) {
         if (productInfo) {
-            document.querySelector(".identified-box img").src = `${productInfo.productName.toLowerCase()}.jpg`;
-            document.querySelector(".identified-box img").alt = productInfo.productName;
-
-            document.querySelector(".food-item h2").textContent = `The following are identified based on the uploaded images`;
-            document.querySelector(".food-item p.text").textContent = `Keep ${productInfo.productName.toLowerCase()} in the refrigerator for 3 to 7 days.`;
-            document.querySelector(".shelf-label").textContent = `Shelf life: ${productInfo.expirationDate}`;
+            identifiedFood.innerHTML = `
+            <div class="p-5 flex flex-col items-center">
+                <h2 class="text text-sm text-center mb-4">
+                  The following are identified based on the uploaded images
+                </h2>
+                <div class="identified-box flex items-center justify-center mb-4">
+                  <img src="${productInfo.productName.toLowerCase()}.jpg" alt="${productInfo.productName}" class="w-16 h-16" />
+                </div>
+                <p class="text-sm text-center text mb-4">
+                  Keep ${productInfo.productName.toLowerCase()} in the refrigerator for 3 to 7 days.
+                </p>
+                <p class="shelf-label sub-text text-sm text-center">
+                  Shelf life: ${productInfo.expirationDate}
+                </p>
+            </div>
+        `;
         } else {
-            console.log("No food item is being identified.");
+            identifiedFood.innerHTML = `
+            <div class="p-5 flex flex-col items-center">
+                <p class="text-sm text-center text">
+                  No item is being identified.
+                </p>
+            </div>
+        `;
         }
     }
 
-    // TODO: Change to listing products in List of Food Items
     function listAllStoredProducts() {
         const products = [];
+
         for (let i = 0; i < localStorage.length; i++) {
-            const barcode = localStorage.key(i);
-            const productInfo = JSON.parse(localStorage.getItem(barcode));
-            products.push({ barcode, ...productInfo });
+            const key = localStorage.key(i);
+            const productInfo = JSON.parse(localStorage.getItem(key));
+            products.push({ key, ...productInfo });
         }
 
-        const productElement = document.getElementById('product');
+        foodList.innerHTML = '';
+
         if (products.length > 0) {
-            let productsListHTML = '<h3>Stored Products:</h3>';
             products.forEach(product => {
-                productsListHTML += `Barcode: ${product.barcode}<br>`;
-                productsListHTML += `Product Name: ${product.productName}<br>`;
-                productsListHTML += `Brand: ${product.brandName}<br>`;
-                productsListHTML += `Expiration Date: ${product.expirationDate}<br>`;
-                productsListHTML += `<button onclick="deleteProduct('${product.barcode}')">Delete</button><br><br>`;
+                const card = document.createElement('div');
+                card.className = 'card flex-shrink-0 w-52';
+
+                const cardContent = `
+                <div class="p-5">
+                    <img src="${product.productName.toLowerCase().replace(/\s+/g, '-')}.jpg" alt="${product.productName}" class="my-4 w-full" />
+                    <p class="text">${product.productName}</p>
+                    <p class="sub-text">Shelf life: ${product.expirationDate}</p>
+                    <button class="mt-2 text-xs text-white bg-red-500 px-2 py-1 rounded" onclick="deleteProduct('${product.key}')">Delete</button>
+                </div>
+                `;
+
+                card.innerHTML = cardContent;
+                foodList.appendChild(card);
             });
-            productElement.innerHTML = productsListHTML;
         } else {
-            productElement.innerHTML = "No products stored in local storage.";
+            foodList.innerHTML = '<p class="text-center text-gray-500">No products stored.</p>';
         }
     }
 
@@ -255,7 +295,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 const expirationDate = new Date(product.expirationDate);
                 const daysUntilExpiry = Math.ceil((expirationDate - today) / (1000 * 60 * 60 * 24));
 
-                if (daysUntilExpiry <= 5 && daysUntilExpiry >= 0) { // Alert for items expiring within 5 days
+                if (daysUntilExpiry <= 7 && daysUntilExpiry >= 0) {
                     alerts.push({
                         barcode: product.barcode,
                         productName: product.productName,
@@ -269,30 +309,41 @@ document.addEventListener("DOMContentLoaded", function () {
         displayAlerts(alerts);
     }
 
-    // TODO: change to displaying Critical Foods 
     function displayAlerts(alerts) {
+        criticalFood.innerHTML = '';
+
         if (alerts.length > 0) {
-            let alertsHTML = '<h3>Expiration Alerts:</h3>';
             alerts.forEach(alert => {
-                alertsHTML += `Barcode: ${alert.barcode}<br>`;
-                alertsHTML += `Product Name: ${alert.productName}<br>`;
-                alertsHTML += `Brand: ${alert.brandName}<br>`;
-                alertsHTML += `Expiration Date: ${alert.expirationDate}<br>`;
-                alertsHTML += `Days Until Expiry: ${alert.daysUntilExpiry}<br>`;
-                alertsHTML += `<button onclick="deleteProduct('${alert.barcode}')">Delete</button><br><br>`;
+                const card = document.createElement('div');
+                card.className = 'card flex-shrink-0 w-48';
+
+                const cardContent = `
+                <div class="min-w-[200px] max-w-sm p-6">
+                    <span class="reminder text-xs font-bold">Be about to expire</span>
+                    <img src="${alert.productName.toLowerCase().replace(/\s+/g, '-')}.jpg" alt="${alert.productName}" class="my-4 w-full" />
+                    <p class="text">${alert.productName}</p>
+                    <p class="sub-text">Shelf life: ${alert.expirationDate}</p>
+                    <p class="text-xs text-red-500 font-semibold">Expires in ${alert.daysUntilExpiry} day(s)</p>
+                    <button class="mt-2 text-xs text-white bg-red-500 px-2 py-1 rounded" onclick="deleteProduct('${alert.barcode}')">Delete</button>
+                </div>
+            `;
+
+                card.innerHTML = cardContent;
+                criticalFood.appendChild(card);
             });
-            alertElement.innerHTML = alertsHTML;
         } else {
-            alertElement.innerHTML = "No items are approaching their expiry date.";
+            criticalFood.innerHTML = '<p class="text-center text-gray-500">No critical foods at the moment.</p>';
         }
     }
 
-    window.deleteProduct = function deleteProduct(barcode) {
-        localStorage.removeItem(barcode);
-        // checkExpirations();
-        // listAllStoredProducts();
-    }
+    window.deleteProduct = function (key) {
+        localStorage.removeItem(key);
+        listAllStoredProducts();
+        checkExpirations();
+        displayIdentifiedFoodItem();
+    };
 
-    // listAllStoredProducts();
-    // checkExpirations();
+    listAllStoredProducts();
+    checkExpirations();
+    displayIdentifiedFoodItem();
 });

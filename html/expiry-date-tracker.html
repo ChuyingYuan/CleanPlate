@@ -115,18 +115,51 @@
             <h1 class="page-label text-xl font-bold">Good morning</h1>
           </div>
           <div class="col-span-1 mb-4">
-            <div class="relative w-full sm:w-1/2 lg:w-1/3 mt-4 sm:mt-0">
-              <input
-                type="text"
-                placeholder="Search by food name"
-                class="w-full p-3 pr-12 rounded-full shadow-md focus:outline-none"
-              />
-              <img
-                src="https://img.icons8.com/?size=100&id=132&format=png&color=000000"
-                alt="Search"
-                class="absolute top-1/2 right-6 transform -translate-y-1/2 w-6 h-6"
-              />
-            </div>
+            <form
+              class="flex items-center max-w-sm mx-auto w-full sm:w-1/2 lg:w-1/3 mt-4 sm:mt-0"
+            >
+              <label for="simple-search" class="sr-only">Search</label>
+              <div class="relative w-full">
+                <div
+                  class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none"
+                >
+                  <img
+                    src="https://img.icons8.com/?size=100&id=YNYZM0o5w67u&format=png&color=000000"
+                    alt="grocery-icon"
+                    class="w-5 h-5"
+                    aria-hidden="true"
+                  />
+                </div>
+                <input
+                  type="text"
+                  id="simple-search"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm block w-full ps-10 p-2.5 rounded-full shadow-md focus:outline-none"
+                  placeholder="Search by food name"
+                  required
+                />
+              </div>
+              <button
+                type="submit"
+                class="p-2.5 ms-2 text-sm font-medium text-gray-900 bg-gray-200 rounded-full border border-gray-200 hover:bg-gray-300 focus:ring-4 focus:outline-none focus:ring-gray-300"
+              >
+                <svg
+                  class="w-5 h-5"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+                  />
+                </svg>
+                <span class="sr-only">Search</span>
+              </button>
+            </form>
           </div>
         </div>
       </div>
@@ -137,23 +170,10 @@
             <div>
               <h2 class="text-xl font-bold mb-2">Critical Food</h2>
               <!-- Critical Food (Expiring Soon) -->
-              <div class="flex space-x-4 overflow-x-auto">
-                <!-- Sample Food Card -->
-                <div class="card flex-shrink-0 w-48">
-                  <div class="min-w-[200px] max-w-sm p-6">
-                    <span class="reminder text-xs font-bold"
-                      >Be about to expire</span
-                    >
-                    <img
-                      src="green-salad.jpg"
-                      alt="Green Salad"
-                      class="my-4 w-full"
-                    />
-                    <p class="text">Green salad</p>
-                    <p class="sub-text">Shelf life: 2024.8.26</p>
-                  </div>
-                </div>
-              </div>
+              <div
+                class="flex space-x-4 overflow-x-auto"
+                id="criticalFood"
+              ></div>
               <h2 class="text-xl font-bold mb-2 pt-6">My Food List</h2>
               <!-- List of Categories -->
               <div class="flex space-x-4 overflow-x-auto">
@@ -189,19 +209,14 @@
                 </div>
               </div>
               <!-- List of Food -->
-              <div class="flex space-x-4 overflow-x-auto mt-5">
-                <div class="card flex-shrink-0 w-52">
-                  <div class="p-5">
-                    <img src="tomato.jpg" alt="Tomato" class="my-4 w-full" />
-                    <p class="text">Tomato</p>
-                    <p class="sub-text">Shelf life: 2024.8.26</p>
-                  </div>
-                </div>
-              </div>
+              <div
+                class="flex space-x-4 overflow-x-auto mt-5"
+                id="foodList"
+              ></div>
             </div>
           </div>
 
-          <div class="col-span-1 mt-4 flex flex-col items-center">
+          <div class="col-span-1 mt-2 flex flex-col items-center">
             <!-- Scan / Upload Image -->
             <div class="input flex flex-col items-center justify-center mb-6">
               <div class="p-5 flex flex-col items-center">
@@ -278,8 +293,7 @@
                         />
                       </svg>
                       <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                        <span class="font-semibold">Click to upload</span> or
-                        drag and drop
+                        <span class="font-semibold">Click to upload</span>
                       </p>
                       <p class="text-xs text-gray-500 dark:text-gray-400">
                         PNG, JPG
@@ -311,25 +325,9 @@
 
             <!-- Identified Food -->
             <div
-              class="food-item flex flex-col items-center justify-center mb-6"
-            >
-              <div class="p-5 flex flex-col items-center">
-                <h2 class="text text-sm text-center">
-                  The following are identified based on the uploaded images
-                </h2>
-                <div
-                  class="identified-box flex items-center justify-center mb-2"
-                >
-                  <img src="broccoli.jpg" alt="Broccoli" class="w-16 h-16" />
-                </div>
-                <p class="text-sm text-center text">
-                  Keep broccoli in the refrigerator for 3 to 7 days.
-                </p>
-                <p class="shelf-label sub-text text-sm text-center">
-                  Shelf life: 2024.8.26
-                </p>
-              </div>
-            </div>
+              class="food-item flex flex-col items-center justify-center mb-6 min-h-64"
+              id="identifiedFood"
+            ></div>
           </div>
         </div>
       </div>
