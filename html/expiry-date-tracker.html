@@ -3,7 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href='https://fonts.googleapis.com/css?family=Lexend' rel='stylesheet'>
+    <link
+      href="https://fonts.googleapis.com/css?family=Lexend"
+      rel="stylesheet"
+    />
     <link
       href="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.css"
       rel="stylesheet"
@@ -104,8 +107,8 @@
       </div>
     </nav>
 
-    <main class="container mx-auto px-4 sm:px-8"">
-      <!-- Greeting + Search Bar-->
+    <main class="container mx-auto px-4 sm:px-8">
+      <!-- Greeting + Search Bar -->
       <div class="mx-auto mt-10 sm:mt-16 sm:px-8">
         <div class="grid grid-cols-1 md:grid-cols-3">
           <div class="col-span-2">
@@ -133,7 +136,7 @@
           <div class="col-span-2">
             <div>
               <h2 class="text-xl font-bold mb-2">Critical Food</h2>
-              <!-- Critical Food (Expiring Soon)-->
+              <!-- Critical Food (Expiring Soon) -->
               <div class="flex space-x-4 overflow-x-auto">
                 <!-- Sample Food Card -->
                 <div class="card flex-shrink-0 w-48">
@@ -157,7 +160,7 @@
                 <div class="card flex-shrink-0 w-32">
                   <div class="p-5">
                     <img src="vegetable-icon.svg" alt="Vegetable" />
-                    <p class="text"">Vegetable</p>
+                    <p class="text">Vegetable</p>
                     <button class="ingredient">
                       <a href="#">
                         <img
@@ -185,19 +188,15 @@
                   </div>
                 </div>
               </div>
-               <!-- List of Food -->
+              <!-- List of Food -->
               <div class="flex space-x-4 overflow-x-auto mt-5">
                 <div class="card flex-shrink-0 w-52">
                   <div class="p-5">
-                    <img
-                      src="tomato.jpg"
-                      alt="Tomato"
-                      class="my-4 w-full"
-                    />
+                    <img src="tomato.jpg" alt="Tomato" class="my-4 w-full" />
                     <p class="text">Tomato</p>
                     <p class="sub-text">Shelf life: 2024.8.26</p>
                   </div>
-                </div>                
+                </div>
               </div>
             </div>
           </div>
@@ -206,18 +205,14 @@
             <!-- Scan / Upload Image -->
             <div class="input flex flex-col items-center justify-center mb-6">
               <div class="p-5 flex flex-col items-center">
-                <div class="input-box">
-                  <button id="showPopup">
-                    <img
-                      src="https://img.icons8.com/?size=100&id=11741&format=png&color=B7E72F"
-                      class="w-14 h-14"
-                      alt="Scan or Upload"
-                    />
-                  </button>
+                <div id="showPopup" class="input-box hover:bg-gray-200">
+                  <img
+                    src="https://img.icons8.com/?size=100&id=11741&format=png&color=B7E72F"
+                    class="w-14 h-14"
+                    alt="Scan or Upload"
+                  />
                 </div>
-                <p class="sub-text mt-3">
-                  Scan or Upload Image(s)
-                </p>
+                <p class="sub-text mt-3">Scan or Upload Image(s)</p>
               </div>
             </div>
 
@@ -225,14 +220,94 @@
             <div id="popup" class="popup">
               <div class="popup-content">
                 <span class="close">&times;</span>
-                <h2>Select an Option</h2>
-                <button onclick="uploadBarcode()">Upload Barcode</button>
-                <button onclick="scanBarcode()">Scan Barcode</button>
-                <button onclick="uploadReceipt()">Upload Receipt</button>
-                <button onclick="scanReceipt()">Scan Receipt</button>
+                <div id="options" class="mt-2 justify-center items-center">
+                  <button
+                    id="uploadBarcode"
+                    type="button"
+                    class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 mt-2"
+                  >
+                    Upload Barcode
+                  </button>
+                  <button
+                    id="scanBarcode"
+                    type="button"
+                    class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 mt-2"
+                  >
+                    Scan Barcode
+                  </button>
+                  <button
+                    id="uploadReceipt"
+                    type="button"
+                    class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 mt-2"
+                  >
+                    Upload Receipt
+                  </button>
+                  <button
+                    id="scanReceipt"
+                    type="button"
+                    class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 mt-2"
+                  >
+                    Scan Receipt
+                  </button>
+                </div>
+                <div
+                  id="fileInput"
+                  style="display: none"
+                  class="flex items-center justify-center w-full"
+                >
+                  <label
+                    for="barcodeImg"
+                    class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100"
+                  >
+                    <div
+                      class="flex flex-col items-center justify-center pt-5 pb-6"
+                    >
+                      <svg
+                        class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 20 16"
+                      >
+                        <path
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+                        />
+                      </svg>
+                      <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                        <span class="font-semibold">Click to upload</span> or
+                        drag and drop
+                      </p>
+                      <p class="text-xs text-gray-500 dark:text-gray-400">
+                        PNG, JPG
+                      </p>
+                    </div>
+                    <input
+                      id="barcodeImg"
+                      type="file"
+                      class="hidden"
+                      accept="image/*"
+                    />
+                  </label>
+                </div>
+
+                <video id="video"></video>
+                <canvas id="canvas"></canvas>
+                <p id="result"></p>
+                <p id="product"></p>
+                <button
+                  id="takePhotoBtn"
+                  style="display: none"
+                  type="button"
+                  class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 mt-4"
+                >
+                  Take Photo
+                </button>
               </div>
             </div>
-
 
             <!-- Identified Food -->
             <div
@@ -261,6 +336,7 @@
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
+    <script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
     <script src="../js/expiry-date-tracker.js"></script>
   </body>
 </html>
