@@ -15,13 +15,61 @@ document.addEventListener("DOMContentLoaded", function () {
     const close = document.getElementsByClassName("close")[0];
     const resultElement = document.getElementById('result');
     const productElement = document.getElementById('product');
-
     const criticalFood = document.getElementById('criticalFood');
+    const ingredientList = document.getElementById('ingredientList');
     const foodList = document.getElementById('foodList');
     const identifiedFood = document.getElementById('identifiedFood');
 
+    const ingredients = [
+        {
+            name: 'Vegetable',
+            category: 'Vegetables',
+            icon: "https://img.icons8.com/?size=100&id=64432&format=png&color=000000",
+            defaultSelectedIcon: 'https://img.icons8.com/?size=100&id=15816&format=png&color=000000',
+            selectedIcon: 'https://img.icons8.com/?size=100&id=15814&format=png&color=000000'
+        },
+        {
+            name: 'Fruit',
+            category: 'Fruit',
+            icon: "https://img.icons8.com/?size=100&id=18957&format=png&color=000000",
+            defaultSelectedIcon: 'https://img.icons8.com/?size=100&id=15816&format=png&color=000000',
+            selectedIcon: 'https://img.icons8.com/?size=100&id=15814&format=png&color=000000'
+        },
+        {
+            name: 'Meat',
+            category: 'Meat',
+            icon: "https://img.icons8.com/?size=100&id=13306&format=png&color=000000",
+            defaultSelectedIcon: 'https://img.icons8.com/?size=100&id=15816&format=png&color=000000',
+            selectedIcon: 'https://img.icons8.com/?size=100&id=15814&format=png&color=000000'
+        },
+        {
+            name: 'Bread',
+            category: 'Bread',
+            icon: "https://img.icons8.com/?size=100&id=12855&format=png&color=000000",
+            defaultSelectedIcon: 'https://img.icons8.com/?size=100&id=15816&format=png&color=000000',
+            selectedIcon: 'https://img.icons8.com/?size=100&id=15814&format=png&color=000000'
+        },
+        {
+            name: 'Dairy',
+            category: 'Dairy',
+            icon: "https://img.icons8.com/?size=100&id=12874&format=png&color=000000",
+            defaultSelectedIcon: 'https://img.icons8.com/?size=100&id=15816&format=png&color=000000',
+            selectedIcon: 'https://img.icons8.com/?size=100&id=15814&format=png&color=000000'
+        },
+        {
+            name: 'Others',
+            category: 'Others',
+            icon: "https://img.icons8.com/?size=100&id=32236&format=png&color=000000",
+            defaultSelectedIcon: 'https://img.icons8.com/?size=100&id=15816&format=png&color=000000',
+            selectedIcon: 'https://img.icons8.com/?size=100&id=15814&format=png&color=000000'
+        }
+    ];
+
     let barcodeDetector;
     let mediaStream = null;
+    let selectedIngredient = null;
+
+    resetAll();
 
     // Check BarcodeDetector support
     if (!("BarcodeDetector" in globalThis)) {
@@ -33,9 +81,10 @@ document.addEventListener("DOMContentLoaded", function () {
         formats: ["code_39", "codabar", "ean_13"],
     });
 
+    // Popup window
     popupBtn.onclick = function () {
         popup.style.display = "flex";
-        reset()
+        reset();
     }
 
     close.onclick = function () {
@@ -48,6 +97,17 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
+    // Reset all UI elements
+    function resetAll() {
+        displayIdentifiedFoodItem();
+        selectedIngredient = null;
+        renderIngredientList();
+        listAllStoredProducts();
+        checkExpirations();
+        reset();
+    }
+
+    // Reset elements in popup window
     function reset() {
         options.style.display = 'block';
         canvas.style.display = 'none';
@@ -64,6 +124,7 @@ document.addEventListener("DOMContentLoaded", function () {
         options.style.display = 'none';
         fileInput.style.display = 'block';
         fileInput.focus();
+        resetSearchResults();
     });
 
     scanBarcodeBtn.addEventListener('click', function () {
@@ -71,12 +132,14 @@ document.addEventListener("DOMContentLoaded", function () {
         takePhotoBtn.style.display = 'block';
         startCamera();
         options.style.display = 'none';
+        resetSearchResults();
     });
 
     // Receipt
     uploadReceiptBtn.addEventListener('click', function () {
         console.log("Upload Receipt");
         options.style.display = 'none';
+        resetSearchResults();
     });
 
     scanReceiptBtn.addEventListener('click', function () {
@@ -84,6 +147,7 @@ document.addEventListener("DOMContentLoaded", function () {
         takePhotoBtn.style.display = 'block';
         startCamera();
         options.style.display = 'none';
+        resetSearchResults();
     });
 
     // Take Photo
@@ -93,6 +157,7 @@ document.addEventListener("DOMContentLoaded", function () {
         } else {
             resultElement.textContent = "No video stream available.";
         }
+        resetSearchResults();
     });
 
     // Upload Image
@@ -109,6 +174,8 @@ document.addEventListener("DOMContentLoaded", function () {
             };
             img.src = URL.createObjectURL(file);
         }
+        barcodeImg.value = '';
+        resetSearchResults();
     });
 
     // Request camera access
@@ -128,6 +195,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
+    // Function to capture the image and stop the camera
     function captureAndStopCamera() {
         if (video.srcObject) {
             context.drawImage(video, 0, 0, canvas.width, canvas.height);
@@ -138,6 +206,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
+    // Function to stop the camera
     function stopCamera() {
         if (mediaStream) {
             const tracks = mediaStream.getTracks();
@@ -146,6 +215,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
+    // Function to detect barcodes from the image
     function detectBarcodes() {
         if (barcodeDetector) {
             barcodeDetector
@@ -170,11 +240,15 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
+    // Function to fetch product information from Lambda function
     function fetchProductInfo(barcode) {
-        // TODO: Replace this with the lambda function api endpoint
-        const apiUrl = `https://world.openfoodfacts.org/api/v0/product/${barcode}.json`;
-
-        fetch(apiUrl)
+        fetch('https://rvtkdasc90.execute-api.ap-southeast-2.amazonaws.com/prod/barcode-expiration', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ barcode: barcode })
+        })
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
@@ -182,31 +256,39 @@ document.addEventListener("DOMContentLoaded", function () {
                 return response.json();
             })
             .then(data => {
-                if (data.product) {
-                    const productName = data.product.product_name || "Not available";
-                    const brandName = data.product.brands || "Not available";
-                    const expirationDate = data.product.expiration_date || "Not available";
+                const productData = JSON.parse(data.body);
 
-                    productElement.innerHTML = `Product Name: ${productName}<br>`;
-                    productElement.innerHTML += `Brand: ${brandName}<br>`;
-                    productElement.innerHTML += `Expiration Date: ${expirationDate}<br>`;
+                const productName = productData.product_name || "Not available";
+                const brandName = productData.brand || "Not available";
+                const expirationDate = productData.expiration_date || "Not available";
+                const imageUrl = productData.image_url || "Not available";
 
-                    const uniqueKey = generateUniqueKey();
+                // Update the UI with the fetched product information
+                productElement.innerHTML = `Product Name: ${productName}<br>`;
+                productElement.innerHTML += `Brand: ${brandName}<br>`;
+                productElement.innerHTML += `Expiration Date: ${expirationDate}<br>`;
 
-                    const productInfo = {
-                        productName: productName,
-                        brandName: brandName,
-                        expirationDate: expirationDate,
-                    };
+                // Generate a unique key for local storage
+                const uniqueKey = generateUniqueKey();
 
-                    localStorage.setItem(uniqueKey, JSON.stringify(productInfo));
-                    console.log(`Stored in local storage: ${uniqueKey}`, productInfo);
-                    popup.style.display = "none";
-                    displayIdentifiedFoodItem(productInfo);
-                    listAllStoredProducts();
-                } else {
-                    productElement.innerHTML = "No product information found.";
-                }
+                // Prepare the product info object for storage
+                const productInfo = {
+                    productName: productName,
+                    brandName: brandName,
+                    expirationDate: expirationDate,
+                    imageUrl: imageUrl,
+                };
+
+                // Store the product info in local storage
+                localStorage.setItem(uniqueKey, JSON.stringify(productInfo));
+                console.log(`Stored in local storage: ${uniqueKey}`, productInfo);
+
+                // Hide the popup and display the identified food item
+                popup.style.display = "none";
+                displayIdentifiedFoodItem(productInfo);
+
+                // Update the list of all stored products
+                listAllStoredProducts();
             })
             .catch(error => {
                 console.error('Error fetching product information:', error);
@@ -221,7 +303,9 @@ document.addEventListener("DOMContentLoaded", function () {
         return `${timestamp}-${randomString}`;
     }
 
+    // Function to display the identified food item
     function displayIdentifiedFoodItem(productInfo) {
+        resetSearchResults();
         if (productInfo) {
             identifiedFood.innerHTML = `
             <div class="p-5 flex flex-col items-center">
@@ -229,7 +313,7 @@ document.addEventListener("DOMContentLoaded", function () {
                   The following are identified based on the uploaded images
                 </h2>
                 <div class="identified-box flex items-center justify-center mb-4">
-                  <img src="${productInfo.productName.toLowerCase()}.jpg" alt="${productInfo.productName}" class="w-16 h-16" />
+                  <img src="${productInfo.imageUrl}" alt="${productInfo.productName}" class="w-16 h-16 rounded-full" />
                 </div>
                 <p class="text-sm text-center text mb-4">
                   Keep ${productInfo.productName.toLowerCase()} in the refrigerator for 3 to 7 days.
@@ -250,6 +334,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
+    // Function to list all stored products in "My Food List"
     function listAllStoredProducts() {
         const products = [];
 
@@ -259,21 +344,23 @@ document.addEventListener("DOMContentLoaded", function () {
             products.push({ key, ...productInfo });
         }
 
+        products.sort((a, b) => new Date(a.expirationDate) - new Date(b.expirationDate));
+
         foodList.innerHTML = '';
 
         if (products.length > 0) {
             products.forEach(product => {
                 const card = document.createElement('div');
-                card.className = 'card flex-shrink-0 w-52';
+                card.className = 'food-list-card';
 
                 const cardContent = `
                 <div class="p-5">
-                    <img src="${product.productName.toLowerCase().replace(/\s+/g, '-')}.jpg" alt="${product.productName}" class="my-4 w-full" />
-                    <p class="text">${product.productName}</p>
-                    <p class="sub-text">Shelf life: ${product.expirationDate}</p>
-                    <button class="mt-2 text-xs text-white bg-red-500 px-2 py-1 rounded" onclick="deleteProduct('${product.key}')">Delete</button>
+                    <img src="${product.imageUrl}" alt="${product.productName}" class="my-4 w-full rounded-lg" />
+                    <p class="mt-2 text">${product.productName}</p>
+                    <p class="mt-2 sub-text">Shelf life: ${product.expirationDate}</p>
+                    <button class="mt-2 text-xs text-white bg-red-500 px-2 py-1 rounded-full" onclick="deleteProduct('${product.key}')">Delete</button>
                 </div>
-                `;
+            `;
 
                 card.innerHTML = cardContent;
                 foodList.appendChild(card);
@@ -283,6 +370,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
+    // Function to check expirations (expiring within 7 days)
     function checkExpirations() {
         const today = new Date();
         const alerts = [];
@@ -297,7 +385,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 if (daysUntilExpiry <= 7 && daysUntilExpiry >= 0) {
                     alerts.push({
-                        barcode: product.barcode,
+                        key: key,
                         productName: product.productName,
                         brandName: product.brandName,
                         expirationDate: product.expirationDate,
@@ -309,22 +397,25 @@ document.addEventListener("DOMContentLoaded", function () {
         displayAlerts(alerts);
     }
 
+    // Function to display food items that are about to expire in "Critical Food"
     function displayAlerts(alerts) {
+        alerts.sort((a, b) => new Date(a.expirationDate) - new Date(b.expirationDate));
+
         criticalFood.innerHTML = '';
 
         if (alerts.length > 0) {
             alerts.forEach(alert => {
                 const card = document.createElement('div');
-                card.className = 'card flex-shrink-0 w-48';
+                card.className = 'card';
 
                 const cardContent = `
-                <div class="min-w-[200px] max-w-sm p-6">
+                <div class="p-5">
                     <span class="reminder text-xs font-bold">Be about to expire</span>
                     <img src="${alert.productName.toLowerCase().replace(/\s+/g, '-')}.jpg" alt="${alert.productName}" class="my-4 w-full" />
-                    <p class="text">${alert.productName}</p>
-                    <p class="sub-text">Shelf life: ${alert.expirationDate}</p>
-                    <p class="text-xs text-red-500 font-semibold">Expires in ${alert.daysUntilExpiry} day(s)</p>
-                    <button class="mt-2 text-xs text-white bg-red-500 px-2 py-1 rounded" onclick="deleteProduct('${alert.barcode}')">Delete</button>
+                    <p class="mt-2 text">${alert.productName}</p>
+                    <p class="mt-2 sub-text">Shelf life: ${alert.expirationDate}</p>
+                    <p class="mt-2 text-xs text-red-500 font-semibold">Expires in ${alert.daysUntilExpiry} day(s)</p>
+                    <button class="mt-2 text-xs text-white bg-red-500 px-2 py-1 rounded-full" onclick="deleteProduct('${alert.key}')">Delete</button>
                 </div>
             `;
 
@@ -336,14 +427,166 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
+    // Function to delete a product from local storage
     window.deleteProduct = function (key) {
         localStorage.removeItem(key);
-        listAllStoredProducts();
-        checkExpirations();
-        displayIdentifiedFoodItem();
+        resetSearchResults();
+        resetAll();
     };
 
-    listAllStoredProducts();
-    checkExpirations();
-    displayIdentifiedFoodItem();
+    // Ingredients Filtering
+    function renderIngredientList() {
+        ingredientList.innerHTML = '';
+
+        ingredients.forEach(ingredient => {
+            const ingredientCard = document.createElement('div');
+            ingredientCard.className = 'ingredient-card';
+            ingredientCard.dataset.category = ingredient.category;
+
+            const cardContent = `
+            <div class="p-5">
+                <img src="${ingredient.icon}" alt="${ingredient.name}" class="ingredient-icon" />
+                <p class="text-sm">${ingredient.name}</p>
+                <button class="ingredient-btn ingredient">
+                    <a href="#">
+                        <img src="${ingredient.defaultSelectedIcon}" class="w-6 h-6" alt="Select" />
+                    </a>
+                </button>
+            </div>
+        `;
+
+            ingredientCard.innerHTML = cardContent;
+            ingredientList.appendChild(ingredientCard);
+        });
+
+        addIngredientSelectionListener();
+        filterAndDisplayProducts(selectedIngredient);
+    }
+
+    function filterAndDisplayProducts(category) {
+        const products = [];
+
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            const productInfo = JSON.parse(localStorage.getItem(key));
+            if (productInfo.ingredientList === category || category === null) {
+                products.push({ key, ...productInfo });
+            }
+        }
+
+        products.sort((a, b) => new Date(a.expirationDate) - new Date(b.expirationDate));
+
+        foodList.innerHTML = '';
+
+        if (products.length > 0) {
+            products.forEach(product => {
+                const card = document.createElement('div');
+                card.className = 'food-list-card';
+
+                const cardContent = `
+            <div class="p-5">
+                <img src="${product.imageUrl}" alt="${product.productName}" class="my-4 w-full rounded-lg" />
+                <p class="mt-2 text">${product.productName}</p>
+                <p class="mt-2 sub-text">Shelf life: ${product.expirationDate}</p>
+                <button class="mt-2 text-xs text-white bg-red-500 px-2 py-1 rounded-full" onclick="deleteProduct('${product.key}')">Delete</button>
+            </div>
+        `;
+
+                card.innerHTML = cardContent;
+                foodList.appendChild(card);
+            });
+        } else {
+            foodList.innerHTML = '<p class="text-center text-gray-500">No products found.</p>';
+        }
+    }
+
+    function addIngredientSelectionListener() {
+        const ingredientButtons = document.querySelectorAll('.ingredient-btn');
+
+        ingredientButtons.forEach(button => {
+            button.addEventListener('click', function (event) {
+                event.preventDefault();
+
+                const img = this.querySelector('img');
+                const ingredientCard = this.closest('.ingredient-card');
+                const iconSrc = img.src;
+                const ingredient = ingredients.find(i => i.category === ingredientCard.dataset.category);
+
+                document.querySelectorAll('.ingredient-card').forEach(card => {
+                    card.classList.remove('selected');
+                    card.querySelector('.ingredient-btn img').src = ingredient.defaultSelectedIcon;
+                });
+
+                if (iconSrc.includes('15816')) {
+                    img.src = ingredient.selectedIcon;
+                    ingredientCard.classList.add('selected');
+                    selectedIngredient = ingredientCard.dataset.category;
+                } else {
+                    img.src = ingredient.defaultSelectedIcon;
+                    ingredientCard.classList.remove('selected');
+                    selectedIngredient = null;
+                }
+
+                filterAndDisplayProducts(selectedIngredient);
+            });
+        });
+    }
+
+    // Handling Search Function
+    document.getElementById("search-form").addEventListener("submit", function (event) {
+        event.preventDefault();
+        performSearch();
+    });
+
+    function performSearch() {
+        const searchQuery = document.getElementById("simple-search").value.toLowerCase().trim();
+        const resultsContainer = document.getElementById("search-results");
+        resultsContainer.innerHTML = "";
+
+        if (!searchQuery) {
+            const noResultsMessage = document.createElement("p");
+            noResultsMessage.className = "text-center text-gray-500 mb-5";
+            noResultsMessage.textContent = "Please enter a search term.";
+            resultsContainer.appendChild(noResultsMessage);
+            return;
+        }
+
+        let resultsFound = false;
+
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            const product = JSON.parse(localStorage.getItem(key));
+
+            if (product && product.productName && product.productName.toLowerCase().includes(searchQuery)) {
+                resultsFound = true;
+
+                const card = document.createElement("div");
+                card.className = "food-list-card";
+
+                const cardContent = `
+                <div class="p-5">
+                    <img src="${product.imageUrl}" alt="${product.productName}" class="my-4 w-full rounded-lg" />
+                    <p class="mt-2 text">${product.productName}</p>
+                    <p class="mt-2 sub-text">Shelf life: ${product.expirationDate}</p>
+                    <button class="mt-2 text-xs text-white bg-red-500 px-2 py-1 rounded-full" onclick="deleteProduct('${key}')">Delete</button>
+                </div>
+                `;
+
+                card.innerHTML = cardContent;
+                resultsContainer.appendChild(card);
+            }
+        }
+
+        if (!resultsFound) {
+            const noResultsMessage = document.createElement("p");
+            noResultsMessage.className = "text-center text-gray-500 mb-5";
+            noResultsMessage.textContent = "No results found";
+            resultsContainer.appendChild(noResultsMessage);
+        }
+    }
+
+    function resetSearchResults() {
+        const resultsContainer = document.getElementById("search-results");
+        resultsContainer.innerHTML = "";
+    }
 });
