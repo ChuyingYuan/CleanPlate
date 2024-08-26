@@ -45,6 +45,28 @@ body {
   line-height: 35px;
 }
 
+/* Dashboards */
+.tab-button {
+  display: inline-block;
+  padding: 1rem;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  text-align: center;
+  font-size: 1rem;
+  background-color: #f9f9f9;
+  transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+}
+
+.tab-button.active {
+  border-color: #38a169;
+  color: #38a169;
+  font-weight: bold;
+}
+
+#dashboard2 {
+  display: none;
+}
+
 /* Card Styles */
 .card,
 .food-list-card,
