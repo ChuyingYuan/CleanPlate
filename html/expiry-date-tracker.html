@@ -118,6 +118,7 @@
           <div class="col-span-1 mb-4">
             <form
               id="search-form"
+              onsubmit="performSearch(); return false;"
               class="flex items-center max-w-sm mx-auto w-full sm:w-1/2 lg:w-1/3 mt-4 sm:mt-0"
             >
               <label for="simple-search" class="sr-only">Search</label>
@@ -186,7 +187,7 @@
             <!-- Scan / Upload Image -->
             <div class="input flex flex-col items-center justify-center mb-6">
               <div class="p-5 flex flex-col items-center">
-                <p class="sub-text mt-3">Scan or Upload Image(s)</p>
+                <p class="sub-text mt-2 mb-2">Scan or Upload Image(s)</p>
                 <button
                   id="uploadBarcodeBtn"
                   type="button"
@@ -250,6 +251,7 @@
                       type="file"
                       class="hidden"
                       accept="image/*"
+                      onchange="handleUploadBarcodeImg(event)"
                     />
                   </label>
                 </div>
