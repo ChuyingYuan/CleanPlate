@@ -3,6 +3,26 @@ body {
   background: #f9f9f9;
   font-family: "Lexend", Arial, Helvetica, sans-serif;
   font-style: normal;
+  min-height: 100vh;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex-grow: 1;
+}
+
+footer {
+  background-color: white;
+  border-top: 1px solid #e5e7eb;
+  box-shadow: 0 -1px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* Navigation Icon */

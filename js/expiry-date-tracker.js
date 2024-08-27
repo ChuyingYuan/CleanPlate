@@ -9,6 +9,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const ingredientList = document.getElementById('ingredientList');
     const foodList = document.getElementById('foodList');
     const identifiedFood = document.getElementById('identifiedFood');
+    const searchResults = document.getElementById('search-results');
+    const greetingElement = document.getElementById("greeting");
+    const currentHour = new Date().getHours();
 
     const ingredients = [
         {
@@ -61,6 +64,27 @@ document.addEventListener("DOMContentLoaded", function () {
 
     resetAll();
 
+    function updateGreeting() {
+        let greeting;
+        if (currentHour < 12) {
+            greeting = `
+            <h1 class="page-label text-xl font-bold">
+                Good Morning <img src="https://img.icons8.com/?size=100&id=648&format=png&color=000000" class="w-6 h-6 ml-2 inline-block"/>
+            </h1>`;
+        } else if (currentHour < 18) {
+            greeting = `
+            <h1 class="page-label text-xl font-bold">
+                Good Afternoon <img src="https://img.icons8.com/?size=100&id=648&format=png&color=000000" class="w-6 h-6 ml-2 inline-block" />
+            </h1>`;
+        } else {
+            greeting = `
+            <h1 class="page-label text-xl font-bold">
+                Good Evening <img src="https://img.icons8.com/?size=100&id=25031&format=png&color=000000" class="w-6 h-6 ml-2 inline-block"/>
+            </h1>`;
+        }
+        greetingElement.innerHTML = greeting;
+    }
+
     // Function to handle upload barcode (display file input)
     window.handleUploadBarcode = function handleUploadBarcode() {
         console.log("Upload Barcode");
@@ -77,6 +101,7 @@ document.addEventListener("DOMContentLoaded", function () {
         takePhotoBtn.style.display = 'block';
         startCamera();
         resetSearchResults();
+        checkExpirations();
     }
 
     // Function to handle upload receipt
@@ -84,6 +109,7 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log("Upload Receipt");
         reset();
         resetSearchResults();
+        checkExpirations();
     }
 
     // Function to handle taking photo 
@@ -96,6 +122,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         resetSearchResults();
         reset();
+        checkExpirations();
     }
 
     // Function to handle file upload for barcode image
@@ -117,6 +144,7 @@ document.addEventListener("DOMContentLoaded", function () {
         event.target.value = '';
         resetSearchResults();
         reset();
+        checkExpirations();
     }
 
     // Check BarcodeDetector support
@@ -136,9 +164,10 @@ document.addEventListener("DOMContentLoaded", function () {
         listAllStoredProducts();
         checkExpirations();
         reset();
+        updateGreeting();
     }
 
-    // Reset elements in popup window
+    // Reset elements 
     function reset() {
         canvas.style.display = 'none';
         video.style.display = 'none';
@@ -195,7 +224,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         console.log("Detected Barcode: ", barcode);
 
                         resultElement.innerHTML = `
-                        <div class="text-center">
+                        <div class="text-center mt-4">
                             <output>
                                 <svg
                                     aria-hidden="true"
@@ -299,6 +328,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Function to display the identified food item
     function displayIdentifiedFoodItem(productInfo) {
+        checkExpirations();
         resetSearchResults();
         if (productInfo) {
             resultElement.innerHTML = ``;
@@ -331,6 +361,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Function to list all stored products in "My Food List"
     function listAllStoredProducts() {
+        checkExpirations();
         const products = [];
 
         for (let i = 0; i < localStorage.length; i++) {
@@ -523,18 +554,20 @@ document.addEventListener("DOMContentLoaded", function () {
     // Search Food Items
     window.performSearch = function performSearch() {
         const searchQuery = document.getElementById("simple-search").value.toLowerCase().trim();
-        const resultsContainer = document.getElementById("search-results");
-        resultsContainer.innerHTML = "";
+        searchResults.innerHTML = "";
 
         if (!searchQuery) {
             const noResultsMessage = document.createElement("p");
             noResultsMessage.className = "text-center text-gray-500 mb-5";
             noResultsMessage.textContent = "Please enter a search term.";
-            resultsContainer.appendChild(noResultsMessage);
+            searchResults.appendChild(noResultsMessage);
             return;
         }
 
         let resultsFound = false;
+
+        const searchHeading = document.getElementById("searchHeading");
+        searchHeading.style.display = "block";
 
         for (let i = 0; i < localStorage.length; i++) {
             const key = localStorage.key(i);
@@ -556,20 +589,21 @@ document.addEventListener("DOMContentLoaded", function () {
                 `;
 
                 card.innerHTML = cardContent;
-                resultsContainer.appendChild(card);
+                searchResults.appendChild(card);
             }
         }
 
         if (!resultsFound) {
+            searchHeading.style.display = "none";
             const noResultsMessage = document.createElement("p");
             noResultsMessage.className = "text-center text-gray-500 mb-5";
             noResultsMessage.textContent = "No results found";
-            resultsContainer.appendChild(noResultsMessage);
+            searchResults.appendChild(noResultsMessage);
         }
     }
 
     function resetSearchResults() {
-        const resultsContainer = document.getElementById("search-results");
-        resultsContainer.innerHTML = "";
+        searchHeading.style.display = "none";
+        searchResults.innerHTML = "";
     }
 });

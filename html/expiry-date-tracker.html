@@ -15,7 +15,7 @@
     <link href="../css/styles.css" rel="stylesheet" />
     <title>Food Expiry Tracker</title>
   </head>
-  <body class="pt-10 sm:pt-24">
+  <body class="min-h-screen flex flex-col pt-10 sm:pt-24">
     <!-- Sticky Navigation Bar -->
     <nav
       class="bg-white fixed w-full z-20 top-0 start-0 border-b border-gray-200"
@@ -127,13 +127,11 @@
       </div>
     </nav>
 
-    <main class="container mx-auto px-4 sm:px-8">
+    <main class="container mx-auto px-4 sm:px-8 flex-grow">
       <!-- Greeting + Search Bar -->
       <div class="mx-auto mt-10 sm:mt-16 sm:px-8">
         <div class="grid grid-cols-1 md:grid-cols-3">
-          <div class="col-span-2">
-            <h1 class="page-label text-xl font-bold">Good morning</h1>
-          </div>
+          <div class="col-span-2" id="greeting"></div>
           <!-- Search Bar -->
           <div class="col-span-1 mb-4">
             <form
@@ -191,6 +189,13 @@
         <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
           <div class="col-span-2">
             <div>
+              <h2
+                class="text-xl font-bold mb-2"
+                id="searchHeading"
+                style="display: none"
+              >
+                Search Results
+              </h2>
               <div class="food-container" id="search-results"></div>
               <h2 class="text-xl font-bold mb-2">Critical Food</h2>
               <!-- Critical Food (Expiring Soon) -->
@@ -220,7 +225,7 @@
                   id="scanBarcodeBtn"
                   type="button"
                   onclick="handleScanBarcode()"
-                  class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 mt-2"
+                  class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 mt-2 hidden md:inline-flex"
                 >
                   Scan Barcode
                 </button>
@@ -235,7 +240,7 @@
                 <div
                   id="fileInput"
                   style="display: none"
-                  class="flex items-center justify-center w-full"
+                  class="flex items-center justify-center w-full mt-2"
                 >
                   <label
                     for="barcodeImg"
@@ -302,10 +307,10 @@
     </main>
 
     <footer
-      class="fixed bottom-0 left-0 z-20 w-full p-4 bg-white border-t border-gray-200 shadow md:flex md:items-center md:justify-between"
+      class="left-0 z-20 w-full p-4 bg-white border-t border-gray-200 shadow md:flex md:items-center md:justify-between"
     >
-      <span class="text-sm text-gray-500 sm:text-center"
-        >&copy;
+      <span class="text-sm text-gray-500 sm:text-center">
+        &copy;
         <script>
           document.write(new Date().getFullYear());
         </script>
@@ -314,18 +319,12 @@
       <ul
         class="flex flex-wrap items-center mt-2 text-sm font-medium text-gray-500 sm:mt-0"
       >
-        <li>
-          <a href="#" class="hover:underline me-4 md:me-6">About</a>
-        </li>
+        <li><a href="#" class="hover:underline me-4 md:me-6">About</a></li>
         <li>
           <a href="#" class="hover:underline me-4 md:me-6">Privacy Policy</a>
         </li>
-        <li>
-          <a href="#" class="hover:underline me-4 md:me-6">Licensing</a>
-        </li>
-        <li>
-          <a href="#" class="hover:underline">Contact</a>
-        </li>
+        <li><a href="#" class="hover:underline me-4 md:me-6">Licensing</a></li>
+        <li><a href="#" class="hover:underline">Contact</a></li>
       </ul>
     </footer>
 
