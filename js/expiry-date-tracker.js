@@ -9,7 +9,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const ingredientList = document.getElementById('ingredientList');
     const foodList = document.getElementById('foodList');
     const identifiedFood = document.getElementById('identifiedFood');
-    const searchResults = document.getElementById('search-results');
+    const searchResults = document.getElementById('searchResults');
+    const searchHeading = document.getElementById("searchHeading");
     const greetingElement = document.getElementById("greeting");
     const currentHour = new Date().getHours();
 
@@ -548,57 +549,6 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         } else {
             foodList.innerHTML = '<p class="text-center text-gray-500">No products found.</p>';
-        }
-    }
-
-    // Search Food Items
-    window.performSearch = function performSearch() {
-        const searchQuery = document.getElementById("simple-search").value.toLowerCase().trim();
-        searchResults.innerHTML = "";
-
-        if (!searchQuery) {
-            const noResultsMessage = document.createElement("p");
-            noResultsMessage.className = "text-center text-gray-500 mb-5";
-            noResultsMessage.textContent = "Please enter a search term.";
-            searchResults.appendChild(noResultsMessage);
-            return;
-        }
-
-        let resultsFound = false;
-
-        const searchHeading = document.getElementById("searchHeading");
-        searchHeading.style.display = "block";
-
-        for (let i = 0; i < localStorage.length; i++) {
-            const key = localStorage.key(i);
-            const product = JSON.parse(localStorage.getItem(key));
-
-            if (product && product.productName && product.productName.toLowerCase().includes(searchQuery)) {
-                resultsFound = true;
-
-                const card = document.createElement("div");
-                card.className = "food-list-card";
-
-                const cardContent = `
-                <div class="p-5">
-                    <img src="${product.imageUrl}" alt="${product.productName}" class="my-4 w-full rounded-lg" />
-                    <p class="mt-2 text">${product.productName}</p>
-                    <p class="mt-2 sub-text">Shelf life: ${product.expirationDate}</p>
-                    <button class="mt-2 text-xs text-white bg-red-500 px-2 py-1 rounded-full" onclick="deleteProduct('${key}')">Delete</button>
-                </div>
-                `;
-
-                card.innerHTML = cardContent;
-                searchResults.appendChild(card);
-            }
-        }
-
-        if (!resultsFound) {
-            searchHeading.style.display = "none";
-            const noResultsMessage = document.createElement("p");
-            noResultsMessage.className = "text-center text-gray-500 mb-5";
-            noResultsMessage.textContent = "No results found";
-            searchResults.appendChild(noResultsMessage);
         }
     }
 
