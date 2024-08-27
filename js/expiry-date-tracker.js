@@ -65,10 +65,60 @@ document.addEventListener("DOMContentLoaded", function () {
 
     resetAll();
 
+    window.handleUploadBarcode = function handleUploadBarcode() {
+        console.log("Upload Barcode");
+        reset();
+        fileInput.style.display = 'block';
+        fileInput.focus();
+        resetSearchResults();
+    }
+
+    window.handleScanBarcode = function handleScanBarcode() {
+        console.log("Scan Barcode");
+        reset();
+        takePhotoBtn.style.display = 'block';
+        startCamera();
+        resetSearchResults();
+    }
+
+    window.handleUploadReceipt = function handleUploadReceipt() {
+        console.log("Upload Receipt");
+        reset();
+        resetSearchResults();
+    }
+
+    window.handleTakePhoto = function handleTakePhoto() {
+        console.log("Take Photo");
+        if (video.srcObject) {
+            captureAndStopCamera();
+        } else {
+            resultElement.textContent = "No video stream available.";
+        }
+        resetSearchResults();
+        reset();
+    }
+
+    // window.handleBarcodeImgChange = function handleBarcodeImgChange(event) {
+    //     const file = event.target.files[0];
+    //     if (file) {
+    //         fileInput.style.display = 'none';
+    //         const img = new Image();
+    //         img.onload = function () {
+    //             canvas.width = img.width;
+    //             canvas.height = img.height;
+    //             context.drawImage(img, 0, 0);
+    //             detectBarcodes();
+    //         };
+    //         img.src = URL.createObjectURL(file);
+    //     }
+    //     barcodeImg.value = '';
+    //     resetSearchResults();
+    //     reset();
+    // }
+
     // Check BarcodeDetector support
     if (!("BarcodeDetector" in globalThis)) {
         resultElement.textContent = "Barcode Detector is not supported by this browser.";
-        return;
     }
 
     barcodeDetector = new BarcodeDetector({
@@ -95,39 +145,39 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Barcode
-    uploadBarcodeBtn.addEventListener('click', function () {
-        console.log("Upload Barcode");
-        reset();
-        fileInput.style.display = 'block';
-        fileInput.focus();
-        resetSearchResults();
-    });
+    // uploadBarcodeBtn.addEventListener('click', function () {
+    //     console.log("Upload Barcode");
+    //     reset();
+    //     fileInput.style.display = 'block';
+    //     fileInput.focus();
+    //     resetSearchResults();
+    // });
 
-    scanBarcodeBtn.addEventListener('click', function () {
-        console.log("Scan Barcode");
-        reset();
-        takePhotoBtn.style.display = 'block';
-        startCamera();
-        resetSearchResults();
-    });
+    // scanBarcodeBtn.addEventListener('click', function () {
+    //     console.log("Scan Barcode");
+    //     reset();
+    //     takePhotoBtn.style.display = 'block';
+    //     startCamera();
+    //     resetSearchResults();
+    // });
 
     // Receipt
-    uploadReceiptBtn.addEventListener('click', function () {
-        console.log("Upload Receipt");
-        reset();
-        resetSearchResults();
-    });
+    // uploadReceiptBtn.addEventListener('click', function () {
+    //     console.log("Upload Receipt");
+    //     reset();
+    //     resetSearchResults();
+    // });
 
     // Take Photo
-    takePhotoBtn.addEventListener('click', function () {
-        if (video.srcObject) {
-            captureAndStopCamera();
-        } else {
-            resultElement.textContent = "No video stream available.";
-        }
-        resetSearchResults();
-        reset();
-    });
+    // takePhotoBtn.addEventListener('click', function () {
+    //     if (video.srcObject) {
+    //         captureAndStopCamera();
+    //     } else {
+    //         resultElement.textContent = "No video stream available.";
+    //     }
+    //     resetSearchResults();
+    //     reset();
+    // });
 
     // Upload Image
     barcodeImg.addEventListener('change', function (event) {

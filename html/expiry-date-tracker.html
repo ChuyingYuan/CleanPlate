@@ -190,6 +190,7 @@
                 <button
                   id="uploadBarcodeBtn"
                   type="button"
+                  onclick="handleUploadBarcode()"
                   class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 mt-2"
                 >
                   Upload Barcode
@@ -197,6 +198,7 @@
                 <button
                   id="scanBarcodeBtn"
                   type="button"
+                  onclick="handleScanBarcode()"
                   class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 mt-2"
                 >
                   Scan Barcode
@@ -204,6 +206,7 @@
                 <button
                   id="uploadReceiptBtn"
                   type="button"
+                  onclick="handleUploadReceipt()"
                   class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 mt-2"
                 >
                   Upload Receipt
@@ -256,6 +259,7 @@
                 <p id="result"></p>
                 <button
                   id="takePhotoBtn"
+                  onclick="handleTakePhoto()"
                   style="display: none"
                   type="button"
                   class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 mt-4"
@@ -274,7 +278,7 @@
         </div>
       </div>
     </main>
-
+    <script src="../js/expiry-date-tracker.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"
@@ -282,6 +286,5 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     ></script>
-    <script src="../js/expiry-date-tracker.js"></script>
   </body>
 </html>
