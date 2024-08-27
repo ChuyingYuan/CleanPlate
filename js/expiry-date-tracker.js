@@ -259,14 +259,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 const productData = JSON.parse(data.body);
 
                 const productName = productData.product_name || "Not available";
-                const brandName = productData.brand || "Not available";
+                const category = productData.category || "Not available";
+                const minShelfLife = productData.min_shelf_life || "Not available";
+                const maxShelfLife = productData.max_shelf_life || "Not available";
+                const metrics = productData.metrics || "Not available";
+                const method = productData.method || "Not available";
                 const expirationDate = productData.expiration_date || "As Soon As Possible";
                 const imageUrl = productData.image_url || "Not available";
-
-                // Update the UI with the fetched product information
-                productElement.innerHTML = `Product Name: ${productName}<br>`;
-                productElement.innerHTML += `Brand: ${brandName}<br>`;
-                productElement.innerHTML += `Expiration Date: ${expirationDate}<br>`;
 
                 // Generate a unique key for local storage
                 const uniqueKey = generateUniqueKey();
@@ -274,7 +273,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 // Prepare the product info object for storage
                 const productInfo = {
                     productName: productName,
-                    brandName: brandName,
+                    category: category,
+                    minShelfLife: minShelfLife,
+                    maxShelfLife: maxShelfLife,
+                    metrics: metrics,
+                    method: method,
                     expirationDate: expirationDate,
                     imageUrl: imageUrl,
                 };
@@ -316,7 +319,7 @@ document.addEventListener("DOMContentLoaded", function () {
                   <img src="${productInfo.imageUrl}" alt="${productInfo.productName}" class="w-16 h-16 rounded-full" />
                 </div>
                 <p class="text-sm text-center text mb-4">
-                  Keep ${productInfo.productName.toLowerCase()} in the refrigerator for 3 to 7 days.
+                  Keep ${productInfo.productName.toLowerCase()} in the ${productInfo.method} for ${productInfo.minShelfLife} to ${productInfo.maxShelfLife} ${productInfo.metrics}.
                 </p>
                 <p class="shelf-label sub-text text-sm text-center">
                   Shelf life: ${productInfo.expirationDate}
@@ -387,8 +390,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     alerts.push({
                         key: key,
                         productName: product.productName,
-                        brandName: product.brandName,
                         expirationDate: product.expirationDate,
+                        imageUrl: product.imageUrl,
                         daysUntilExpiry: daysUntilExpiry
                     });
                 }
@@ -411,7 +414,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 const cardContent = `
                 <div class="p-5">
                     <span class="reminder text-xs font-bold">Be about to expire</span>
-                    <img src="${alert.productName.toLowerCase().replace(/\s+/g, '-')}.jpg" alt="${alert.productName}" class="my-4 w-full" />
+                    <img src="${alert.imageUrl}" alt="${alert.productName}" class="my-4 w-full rounded-lg" />
                     <p class="mt-2 text">${alert.productName}</p>
                     <p class="mt-2 sub-text">Shelf life: ${alert.expirationDate}</p>
                     <p class="mt-2 text-xs text-red-500 font-semibold">Expires in ${alert.daysUntilExpiry} day(s)</p>
