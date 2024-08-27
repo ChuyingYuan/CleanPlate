@@ -43,9 +43,9 @@ document.addEventListener("DOMContentLoaded", function () {
             selectedIcon: 'https://img.icons8.com/?size=100&id=15814&format=png&color=000000'
         },
         {
-            name: 'Bread',
-            category: 'Bread',
-            icon: "https://img.icons8.com/?size=100&id=12855&format=png&color=000000",
+            name: 'Seafood',
+            category: 'Seafood',
+            icon: "https://img.icons8.com/?size=100&id=dcNXeTC0SjGX&format=png&color=000000",
             defaultSelectedIcon: 'https://img.icons8.com/?size=100&id=15816&format=png&color=000000',
             selectedIcon: 'https://img.icons8.com/?size=100&id=15814&format=png&color=000000'
         },
@@ -260,7 +260,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 const productName = productData.product_name || "Not available";
                 const brandName = productData.brand || "Not available";
-                const expirationDate = productData.expiration_date || "Not available";
+                const expirationDate = productData.expiration_date || "As Soon As Possible";
                 const imageUrl = productData.image_url || "Not available";
 
                 // Update the UI with the fetched product information
