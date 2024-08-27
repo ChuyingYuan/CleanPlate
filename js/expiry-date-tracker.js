@@ -5,16 +5,10 @@ document.addEventListener("DOMContentLoaded", function () {
     const takePhotoBtn = document.getElementById('takePhotoBtn');
     const barcodeImg = document.getElementById('barcodeImg');
     const fileInput = document.getElementById('fileInput');
-    const uploadBarcodeBtn = document.getElementById('uploadBarcode');
-    const scanBarcodeBtn = document.getElementById('scanBarcode');
-    const uploadReceiptBtn = document.getElementById('uploadReceipt');
-    const scanReceiptBtn = document.getElementById('scanReceipt');
-    const options = document.getElementById('options');
-    const popup = document.getElementById('popup');
-    const popupBtn = document.getElementById("showPopup");
-    const close = document.getElementsByClassName("close")[0];
+    const uploadBarcodeBtn = document.getElementById('uploadBarcodeBtn');
+    const scanBarcodeBtn = document.getElementById('scanBarcodeBtn');
+    const uploadReceiptBtn = document.getElementById('uploadReceiptBtn');
     const resultElement = document.getElementById('result');
-    const productElement = document.getElementById('product');
     const criticalFood = document.getElementById('criticalFood');
     const ingredientList = document.getElementById('ingredientList');
     const foodList = document.getElementById('foodList');
@@ -81,22 +75,6 @@ document.addEventListener("DOMContentLoaded", function () {
         formats: ["code_39", "codabar", "ean_13"],
     });
 
-    // Popup window
-    popupBtn.onclick = function () {
-        popup.style.display = "flex";
-        reset();
-    }
-
-    close.onclick = function () {
-        popup.style.display = "none";
-    }
-
-    window.onclick = function (event) {
-        if (event.target == popup) {
-            popup.style.display = "none";
-        }
-    }
-
     // Reset all UI elements
     function resetAll() {
         displayIdentifiedFoodItem();
@@ -109,19 +87,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Reset elements in popup window
     function reset() {
-        options.style.display = 'block';
         canvas.style.display = 'none';
         video.style.display = 'none';
         takePhotoBtn.style.display = 'none';
         fileInput.style.display = 'none';
         resultElement.innerHTML = '';
-        productElement.innerHTML = '';
     }
 
     // Barcode
     uploadBarcodeBtn.addEventListener('click', function () {
         console.log("Upload Barcode");
-        options.style.display = 'none';
+        reset();
         fileInput.style.display = 'block';
         fileInput.focus();
         resetSearchResults();
@@ -129,24 +105,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
     scanBarcodeBtn.addEventListener('click', function () {
         console.log("Scan Barcode");
+        reset();
         takePhotoBtn.style.display = 'block';
         startCamera();
-        options.style.display = 'none';
         resetSearchResults();
     });
 
     // Receipt
     uploadReceiptBtn.addEventListener('click', function () {
         console.log("Upload Receipt");
-        options.style.display = 'none';
-        resetSearchResults();
-    });
-
-    scanReceiptBtn.addEventListener('click', function () {
-        console.log("Scan Receipt");
-        takePhotoBtn.style.display = 'block';
-        startCamera();
-        options.style.display = 'none';
+        reset();
         resetSearchResults();
     });
 
@@ -158,6 +126,7 @@ document.addEventListener("DOMContentLoaded", function () {
             resultElement.textContent = "No video stream available.";
         }
         resetSearchResults();
+        reset();
     });
 
     // Upload Image
@@ -176,6 +145,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         barcodeImg.value = '';
         resetSearchResults();
+        reset();
     });
 
     // Request camera access
@@ -286,8 +256,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 localStorage.setItem(uniqueKey, JSON.stringify(productInfo));
                 console.log(`Stored in local storage: ${uniqueKey}`, productInfo);
 
-                // Hide the popup and display the identified food item
-                popup.style.display = "none";
+                // Display the identified food item
                 displayIdentifiedFoodItem(productInfo);
 
                 // Update the list of all stored products
@@ -295,7 +264,7 @@ document.addEventListener("DOMContentLoaded", function () {
             })
             .catch(error => {
                 console.error('Error fetching product information:', error);
-                productElement.innerHTML = "Error fetching product information.";
+                resultElement.innerHTML = "Error fetching product information.";
             });
     }
 
@@ -310,6 +279,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function displayIdentifiedFoodItem(productInfo) {
         resetSearchResults();
         if (productInfo) {
+            resultElement.innerHTML = ``;
             identifiedFood.innerHTML = `
             <div class="p-5 flex flex-col items-center">
                 <h2 class="text text-sm text-center mb-4">

@@ -186,51 +186,28 @@
             <!-- Scan / Upload Image -->
             <div class="input flex flex-col items-center justify-center mb-6">
               <div class="p-5 flex flex-col items-center">
-                <div id="showPopup" class="input-box hover:bg-gray-200">
-                  <img
-                    src="https://img.icons8.com/?size=100&id=11741&format=png&color=B7E72F"
-                    class="w-14 h-14"
-                    alt="Scan or Upload"
-                  />
-                </div>
                 <p class="sub-text mt-3">Scan or Upload Image(s)</p>
-              </div>
-            </div>
-
-            <!-- Pop Up Window -->
-            <div id="popup" class="popup">
-              <div class="popup-content">
-                <span class="close">&times;</span>
-                <div id="options" class="mt-2 justify-center items-center">
-                  <button
-                    id="uploadBarcode"
-                    type="button"
-                    class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 mt-2"
-                  >
-                    Upload Barcode
-                  </button>
-                  <button
-                    id="scanBarcode"
-                    type="button"
-                    class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 mt-2"
-                  >
-                    Scan Barcode
-                  </button>
-                  <button
-                    id="uploadReceipt"
-                    type="button"
-                    class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 mt-2"
-                  >
-                    Upload Receipt
-                  </button>
-                  <button
-                    id="scanReceipt"
-                    type="button"
-                    class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 mt-2"
-                  >
-                    Scan Receipt
-                  </button>
-                </div>
+                <button
+                  id="uploadBarcodeBtn"
+                  type="button"
+                  class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 mt-2"
+                >
+                  Upload Barcode
+                </button>
+                <button
+                  id="scanBarcodeBtn"
+                  type="button"
+                  class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 mt-2"
+                >
+                  Scan Barcode
+                </button>
+                <button
+                  id="uploadReceiptBtn"
+                  type="button"
+                  class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 mt-2"
+                >
+                  Upload Receipt
+                </button>
                 <div
                   id="fileInput"
                   style="display: none"
@@ -277,7 +254,6 @@
                 <video id="video"></video>
                 <canvas id="canvas"></canvas>
                 <p id="result"></p>
-                <p id="product"></p>
                 <button
                   id="takePhotoBtn"
                   style="display: none"
@@ -300,7 +276,12 @@
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
-    <script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"
+      integrity="sha512-r6rDA7W6ZeQhvl8S7yRVQUKVHdexq+GAlNkNNqVC7YyIV+NwqCTJe2hDWCiffTyRNOeGEzRRJ9ifvRm/HCzGYg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
     <script src="../js/expiry-date-tracker.js"></script>
   </body>
 </html>
