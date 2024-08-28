@@ -372,30 +372,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (productInfo) {
             resultElement.innerHTML = ``;
 
-            let storageInfo;
-
-            if (productInfo.expirationDate === "As Soon As Possible") {
-                storageInfo = "Consume As Soon As Possible";
-                const newExpirationDate = new Date(currentDate);
-                newExpirationDate.setDate(currentDate.getDate() + 7);
-                productInfo.expirationDate = newExpirationDate.toISOString().split('T')[0];
-                uniqueKey = generateUniqueKey();
-                localStorage.setItem(uniqueKey, JSON.stringify(productInfo));
-                console.log(`Stored in local storage: ${uniqueKey}`, productInfo);
-            } else if (productInfo.method === "Not available" &&
-                productInfo.minShelfLife === "Not available" &&
-                productInfo.maxShelfLife === "Not available" &&
-                productInfo.metrics === "Not available") {
-                const expirationDate = new Date(productInfo.expirationDate);
-                if (expirationDate < currentDate) {
-                    storageInfo = "This item has expired.";
-                } else { storageInfo = "" }
-            } else {
-                const expirationDate = new Date(productInfo.expirationDate);
-                if (expirationDate < currentDate) {
-                    storageInfo = "This item has expired.";
-                } else { storageInfo = `Keep ${productInfo.productName.toLowerCase()} in the ${productInfo.method} for ${productInfo.minShelfLife} to ${productInfo.maxShelfLife} ${productInfo.metrics}.`; }
-            }
+            let storageInfo = getStorageInfo(productInfo);
 
             identifiedFood.innerHTML = `
             <div class="p-5 flex flex-col items-center">
@@ -424,6 +401,50 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
+    function getStorageInfo(productInfo) {
+        if (productInfo.expirationDate === "As Soon As Possible") {
+            return handleAsSoonAsPossible(productInfo);
+        } else if (productInfo.method === "Not available" &&
+            productInfo.minShelfLife === "Not available" &&
+            productInfo.maxShelfLife === "Not available" &&
+            productInfo.metrics === "Not available") {
+            return handleNotAvailable(productInfo);
+        } else {
+            return handleDefault(productInfo);
+        }
+    }
+
+    function handleAsSoonAsPossible(productInfo) {
+        let storageInfo = "Consume As Soon As Possible";
+        const newExpirationDate = new Date(currentDate);
+        newExpirationDate.setDate(currentDate.getDate() + 7);
+        productInfo.expirationDate = newExpirationDate.toISOString().split('T')[0];
+        const uniqueKey = generateUniqueKey();
+        localStorage.setItem(uniqueKey, JSON.stringify(productInfo));
+        console.log(`Stored in local storage: ${uniqueKey}`, productInfo);
+        return storageInfo;
+    }
+
+    function handleNotAvailable(productInfo) {
+        const expirationDate = new Date(productInfo.expirationDate);
+        if (expirationDate < currentDate) {
+            return "This item has expired.";
+        } else {
+            return "";
+        }
+    }
+
+    function handleDefault(productInfo) {
+        let storageMethod = productInfo.method === "Refrigerate" ? "Refrigerator" : productInfo.method;
+        let minShelfLife = Math.round(productInfo.minShelfLife);
+        let maxShelfLife = Math.round(productInfo.maxShelfLife);
+        const expirationDate = new Date(productInfo.expirationDate);
+        if (expirationDate < currentDate) {
+            return "This item has expired.";
+        } else {
+            return `Keep ${productInfo.productName.toLowerCase()} in the ${storageMethod} for ${minShelfLife} to ${maxShelfLife} ${productInfo.metrics}.`;
+        }
+    }
 
     // Function to list all stored products in "My Food List"
     function listAllStoredProducts() {
