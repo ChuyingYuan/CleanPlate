@@ -65,6 +65,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let barcodeDetector;
     let mediaStream = null;
     let selectedIngredient = null;
+    var tesseractWorker = null;
 
     resetAll();
 
@@ -112,8 +113,9 @@ document.addEventListener("DOMContentLoaded", function () {
     window.handleUploadReceipt = function handleUploadReceipt() {
         console.log("Upload Receipt");
         reset();
+        receiptInput.style.display = 'block';
+        receiptInput.focus();
         resetSearchResults();
-        checkExpirations();
     }
 
     // Function to handle taking photo 
@@ -127,7 +129,6 @@ document.addEventListener("DOMContentLoaded", function () {
         resetSearchResults();
         reset();
         checkExpirations();
-
     }
 
     // Function to handle file upload for barcode image
@@ -150,6 +151,158 @@ document.addEventListener("DOMContentLoaded", function () {
         resetSearchResults();
         reset();
         checkExpirations();
+    }
+
+    window.handleUploadReceiptImg = async function handleUploadReceiptImg(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const fileInput = document.getElementById('fileInput');
+            fileInput.style.display = 'none';
+
+            const img = new Image();
+            img.onload = function () {
+                canvas.width = img.width;
+                canvas.height = img.height;
+                context.drawImage(img, 0, 0);
+            };
+            img.src = URL.createObjectURL(file);
+            convertImgToText(img.src);
+        }
+
+        event.target.value = '';
+        resetSearchResults();
+        reset();
+        checkExpirations();
+    }
+
+
+    async function initTesseract() {
+        tesseractWorker = await Tesseract.createWorker('eng', 1, { workerPath: 'https://cdn.jsdelivr.net/npm/tesseract.js@v5.0.0/dist/worker.min.js' });
+    }
+
+
+    async function loadImage(url) {
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.addEventListener('load', () => resolve(img));
+            img.addEventListener('error', (err) => reject(err));
+            img.src = url;
+        });
+    }
+
+    async function convertImgToText(imageLink) {
+        let finalText = '';
+        await initTesseract();
+        let image = await loadImage(imageLink);
+        const { data: { text } } = await tesseractWorker.recognize(image);
+        // Split the text into lines
+        const lines = text.split('\n');
+
+        // Append each line to the finalText variable
+        for (const line of lines) {
+            finalText += line + '/'
+        }
+        let cleanedString = finalText.replace(/"/g, '');
+        detectText(cleanedString)
+        await tesseractWorker.terminate();
+    }
+
+    function detectText(finalText) {
+        if (finalText.length > 0) {
+            console.log("Detected finalText: ", finalText);
+            resultElement.innerHTML = `
+                        <div class="text-center mt-4">
+                            <output>
+                                <svg
+                                    aria-hidden="true"
+                                    class="inline w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-green-500"
+                                    viewBox="0 0 100 101"
+                                    fill="none"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                >
+                                    <path
+                                        d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                                        fill="currentColor"
+                                    />
+                                    <path
+                                        d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                                        fill="currentFill"
+                                    />
+                                </svg>
+                                <span class="sr-only">Loading...</span>
+                            </output>
+                        </div>`;
+            fetchProducts(finalText);    
+        } else {
+            console.log("No barcode detected.");
+            resultElement.textContent = "No barcode detected.";
+        }
+    }
+
+    function fetchProducts(finalText) {
+        const API = 'https://rvtkdasc90.execute-api.ap-southeast-2.amazonaws.com/prod/receipt-expiration';
+        const data = {"finalText": finalText};
+        fetch(API, {
+            method: 'POST',
+            body: JSON.stringify(data),
+            })
+            .then((res) => res.json())
+            .then((json) => {
+                console.log(json.body);
+                const productData = JSON.parse(json.body);
+                for(let i = 0; i < productData.length; i++) {
+                    try {
+                        console.log(productData[i]);
+                        const productName = productData[i].Name || "Not available";
+                        const minShelfLife = productData[i].DOP_Refrigerate_Min || "Not available";
+                        const maxShelfLife = productData[i].DOP_Refrigerate_Max || "Not available";
+                        const metrics = productData[i].DOP_Refrigerate_Metric || "Not available";
+                        const method = productData[i].type || "Not available";
+                        const expirationDate = productData[i].Expiration_Date || "As Soon As Possible";
+                        let imgUrl = "	https://img.icons8.com/?size=100&id=32236&format=png&color=000000";
+                        if(productData[i].category === "vegetables") {
+                            imgUrl = "https://img.icons8.com/?size=100&id=64432&format=png&color=000000";
+                        };
+                        if(productData[i].category === "fruits") {
+                            imgUrl = "https://img.icons8.com/?size=100&id=18957&format=png&color=000000";
+                        };
+                        if(productData[i].category === "meat") {
+                            imgUrl = "https://img.icons8.com/?size=100&id=13306&format=png&color=000000";
+                        };
+                        if(productData[i].category === "dairy") {
+                            imgUrl = "https://img.icons8.com/?size=100&id=12874&format=png&color=000000";
+                        };
+                        if(productData[i].category === "seafood") {
+                            imgUrl = "https://img.icons8.com/?size=100&id=dcNXeTC0SjGX&format=png&color=000000";
+                        };
+
+
+                        const uniqueKey = generateUniqueKey();
+    
+                        const productInfo = {
+                            productName: productName,
+                            minShelfLife: minShelfLife,
+                            maxShelfLife: maxShelfLife,
+                            metrics: metrics,
+                            method: method,
+                            expirationDate: expirationDate,
+                            imageUrl: imgUrl,
+                        };
+    
+                        const foodExpirationDate = new Date(productInfo.expirationDate);
+                        if (foodExpirationDate > currentDate) {
+                            localStorage.setItem(uniqueKey, JSON.stringify(productInfo));
+                            console.log(`Stored in local storage: ${uniqueKey}`, productInfo);
+                        }
+    
+                        displayIdentifiedFoodItem(productInfo);
+                        listAllStoredProducts();
+                    } catch (error) {
+                        console.log('Error parsing product data:', error);
+                        resultElement.innerHTML = "Unable to identify food item.";
+                    }
+                }
+        })
     }
 
     // Check BarcodeDetector support
@@ -178,6 +331,7 @@ document.addEventListener("DOMContentLoaded", function () {
         video.style.display = 'none';
         takePhotoBtn.style.display = 'none';
         fileInput.style.display = 'none';
+        receiptInput.style.display = 'none';
         resultElement.innerHTML = '';
     }
 
@@ -315,7 +469,7 @@ document.addEventListener("DOMContentLoaded", function () {
             .then(data => {
                 try {
                     const productData = JSON.parse(data.body);
-
+                    
                     const productName = productData.product_name || "Not available";
                     const category = productData.category || "Not available";
                     const minShelfLife = productData.min_shelf_life || "Not available";
@@ -323,7 +477,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     const metrics = productData.metrics || "Not available";
                     const method = productData.method || "Not available";
                     const expirationDate = productData.expiration_date || "As Soon As Possible";
-                    const imageUrl = productData.image_url || "Not available";
 
                     const uniqueKey = generateUniqueKey();
 
@@ -335,7 +488,6 @@ document.addEventListener("DOMContentLoaded", function () {
                         metrics: metrics,
                         method: method,
                         expirationDate: expirationDate,
-                        imageUrl: imageUrl,
                     };
 
                     const foodExpirationDate = new Date(productInfo.expirationDate);
@@ -380,7 +532,7 @@ document.addEventListener("DOMContentLoaded", function () {
                   The following is identified based on the uploaded image.
                 </h2>
                 <div class="identified-box flex items-center justify-center mb-4">
-                  <img src="${productInfo.imageUrl}" alt="${productInfo.productName}" class="w-16 h-16 rounded-full max-h-40" />
+                  <img src="${productInfo.imageUrl}" alt="${productInfo.productName}" class="w-16 h-16 rounded-full" />
                 </div>
                 <p class="text-sm text-center text mb-4">
                   ${storageInfo}
@@ -468,7 +620,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 const cardContent = `
                 <div class="p-3">
-                    <img src="${product.imageUrl}" alt="${product.productName}" class="my-4 w-full rounded-lg max-h-40" />
+                    <img src="${product.imageUrl}" alt="${product.productName}" class="my-4 w-full rounded-lg" />
                     <p class="mt-2 text">${product.productName}</p>
                     <p class="mt-2 sub-text">Shelf life: ${product.expirationDate}</p>
                     <button class="mt-2 text-xs text-white bg-red-500 px-2 py-1 rounded-full" onclick="deleteProduct('${product.key}')">Delete</button>
@@ -525,7 +677,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 const cardContent = `
                 <div class="p-3">
                     <span class="reminder text-xs font-bold">Be about to expire</span>
-                    <img src="${alert.imageUrl}" alt="${alert.productName}" class="my-4 w-full rounded-lg max-h-40" />
+                    <img src="${alert.imageUrl}" alt="${alert.productName}" class="my-4 w-full rounded-lg" />
                     <p class="mt-2 text">${alert.productName}</p>
                     <p class="mt-2 sub-text">Shelf life: ${alert.expirationDate}</p>
                     <p class="mt-2 text-xs text-red-500 font-semibold">Expires in ${alert.daysUntilExpiry} day(s)</p>
@@ -637,7 +789,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 const cardContent = `
                 <div class="p-3">
-                    <img src="${product.imageUrl}" alt="${product.productName}" class="my-4 w-full rounded-lg max-h-40" />
+                    <img src="${product.imageUrl}" alt="${product.productName}" class="my-4 w-full rounded-lg" />
                     <p class="mt-2 text">${product.productName}</p>
                     <p class="mt-2 sub-text">Shelf life: ${product.expirationDate}</p>
                     <button class="mt-2 text-xs text-white bg-red-500 px-2 py-1 rounded-full" onclick="deleteProduct('${product.key}')">Delete</button>
