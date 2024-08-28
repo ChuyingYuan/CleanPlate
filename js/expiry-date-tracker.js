@@ -362,7 +362,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
             let storageInfo;
 
-            if (productInfo.method === "Not available" &&
+            if (productInfo.expirationDate === "As Soon As Possible") {
+                storageInfo = "Consume As Soon As Possible";
+                const newExpirationDate = new Date(currentDate);
+                newExpirationDate.setDate(currentDate.getDate() + 7);
+                productInfo.expirationDate = newExpirationDate.toISOString().split('T')[0];
+                uniqueKey = generateUniqueKey();
+                localStorage.setItem(uniqueKey, JSON.stringify(productInfo));
+                console.log(`Stored in local storage: ${uniqueKey}`, productInfo);
+            } else if (productInfo.method === "Not available" &&
                 productInfo.minShelfLife === "Not available" &&
                 productInfo.maxShelfLife === "Not available" &&
                 productInfo.metrics === "Not available") {
@@ -370,10 +378,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (expirationDate < currentDate) {
                     storageInfo = "This item has expired.";
                 } else { storageInfo = "" }
-            } else if (productInfo.expirationDate === "As Soon As Possible") {
-                storageInfo = "Consume As Soon As Possible";
             } else {
-
                 const expirationDate = new Date(productInfo.expirationDate);
                 if (expirationDate < currentDate) {
                     storageInfo = "This item has expired.";
