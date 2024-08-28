@@ -3,6 +3,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const canvas = document.getElementById('canvas');
     const context = canvas.getContext('2d');
     const takePhotoBtn = document.getElementById('takePhotoBtn');
+    const uploadBarcodeBtn = document.getElementById('uploadBarcodeBtn');
+    const scanBarcodeBtn = document.getElementById('scanBarcodeBtn');
     const fileInput = document.getElementById('fileInput');
     const resultElement = document.getElementById('result');
     const criticalFood = document.getElementById('criticalFood');
@@ -184,31 +186,41 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     window.onload = function () {
-        const uploadBarcodeBtn = document.getElementById('uploadBarcodeBtn');
         if (isMobileDevice()) {
             uploadBarcodeBtn.textContent = 'Upload / Scan Barcode';
-        } else {
-            uploadBarcodeBtn.textContent = 'Upload Barcode';
-        }
-        const scanBarcodeBtn = document.getElementById('scanBarcodeBtn');
-        if (isMobileDevice()) {
+            document.getElementById("uploadText").innerHTML =
+                '<span class="font-semibold">Click to Scan / Upload</span>';
             scanBarcodeBtn.style.display = 'none';
         } else {
+            uploadBarcodeBtn.textContent = 'Upload Barcode';
             scanBarcodeBtn.style.display = 'inline-flex';
         }
+
     };
 
     // Request camera access
     async function startCamera() {
         try {
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                throw new Error('Media devices are not supported by this browser.');
+            }
+
             mediaStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+
+            if (!mediaStream) {
+                throw new Error('Failed to get video stream.');
+            }
+
             video.srcObject = mediaStream;
             video.style.display = 'block';
             video.play();
+
             video.onloadedmetadata = function () {
                 canvas.width = video.videoWidth;
                 canvas.height = video.videoHeight;
             };
+
+            console.log("Camera permission requested and granted.");
         } catch (err) {
             console.error("Error accessing camera: ", err);
             resultElement.textContent = `Error accessing camera: ${err.message}`;
