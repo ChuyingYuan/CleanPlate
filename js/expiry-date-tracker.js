@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const searchHeading = document.getElementById("searchHeading");
     const greetingElement = document.getElementById("greeting");
     const currentHour = new Date().getHours();
+    const currentDate = new Date();
 
     const ingredients = [
         {
@@ -64,8 +65,6 @@ document.addEventListener("DOMContentLoaded", function () {
     let selectedIngredient = null;
 
     resetAll();
-
-    // window.onload = resetAll;
 
     function updateGreeting() {
         let greeting;
@@ -295,50 +294,54 @@ document.addEventListener("DOMContentLoaded", function () {
         })
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Network response was not ok');
+                    return response.text().then(text => {
+                        throw new Error(`Error: ${text}`);
+                    });
                 }
                 return response.json();
             })
             .then(data => {
-                const productData = JSON.parse(data.body);
+                try {
+                    const productData = JSON.parse(data.body);
 
-                const productName = productData.product_name || "Not available";
-                const category = productData.category || "Not available";
-                const minShelfLife = productData.min_shelf_life || "Not available";
-                const maxShelfLife = productData.max_shelf_life || "Not available";
-                const metrics = productData.metrics || "Not available";
-                const method = productData.method || "Not available";
-                const expirationDate = productData.expiration_date || "As Soon As Possible";
-                const imageUrl = productData.image_url || "Not available";
+                    const productName = productData.product_name || "Not available";
+                    const category = productData.category || "Not available";
+                    const minShelfLife = productData.min_shelf_life || "Not available";
+                    const maxShelfLife = productData.max_shelf_life || "Not available";
+                    const metrics = productData.metrics || "Not available";
+                    const method = productData.method || "Not available";
+                    const expirationDate = productData.expiration_date || "As Soon As Possible";
+                    const imageUrl = productData.image_url || "Not available";
 
-                // Generate a unique key for local storage
-                const uniqueKey = generateUniqueKey();
+                    const uniqueKey = generateUniqueKey();
 
-                // Prepare the product info object for storage
-                const productInfo = {
-                    productName: productName,
-                    category: category,
-                    minShelfLife: minShelfLife,
-                    maxShelfLife: maxShelfLife,
-                    metrics: metrics,
-                    method: method,
-                    expirationDate: expirationDate,
-                    imageUrl: imageUrl,
-                };
+                    const productInfo = {
+                        productName: productName,
+                        category: category,
+                        minShelfLife: minShelfLife,
+                        maxShelfLife: maxShelfLife,
+                        metrics: metrics,
+                        method: method,
+                        expirationDate: expirationDate,
+                        imageUrl: imageUrl,
+                    };
 
-                // Store the product info in local storage
-                localStorage.setItem(uniqueKey, JSON.stringify(productInfo));
-                console.log(`Stored in local storage: ${uniqueKey}`, productInfo);
+                    const foodExpirationDate = new Date(productInfo.expirationDate);
+                    if (foodExpirationDate > currentDate) {
+                        localStorage.setItem(uniqueKey, JSON.stringify(productInfo));
+                        console.log(`Stored in local storage: ${uniqueKey}`, productInfo);
+                    }
 
-                // Display the identified food item
-                displayIdentifiedFoodItem(productInfo);
-
-                // Update the list of all stored products
-                listAllStoredProducts();
+                    displayIdentifiedFoodItem(productInfo);
+                    listAllStoredProducts();
+                } catch (error) {
+                    console.log('Error parsing product data:', error);
+                    resultElement.innerHTML = "Unable to identify food item.";
+                }
             })
             .catch(error => {
-                console.error('Error fetching product information:', error);
-                resultElement.innerHTML = "Error fetching product information.";
+                console.log('Error fetching product information:', error);
+                resultElement.innerHTML = "Unable to identify food item.";
             });
     }
 
@@ -358,13 +361,23 @@ document.addEventListener("DOMContentLoaded", function () {
             resultElement.innerHTML = ``;
 
             let storageInfo;
-            if (productInfo.method === "Not Available" &&
-                productInfo.minShelfLife === "Not Available" &&
-                productInfo.maxShelfLife === "Not Available" &&
-                productInfo.metrics === "Not Available") {
-                storageInfo = "Consume As Soon As Possible.";
+
+            if (productInfo.method === "Not available" &&
+                productInfo.minShelfLife === "Not available" &&
+                productInfo.maxShelfLife === "Not available" &&
+                productInfo.metrics === "Not available") {
+                const expirationDate = new Date(productInfo.expirationDate);
+                if (expirationDate < currentDate) {
+                    storageInfo = "This item has expired.";
+                } else { storageInfo = "" }
+            } else if (productInfo.expirationDate === "As Soon As Possible") {
+                storageInfo = "Consume As Soon As Possible";
             } else {
-                storageInfo = `Keep ${productInfo.productName.toLowerCase()} in the ${productInfo.method} for ${productInfo.minShelfLife} to ${productInfo.maxShelfLife} ${productInfo.metrics}.`;
+
+                const expirationDate = new Date(productInfo.expirationDate);
+                if (expirationDate < currentDate) {
+                    storageInfo = "This item has expired.";
+                } else { storageInfo = `Keep ${productInfo.productName.toLowerCase()} in the ${productInfo.method} for ${productInfo.minShelfLife} to ${productInfo.maxShelfLife} ${productInfo.metrics}.`; }
             }
 
             identifiedFood.innerHTML = `
@@ -393,6 +406,7 @@ document.addEventListener("DOMContentLoaded", function () {
         `;
         }
     }
+
 
     // Function to list all stored products in "My Food List"
     function listAllStoredProducts() {
