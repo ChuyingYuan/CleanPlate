@@ -180,6 +180,25 @@ document.addEventListener("DOMContentLoaded", function () {
         resultElement.innerHTML = '';
     }
 
+    function isMobileDevice() {
+        return /Mobi|Android|iPad|iPhone|Tablet/i.test(navigator.userAgent);
+    }
+
+    window.onload = function () {
+        const uploadBarcodeBtn = document.getElementById('uploadBarcodeBtn');
+        if (isMobileDevice()) {
+            uploadBarcodeBtn.textContent = 'Upload / Scan Barcode';
+        } else {
+            uploadBarcodeBtn.textContent = 'Upload Barcode';
+        }
+        const scanBarcodeBtn = document.getElementById('scanBarcodeBtn');
+        if (isMobileDevice()) {
+            scanBarcodeBtn.style.display = 'none';
+        } else {
+            scanBarcodeBtn.style.display = 'inline-flex';
+        }
+    };
+
     // Request camera access
     async function startCamera() {
         try {
@@ -334,18 +353,30 @@ document.addEventListener("DOMContentLoaded", function () {
     function displayIdentifiedFoodItem(productInfo) {
         checkExpirations();
         resetSearchResults();
+
         if (productInfo) {
             resultElement.innerHTML = ``;
+
+            let storageInfo;
+            if (productInfo.method === "Not Available" &&
+                productInfo.minShelfLife === "Not Available" &&
+                productInfo.maxShelfLife === "Not Available" &&
+                productInfo.metrics === "Not Available") {
+                storageInfo = "Consume As Soon As Possible.";
+            } else {
+                storageInfo = `Keep ${productInfo.productName.toLowerCase()} in the ${productInfo.method} for ${productInfo.minShelfLife} to ${productInfo.maxShelfLife} ${productInfo.metrics}.`;
+            }
+
             identifiedFood.innerHTML = `
             <div class="p-5 flex flex-col items-center">
                 <h2 class="text text-sm text-center mb-4">
-                  The following are identified based on the uploaded images
+                  The following is identified based on the uploaded image.
                 </h2>
                 <div class="identified-box flex items-center justify-center mb-4">
                   <img src="${productInfo.imageUrl}" alt="${productInfo.productName}" class="w-16 h-16 rounded-full" />
                 </div>
                 <p class="text-sm text-center text mb-4">
-                  Keep ${productInfo.productName.toLowerCase()} in the ${productInfo.method} for ${productInfo.minShelfLife} to ${productInfo.maxShelfLife} ${productInfo.metrics}.
+                  ${storageInfo}
                 </p>
                 <p class="shelf-label sub-text text-sm text-center">
                   Shelf life: ${productInfo.expirationDate}
@@ -384,7 +415,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 card.className = 'food-list-card';
 
                 const cardContent = `
-                <div class="p-5">
+                <div class="p-3">
                     <img src="${product.imageUrl}" alt="${product.productName}" class="my-4 w-full rounded-lg" />
                     <p class="mt-2 text">${product.productName}</p>
                     <p class="mt-2 sub-text">Shelf life: ${product.expirationDate}</p>
@@ -440,7 +471,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 card.className = 'card';
 
                 const cardContent = `
-                <div class="p-5">
+                <div class="p-3">
                     <span class="reminder text-xs font-bold">Be about to expire</span>
                     <img src="${alert.imageUrl}" alt="${alert.productName}" class="my-4 w-full rounded-lg" />
                     <p class="mt-2 text">${alert.productName}</p>
@@ -553,7 +584,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 card.className = 'food-list-card';
 
                 const cardContent = `
-                <div class="p-5">
+                <div class="p-3">
                     <img src="${product.imageUrl}" alt="${product.productName}" class="my-4 w-full rounded-lg" />
                     <p class="mt-2 text">${product.productName}</p>
                     <p class="mt-2 sub-text">Shelf life: ${product.expirationDate}</p>
