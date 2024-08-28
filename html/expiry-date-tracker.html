@@ -372,7 +372,7 @@
         <script>
           document.write(new Date().getFullYear());
         </script>
-        TA13 Loading... All Rights Reserved.
+        CleanPlate All Rights Reserved.
       </span>
       <!-- <ul
         class="flex flex-wrap items-center mt-2 text-sm font-medium text-gray-500 sm:mt-0"
@@ -437,7 +437,7 @@
 
             const cardContent = `
                 <div class="p-5">
-                    <img src="${product.imageUrl}" alt="${product.productName}" class="my-4 w-full rounded-lg" />
+                    <img src="${product.imageUrl}" alt="${product.productName}" class="my-4 w-full rounded-lg max-h-40" />
                     <p class="mt-2 text">${product.productName}</p>
                     <p class="mt-2 sub-text">Shelf life: ${product.expirationDate}</p>
                     <button class="mt-2 text-xs text-white bg-red-500 px-2 py-1 rounded-full" onclick="deleteProduct('${key}')">Delete</button>

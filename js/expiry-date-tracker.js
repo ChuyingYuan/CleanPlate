@@ -380,7 +380,7 @@ document.addEventListener("DOMContentLoaded", function () {
                   The following is identified based on the uploaded image.
                 </h2>
                 <div class="identified-box flex items-center justify-center mb-4">
-                  <img src="${productInfo.imageUrl}" alt="${productInfo.productName}" class="w-16 h-16 rounded-full" />
+                  <img src="${productInfo.imageUrl}" alt="${productInfo.productName}" class="w-16 h-16 rounded-full max-h-40" />
                 </div>
                 <p class="text-sm text-center text mb-4">
                   ${storageInfo}
@@ -468,7 +468,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 const cardContent = `
                 <div class="p-3">
-                    <img src="${product.imageUrl}" alt="${product.productName}" class="my-4 w-full rounded-lg" />
+                    <img src="${product.imageUrl}" alt="${product.productName}" class="my-4 w-full rounded-lg max-h-40" />
                     <p class="mt-2 text">${product.productName}</p>
                     <p class="mt-2 sub-text">Shelf life: ${product.expirationDate}</p>
                     <button class="mt-2 text-xs text-white bg-red-500 px-2 py-1 rounded-full" onclick="deleteProduct('${product.key}')">Delete</button>
@@ -525,7 +525,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 const cardContent = `
                 <div class="p-3">
                     <span class="reminder text-xs font-bold">Be about to expire</span>
-                    <img src="${alert.imageUrl}" alt="${alert.productName}" class="my-4 w-full rounded-lg" />
+                    <img src="${alert.imageUrl}" alt="${alert.productName}" class="my-4 w-full rounded-lg max-h-40" />
                     <p class="mt-2 text">${alert.productName}</p>
                     <p class="mt-2 sub-text">Shelf life: ${alert.expirationDate}</p>
                     <p class="mt-2 text-xs text-red-500 font-semibold">Expires in ${alert.daysUntilExpiry} day(s)</p>
@@ -637,7 +637,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 const cardContent = `
                 <div class="p-3">
-                    <img src="${product.imageUrl}" alt="${product.productName}" class="my-4 w-full rounded-lg" />
+                    <img src="${product.imageUrl}" alt="${product.productName}" class="my-4 w-full rounded-lg max-h-40" />
                     <p class="mt-2 text">${product.productName}</p>
                     <p class="mt-2 sub-text">Shelf life: ${product.expirationDate}</p>
                     <button class="mt-2 text-xs text-white bg-red-500 px-2 py-1 rounded-full" onclick="deleteProduct('${product.key}')">Delete</button>
