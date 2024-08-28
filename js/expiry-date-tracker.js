@@ -65,6 +65,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     resetAll();
 
+    // window.onload = resetAll;
+
     function updateGreeting() {
         let greeting;
         if (currentHour < 12) {
@@ -124,6 +126,7 @@ document.addEventListener("DOMContentLoaded", function () {
         resetSearchResults();
         reset();
         checkExpirations();
+
     }
 
     // Function to handle file upload for barcode image
@@ -422,6 +425,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         }
         displayAlerts(alerts);
+        showNotification(alerts.length);
     }
 
     // Function to display food items that are about to expire in "Critical Food"
@@ -451,6 +455,19 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         } else {
             criticalFood.innerHTML = '<p class="text-center text-gray-500">No critical foods at the moment.</p>';
+        }
+    }
+
+    // Function to show notification
+    function showNotification(expiringCount) {
+        const toast = document.getElementById('notification');
+
+        if (expiringCount > 0) {
+            const message = `You have ${expiringCount} item(s) about to expire within 7 days!`;
+            toast.querySelector('.text-sm.font-normal').textContent = message;
+            toast.classList.remove('hidden');
+        } else {
+            toast.classList.add('hidden');
         }
     }
 
