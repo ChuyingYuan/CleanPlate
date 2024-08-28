@@ -292,6 +292,7 @@
                 >
                   Upload Receipt
                 </button>
+              
                 <div
                   id="fileInput"
                   style="display: none"
@@ -339,6 +340,63 @@
                   </label>
                 </div>
 
+                <button
+                  id="scanBarcodeBtn"
+                  type="button"
+                  onclick="handleScanBarcode()"
+                  style="display: none"
+                  class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 mt-2"
+                >
+                  Scan Barcode
+                </button>
+                
+                <div
+                  id="receiptInput"
+                  style="display: none"
+                  class="flex items-center justify-center w-full mt-2"
+                >
+                  <label
+                    for="receiptImg"
+                    class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100"
+                  >
+                    <div
+                      class="flex flex-col items-center justify-center pt-5 pb-6"
+                    >
+                      <svg
+                        class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 20 16"
+                      >
+                        <path
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+                        />
+                      </svg>
+                      <p
+                        id="uploadText"
+                        class="mb-2 text-sm text-gray-500 dark:text-gray-400"
+                      >
+                        <span class="font-semibold">Click to upload</span>
+                      </p>
+                      <p class="text-xs text-gray-500 dark:text-gray-400">
+                        PNG, JPG
+                      </p>
+                    </div>
+                    <input
+                      id="receiptImg"
+                      type="file"
+                      class="hidden"
+                      accept="image/*"
+                      onchange="handleUploadReceiptImg(event)"
+                    />
+                  </label>
+                </div>
+
                 <video id="video"></video>
                 <canvas id="canvas"></canvas>
                 <p id="result"></p>
@@ -372,7 +430,7 @@
         <script>
           document.write(new Date().getFullYear());
         </script>
-        CleanPlate All Rights Reserved.
+        TA13 Loading... All Rights Reserved.
       </span>
       <!-- <ul
         class="flex flex-wrap items-center mt-2 text-sm font-medium text-gray-500 sm:mt-0"
@@ -395,9 +453,13 @@
       src="https://fastly.jsdelivr.net/npm/barcode-detector@2/dist/es/side-effects.min.js"
     ></script>
 
+    <!-- Scripts for importing tesseract.js -->
+    <script src='https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js'></script>
+	  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.0.269/pdf.min.mjs" type="module"></script>
+    
     <!-- Script for handling functions for expiry date tracker -->
     <script src="../js/expiry-date-tracker.js"></script>
-
+    
     <!-- Script for searching food items -->
     <script>
       window.performSearch = function performSearch(event) {
@@ -437,7 +499,7 @@
 
             const cardContent = `
                 <div class="p-5">
-                    <img src="${product.imageUrl}" alt="${product.productName}" class="my-4 w-full rounded-lg max-h-40" />
+                    <img src="${product.imageUrl}" alt="${product.productName}" class="my-4 w-full rounded-lg" />
                     <p class="mt-2 text">${product.productName}</p>
                     <p class="mt-2 sub-text">Shelf life: ${product.expirationDate}</p>
                     <button class="mt-2 text-xs text-white bg-red-500 px-2 py-1 rounded-full" onclick="deleteProduct('${key}')">Delete</button>
