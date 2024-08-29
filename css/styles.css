@@ -125,10 +125,6 @@ footer {
   position: relative;
 }
 
-.home-card {
-  width: 30%;
-}
-
 .card:hover,
 .food-list-card:hover,
 .ingredient-card:hover,
