@@ -140,6 +140,24 @@ footer {
   background-color: #b7e72f;
 }
 
+.image-container {
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.image-container img {
+  max-height: 200px;
+  height: auto;
+  width: auto;
+}
+
+.food-list-card .image-container img {
+  max-height: 150px;
+  height: auto;
+  width: auto;
+}
+
 /* Ingredient Card Elements */
 .ingredient-card .p-5 {
   display: flex;

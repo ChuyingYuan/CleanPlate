@@ -65,7 +65,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let barcodeDetector;
     let mediaStream = null;
     let selectedIngredient = null;
-    var tesseractWorker = null;
+    let tesseractWorker = null;
 
     resetAll();
 
@@ -232,7 +232,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                 <span class="sr-only">Loading...</span>
                             </output>
                         </div>`;
-            fetchProducts(finalText);    
+            fetchProducts(finalText);
         } else {
             console.log("No barcode detected.");
             resultElement.textContent = "No barcode detected.";
@@ -241,46 +241,32 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function fetchProducts(finalText) {
         const API = 'https://rvtkdasc90.execute-api.ap-southeast-2.amazonaws.com/prod/receipt-expiration';
-        const data = {"finalText": finalText};
+        const data = { "finalText": finalText };
         fetch(API, {
             method: 'POST',
             body: JSON.stringify(data),
-            })
+        })
             .then((res) => res.json())
             .then((json) => {
                 console.log(json.body);
                 const productData = JSON.parse(json.body);
-                for(let i = 0; i < productData.length; i++) {
+                for (const product of productData) {
                     try {
-                        console.log(productData[i]);
-                        const productName = productData[i].Name || "Not available";
-                        const minShelfLife = productData[i].DOP_Refrigerate_Min || "Not available";
-                        const maxShelfLife = productData[i].DOP_Refrigerate_Max || "Not available";
-                        const metrics = productData[i].DOP_Refrigerate_Metric || "Not available";
-                        const method = productData[i].type || "Not available";
-                        const expirationDate = productData[i].Expiration_Date || "As Soon As Possible";
-                        let imgUrl = "	https://img.icons8.com/?size=100&id=32236&format=png&color=000000";
-                        if(productData[i].category === "vegetables") {
-                            imgUrl = "https://img.icons8.com/?size=100&id=64432&format=png&color=000000";
-                        };
-                        if(productData[i].category === "fruits") {
-                            imgUrl = "https://img.icons8.com/?size=100&id=18957&format=png&color=000000";
-                        };
-                        if(productData[i].category === "meat") {
-                            imgUrl = "https://img.icons8.com/?size=100&id=13306&format=png&color=000000";
-                        };
-                        if(productData[i].category === "dairy") {
-                            imgUrl = "https://img.icons8.com/?size=100&id=12874&format=png&color=000000";
-                        };
-                        if(productData[i].category === "seafood") {
-                            imgUrl = "https://img.icons8.com/?size=100&id=dcNXeTC0SjGX&format=png&color=000000";
-                        };
-
+                        console.log(product);
+                        const productName = product.Name || "Not available";
+                        const minShelfLife = product.DOP_Refrigerate_Min || "Not available";
+                        const maxShelfLife = product.DOP_Refrigerate_Max || "Not available";
+                        const metrics = product.DOP_Refrigerate_Metric || "Not available";
+                        const method = product.type || "Not available";
+                        const expirationDate = product.Expiration_Date || "As Soon As Possible";
+                        const category = product.category || "others";
+                        const imgUrl = product.imageUrl || "https://img.icons8.com/?size=100&id=32236&format=png&color=000000";
 
                         const uniqueKey = generateUniqueKey();
-    
+
                         const productInfo = {
                             productName: productName,
+                            category: category,
                             minShelfLife: minShelfLife,
                             maxShelfLife: maxShelfLife,
                             metrics: metrics,
@@ -288,13 +274,13 @@ document.addEventListener("DOMContentLoaded", function () {
                             expirationDate: expirationDate,
                             imageUrl: imgUrl,
                         };
-    
+
                         const foodExpirationDate = new Date(productInfo.expirationDate);
                         if (foodExpirationDate > currentDate) {
                             localStorage.setItem(uniqueKey, JSON.stringify(productInfo));
                             console.log(`Stored in local storage: ${uniqueKey}`, productInfo);
                         }
-    
+
                         displayIdentifiedFoodItem(productInfo);
                         listAllStoredProducts();
                     } catch (error) {
@@ -302,7 +288,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         resultElement.innerHTML = "Unable to identify food item.";
                     }
                 }
-        })
+            })
     }
 
     // Check BarcodeDetector support
@@ -355,7 +341,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Request camera access
     async function startCamera() {
         try {
-            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+            if (!navigator.mediaDevices?.getUserMedia) {
                 throw new Error('Media devices are not supported by this browser.');
             }
 
@@ -469,7 +455,7 @@ document.addEventListener("DOMContentLoaded", function () {
             .then(data => {
                 try {
                     const productData = JSON.parse(data.body);
-                    
+
                     const productName = productData.product_name || "Not available";
                     const category = productData.category || "Not available";
                     const minShelfLife = productData.min_shelf_life || "Not available";
@@ -477,6 +463,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     const metrics = productData.metrics || "Not available";
                     const method = productData.method || "Not available";
                     const expirationDate = productData.expiration_date || "As Soon As Possible";
+                    const imgUrl = productData.image_url || "https://img.icons8.com/?size=100&id=32236&format=png&color=000000";
 
                     const uniqueKey = generateUniqueKey();
 
@@ -488,6 +475,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         metrics: metrics,
                         method: method,
                         expirationDate: expirationDate,
+                        imageUrl: imgUrl,
                     };
 
                     const foodExpirationDate = new Date(productInfo.expirationDate);
@@ -532,7 +520,7 @@ document.addEventListener("DOMContentLoaded", function () {
                   The following is identified based on the uploaded image.
                 </h2>
                 <div class="identified-box flex items-center justify-center mb-4">
-                  <img src="${productInfo.imageUrl}" alt="${productInfo.productName}" class="w-16 h-16 rounded-full" />
+                  <img src="${productInfo.imageUrl}" alt="${productInfo.productName}" class="w-16 h-16 rounded-full max-h-40" />
                 </div>
                 <p class="text-sm text-center text mb-4">
                   ${storageInfo}
@@ -587,7 +575,14 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function handleDefault(productInfo) {
-        let storageMethod = productInfo.method === "Refrigerate" ? "Refrigerator" : productInfo.method;
+        let storageMethod = productInfo.method.toLowerCase();
+
+        if (storageMethod === "refrigerate") {
+            storageMethod = "refrigerator";
+        } else if (storageMethod === "freeze") {
+            storageMethod = "freezer";
+        }
+
         let minShelfLife = Math.round(productInfo.minShelfLife);
         let maxShelfLife = Math.round(productInfo.maxShelfLife);
         const expirationDate = new Date(productInfo.expirationDate);
@@ -620,7 +615,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 const cardContent = `
                 <div class="p-3">
-                    <img src="${product.imageUrl}" alt="${product.productName}" class="my-4 w-full rounded-lg" />
+                    <div class="image-container">
+                        <img src="${product.imageUrl}" alt="${product.productName}" class="my-4 rounded-lg" />
+                    </div>       
                     <p class="mt-2 text">${product.productName}</p>
                     <p class="mt-2 sub-text">Shelf life: ${product.expirationDate}</p>
                     <button class="mt-2 text-xs text-white bg-red-500 px-2 py-1 rounded-full" onclick="deleteProduct('${product.key}')">Delete</button>
@@ -676,8 +673,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 const cardContent = `
                 <div class="p-3">
-                    <span class="reminder text-xs font-bold">Be about to expire</span>
-                    <img src="${alert.imageUrl}" alt="${alert.productName}" class="my-4 w-full rounded-lg" />
+                    <span class="reminder text-xs font-bold">Expiring Soon !</span>
+                    <div class="image-container">
+                        <img src="${alert.imageUrl}" alt="${alert.productName}" class="my-4 rounded-lg" />
+                    </div>
                     <p class="mt-2 text">${alert.productName}</p>
                     <p class="mt-2 sub-text">Shelf life: ${alert.expirationDate}</p>
                     <p class="mt-2 text-xs text-red-500 font-semibold">Expires in ${alert.daysUntilExpiry} day(s)</p>
@@ -789,7 +788,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 const cardContent = `
                 <div class="p-3">
-                    <img src="${product.imageUrl}" alt="${product.productName}" class="my-4 w-full rounded-lg" />
+                    <div class="image-container">
+                        <img src="${product.imageUrl}" alt="${product.productName}" class="my-4 rounded-lg" />
+                    </div>                    
                     <p class="mt-2 text">${product.productName}</p>
                     <p class="mt-2 sub-text">Shelf life: ${product.expirationDate}</p>
                     <button class="mt-2 text-xs text-white bg-red-500 px-2 py-1 rounded-full" onclick="deleteProduct('${product.key}')">Delete</button>

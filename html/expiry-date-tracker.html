@@ -292,7 +292,7 @@
                 >
                   Upload Receipt
                 </button>
-              
+
                 <div
                   id="fileInput"
                   style="display: none"
@@ -349,7 +349,7 @@
                 >
                   Scan Barcode
                 </button>
-                
+
                 <div
                   id="receiptInput"
                   style="display: none"
@@ -430,7 +430,7 @@
         <script>
           document.write(new Date().getFullYear());
         </script>
-        TA13 Loading... All Rights Reserved.
+        CleanPlate All Rights Reserved.
       </span>
       <!-- <ul
         class="flex flex-wrap items-center mt-2 text-sm font-medium text-gray-500 sm:mt-0"
@@ -454,12 +454,15 @@
     ></script>
 
     <!-- Scripts for importing tesseract.js -->
-    <script src='https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js'></script>
-	  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.0.269/pdf.min.mjs" type="module"></script>
-    
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.0.269/pdf.min.mjs"
+      type="module"
+    ></script>
+
     <!-- Script for handling functions for expiry date tracker -->
     <script src="../js/expiry-date-tracker.js"></script>
-    
+
     <!-- Script for searching food items -->
     <script>
       window.performSearch = function performSearch(event) {
@@ -499,10 +502,12 @@
 
             const cardContent = `
                 <div class="p-5">
-                    <img src="${product.imageUrl}" alt="${product.productName}" class="my-4 w-full rounded-lg" />
+                    <div class="image-container">
+                        <img src="${product.imageUrl}" alt="${product.productName}" class="my-4 rounded-lg" />
+                    </div>
                     <p class="mt-2 text">${product.productName}</p>
                     <p class="mt-2 sub-text">Shelf life: ${product.expirationDate}</p>
-                    <button class="mt-2 text-xs text-white bg-red-500 px-2 py-1 rounded-full" onclick="deleteProduct('${key}')">Delete</button>
+                    <button class="mt-2 text-xs text-white bg-red-500 px-2 py-1 rounded-full" onclick="deleteProduct('${product.key}')">Delete</button>
                 </div>
                 `;
 
