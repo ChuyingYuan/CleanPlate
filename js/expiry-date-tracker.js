@@ -706,7 +706,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Function to delete a product from local storage
-    window.deleteProduct = function (key) {
+    window.deleteProduct = function deleteProduct(key) {
+        console.log("Delete Product:", key);
         localStorage.removeItem(key);
         resetSearchResults();
         resetAll();
