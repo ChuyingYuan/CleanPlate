@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const takePhotoBtn = document.getElementById('takePhotoBtn');
     const uploadBarcodeBtn = document.getElementById('uploadBarcodeBtn');
     const scanBarcodeBtn = document.getElementById('scanBarcodeBtn');
+    const uploadReceiptBtn = document.getElementById('uploadReceiptBtn');
     const fileInput = document.getElementById('fileInput');
     const resultElement = document.getElementById('result');
     const criticalFood = document.getElementById('criticalFood');
@@ -94,6 +95,7 @@ document.addEventListener("DOMContentLoaded", function () {
     window.handleUploadBarcode = function handleUploadBarcode() {
         console.log("Upload Barcode");
         reset();
+        uploadBarcodeBtn.classList.add('selected');
         fileInput.style.display = 'block';
         fileInput.focus();
         resetSearchResults();
@@ -103,6 +105,7 @@ document.addEventListener("DOMContentLoaded", function () {
     window.handleScanBarcode = function handleScanBarcode() {
         console.log("Scan Barcode");
         reset();
+        scanBarcodeBtn.classList.add('selected');
         takePhotoBtn.style.display = 'block';
         startCamera();
         resetSearchResults();
@@ -113,6 +116,7 @@ document.addEventListener("DOMContentLoaded", function () {
     window.handleUploadReceipt = function handleUploadReceipt() {
         console.log("Upload Receipt");
         reset();
+        uploadReceiptBtn.classList.add('selected');
         receiptInput.style.display = 'block';
         receiptInput.focus();
         resetSearchResults();
@@ -319,6 +323,9 @@ document.addEventListener("DOMContentLoaded", function () {
         fileInput.style.display = 'none';
         receiptInput.style.display = 'none';
         resultElement.innerHTML = '';
+        uploadBarcodeBtn.classList.remove('selected');
+        scanBarcodeBtn.classList.remove('selected');
+        uploadReceiptBtn.classList.remove('selected');
     }
 
     function isMobileDevice() {
