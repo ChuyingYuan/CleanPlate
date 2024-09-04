@@ -3,7 +3,25 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/x-icon" href="../favicon.ico" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="../favicon/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="../favicon/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="../favicon/favicon-16x16.png"
+    />
+    <link rel="icon" type="image/x-icon" href="../favicon/favicon.ico" />
+    <link rel="manifest" href="../favicon/site.webmanifest" />
     <link
       href="https://fonts.googleapis.com/css?family=Lexend"
       rel="stylesheet"
@@ -147,14 +165,78 @@
       </div>
     </nav>
 
-    <main class="container mx-auto px-4 sm:px-8 flex-grow">
+    <main class="container mx-auto mt-2 px-4 sm:px-8 flex-grow">
       <!-- Greeting + Notification + Search Bar -->
       <div class="mx-auto mt-10 sm:mt-16 sm:px-8">
         <div class="grid grid-cols-1 md:grid-cols-3">
           <!-- Greeting -->
           <div class="col-span-1" id="greeting"></div>
+          <!-- Search Bar -->
+          <div class="col-span-1 mb-4">
+            <form
+              id="search-form"
+              onsubmit="performSearch(event)"
+              class="flex items-center max-w-sm mx-auto w-full sm:w-1/2 lg:w-1/3 mt-4 sm:mt-0"
+            >
+              <label for="simple-search" class="sr-only">Search</label>
+              <div class="relative w-full">
+                <div
+                  class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none"
+                >
+                  <img
+                    src="https://img.icons8.com/?size=100&id=YNYZM0o5w67u&format=png&color=000000"
+                    alt="grocery-icon"
+                    class="w-5 h-5"
+                    aria-hidden="true"
+                  />
+                </div>
+                <input
+                  type="text"
+                  id="simple-search"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm block w-full ps-10 p-2.5 rounded-full shadow-md focus:outline-none"
+                  placeholder="Search by food name"
+                  required
+                />
+              </div>
+              <button type="submit" class="p-2.5 ms-2 search-btn">
+                <svg
+                  class="w-5 h-5"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+                  />
+                </svg>
+                <span class="sr-only">Search</span>
+              </button>
+              <!-- Reset Button -->
+              <button
+                type="reset"
+                class="p-2.5 ms-2 search-btn"
+                aria-label="Reset"
+                onclick="resetAll()"
+              >
+                <img
+                  src="https://img.icons8.com/?size=100&id=12494&format=png&color=000000"
+                  alt="Reset"
+                  class="w-5 h-5"
+                  aria-hidden="true"
+                />
+                <span class="sr-only">Reset</span>
+              </button>
+            </form>
+          </div>
           <!-- Notification -->
-          <div class="col-span-1">
+          <div
+            class="col-span-1 flex justify-center lg:justify-end mb-4 lg:mb-0"
+          >
             <div
               id="notification"
               class="flex items-center w-full max-w-xs p-4 text-gray-500 bg-white rounded-lg shadow hidden"
@@ -204,56 +286,6 @@
               </button>
             </div>
           </div>
-          <!-- Search Bar -->
-          <div class="col-span-1 mb-4">
-            <form
-              id="search-form"
-              onsubmit="performSearch(event)"
-              class="flex items-center max-w-sm mx-auto w-full sm:w-1/2 lg:w-1/3 mt-4 sm:mt-0"
-            >
-              <label for="simple-search" class="sr-only">Search</label>
-              <div class="relative w-full">
-                <div
-                  class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none"
-                >
-                  <img
-                    src="https://img.icons8.com/?size=100&id=YNYZM0o5w67u&format=png&color=000000"
-                    alt="grocery-icon"
-                    class="w-5 h-5"
-                    aria-hidden="true"
-                  />
-                </div>
-                <input
-                  type="text"
-                  id="simple-search"
-                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm block w-full ps-10 p-2.5 rounded-full shadow-md focus:outline-none"
-                  placeholder="Search by food name"
-                  required
-                />
-              </div>
-              <button
-                type="submit"
-                class="p-2.5 ms-2 text-sm font-medium text-gray-900 bg-gray-200 rounded-full border border-gray-200 hover:bg-gray-300 focus:ring-4 focus:outline-none focus:ring-gray-300"
-              >
-                <svg
-                  class="w-5 h-5"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-                  />
-                </svg>
-                <span class="sr-only">Search</span>
-              </button>
-            </form>
-          </div>
         </div>
       </div>
 
@@ -271,14 +303,16 @@
                 Search Results
               </h2>
               <div class="food-container" id="searchResults"></div>
-              <!-- Critical Food (Expiring Soon) -->
-              <h2 class="text-xl font-bold mb-2">Expiring Food</h2>
-              <div class="food-container" id="criticalFood"></div>
-              <h2 class="text-xl font-bold mb-2 pt-6">My Food List</h2>
-              <!-- Category -->
-              <div class="food-container" id="ingredientList"></div>
-              <!-- List of Food -->
-              <div id="foodList" class="food-container"></div>
+              <div id="hideFromSearch">
+                <!-- Critical Food (Expiring Soon) -->
+                <h2 class="text-xl font-bold mb-2">Expiring Food</h2>
+                <div class="food-container" id="criticalFood"></div>
+                <h2 class="text-xl font-bold mb-2 pt-6">My Food List</h2>
+                <!-- Category -->
+                <div class="food-container" id="ingredientList"></div>
+                <!-- List of Food -->
+                <div id="foodList" class="food-container"></div>
+              </div>
             </div>
           </div>
 
@@ -310,6 +344,11 @@
                   onclick="handleUploadReceipt()"
                   class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 mt-2"
                 >
+                  <img
+                    src="https://img.icons8.com/?size=100&id=84056&format=png&color=000000"
+                    class="w-4 h-4 me-1 inline-block"
+                    alt="Upload"
+                  />
                   Upload Receipt
                 </button>
 
@@ -477,6 +516,7 @@
     <script>
       window.performSearch = function performSearch(event) {
         event.preventDefault();
+        const hideFromSearch = document.getElementById("hideFromSearch");
         console.log("Perform Search");
         const searchQuery = document
           .getElementById("simple-search")
@@ -525,6 +565,8 @@
             searchResults.appendChild(card);
           }
         }
+
+        hideFromSearch.classList.add("hidden");
 
         if (!resultsFound) {
           searchHeading.style.display = "none";
