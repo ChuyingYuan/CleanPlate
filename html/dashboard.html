@@ -165,46 +165,18 @@
     </nav>
 
     <main class="container mx-auto mt-10 sm:mt-16 sm:px-8">
-      <div
-        class="text-sm font-medium text-center text-gray-500 border-b border-gray-200"
-      >
-        <div class="flex">
-          <button
-            onclick="switchDashboard(event)"
-            data-target="dashboard1"
-            class="tab-button active hover:text-gray-600 hover:border-gray-300"
-          >
-            Waste in Australia
-          </button>
-          <button
-            onclick="switchDashboard(event)"
-            data-target="dashboard2"
-            class="tab-button hover:text-gray-600 hover:border-gray-300"
-          >
-            Household Waste Insights
-          </button>
-          <button
-            onclick="switchDashboard(event)"
-            data-target="dashboard3"
-            class="tab-button hover:text-gray-600 hover:border-gray-300"
-          >
-            Estimated Melbourne Food Waste (Per Year)
-          </button>
-        </div>
-      </div>
-
       <!-- Dashboard 1 -->
-      <div id="dashboard1" class="active">
+      <div>
         <div
           class="tableauPlaceholder"
-          id="viz1724830325625"
+          id="viz1725505975602"
           style="position: relative"
         >
           <noscript
             ><a href="#"
               ><img
                 alt="Dashboard 3 "
-                src="https://public.tableau.com/static/images/Ep/Epic1/Dashboard3/1_rss.png"
+                src="https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Ep&#47;Epic1&#47;Dashboard3&#47;1_rss.png"
                 style="border: none" /></a></noscript
           ><object class="tableauViz" style="display: none">
             <param
@@ -213,12 +185,12 @@
             />
             <param name="embed_code_version" value="3" />
             <param name="site_root" value="" />
-            <param name="name" value="Epic1/Dashboard3" />
+            <param name="name" value="Epic1&#47;Dashboard3" />
             <param name="tabs" value="no" />
             <param name="toolbar" value="yes" />
             <param
               name="static_image"
-              value="https://public.tableau.com/static/images/Ep/Epic1/Dashboard3/1.png"
+              value="https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Ep&#47;Epic1&#47;Dashboard3&#47;1.png"
             />
             <param name="animate_transition" value="yes" />
             <param name="display_static_image" value="yes" />
@@ -230,7 +202,7 @@
           </object>
         </div>
         <script type="text/javascript">
-          var divElement = document.getElementById("viz1724830325625");
+          var divElement = document.getElementById("viz1725505975602");
           var vizElement = divElement.getElementsByTagName("object")[0];
           if (divElement.offsetWidth > 800) {
             vizElement.style.width = "100%";
@@ -240,7 +212,7 @@
             vizElement.style.height = divElement.offsetWidth * 0.75 + "px";
           } else {
             vizElement.style.width = "100%";
-            vizElement.style.height = "727px";
+            vizElement.style.height = "1427px";
           }
           var scriptElement = document.createElement("script");
           scriptElement.src =
@@ -250,10 +222,10 @@
       </div>
 
       <!-- Dashboard 2 -->
-      <div id="dashboard2">
+      <div>
         <div
           class="tableauPlaceholder"
-          id="viz1724849828105"
+          id="viz1725506070735"
           style="position: relative"
         >
           <noscript
@@ -286,7 +258,7 @@
           </object>
         </div>
         <script type="text/javascript">
-          var divElement = document.getElementById("viz1724849828105");
+          var divElement = document.getElementById("viz1725506070735");
           var vizElement = divElement.getElementsByTagName("object")[0];
           if (divElement.offsetWidth > 800) {
             vizElement.style.width = "100%";
@@ -296,7 +268,7 @@
             vizElement.style.height = divElement.offsetWidth * 0.75 + "px";
           } else {
             vizElement.style.width = "100%";
-            vizElement.style.height = "727px";
+            vizElement.style.height = "1877px";
           }
           var scriptElement = document.createElement("script");
           scriptElement.src =
@@ -305,10 +277,11 @@
         </script>
       </div>
 
-      <div id="dashboard3">
+      <!-- Dashboard 3 -->
+      <div>
         <div
           class="tableauPlaceholder"
-          id="viz1724849906105"
+          id="viz1725507271446"
           style="position: relative"
         >
           <noscript
@@ -341,7 +314,7 @@
           </object>
         </div>
         <script type="text/javascript">
-          var divElement = document.getElementById("viz1724849906105");
+          var divElement = document.getElementById("viz1725507271446");
           var vizElement = divElement.getElementsByTagName("object")[0];
           if (divElement.offsetWidth > 800) {
             vizElement.style.width = "100%";
@@ -351,7 +324,7 @@
             vizElement.style.height = divElement.offsetWidth * 0.75 + "px";
           } else {
             vizElement.style.width = "100%";
-            vizElement.style.height = "727px";
+            vizElement.style.height = "1827px";
           }
           var scriptElement = document.createElement("script");
           scriptElement.src =
@@ -375,35 +348,5 @@
 
     <!-- Script for importing Flowbite CSS -->
     <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
-
-    <script type="text/javascript">
-      function switchDashboard(event) {
-        var tabElements = document.querySelectorAll(".tab-button");
-        var dashboard1 = document.getElementById("dashboard1");
-        var dashboard2 = document.getElementById("dashboard2");
-        var dashboard3 = document.getElementById("dashboard3");
-
-        tabElements.forEach(function (tab) {
-          tab.classList.remove("active");
-        });
-
-        var tabElement = event.currentTarget;
-        tabElement.classList.add("active");
-
-        if (tabElement.dataset.target === "dashboard1") {
-          dashboard1.style.display = "block";
-          dashboard2.style.display = "none";
-          dashboard3.style.display = "none";
-        } else if (tabElement.dataset.target === "dashboard2") {
-          dashboard1.style.display = "none";
-          dashboard2.style.display = "block";
-          dashboard3.style.display = "none";
-        } else {
-          dashboard1.style.display = "none";
-          dashboard2.style.display = "none";
-          dashboard3.style.display = "block";
-        }
-      }
-    </script>
   </body>
 </html>
