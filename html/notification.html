@@ -175,13 +175,14 @@
       class="left-0 z-20 w-full p-4 bg-white border-t border-gray-200 shadow md:flex md:items-center md:justify-between"
     >
       <span class="text-sm text-gray-500 sm:text-center">
-        &copy;
-        <script>
-          document.write(new Date().getFullYear());
-        </script>
-        CleanPlate All Rights Reserved.
+        &copy; <span id="current-year"></span> CleanPlate All Rights Reserved.
       </span>
     </footer>
+
+    <script>
+      document.getElementById("current-year").textContent =
+        new Date().getFullYear();
+    </script>
 
     <!-- Script for importing Flowbite CSS -->
     <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>

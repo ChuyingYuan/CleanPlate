@@ -1082,6 +1082,73 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
+    window.performSearch = function performSearch(event) {
+        event.preventDefault();
+        const hideFromSearch = document.getElementById("hideFromSearch");
+        console.log("Perform Search");
+        const searchQuery = document
+            .getElementById("simple-search")
+            .value.toLowerCase()
+            .trim();
+        searchResults.innerHTML = "";
+
+        if (!searchQuery) {
+            const noResultsMessage = document.createElement("p");
+            noResultsMessage.className = "text-center text-gray-500 mb-5";
+            noResultsMessage.textContent = "Please enter a search term.";
+            searchResults.appendChild(noResultsMessage);
+            return;
+        }
+
+        let resultsFound = false;
+
+        searchHeading.style.display = "block";
+
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            const product = JSON.parse(localStorage.getItem(key));
+
+            if (
+                product &&
+                product.productName &&
+                product.productName.toLowerCase().includes(searchQuery)
+            ) {
+                resultsFound = true;
+
+                const card = document.createElement("div");
+                card.className = "food-list-card";
+                const category =
+                    product.category.charAt(0).toUpperCase() +
+                    product.category.slice(1);
+
+                const cardContent = `
+                <div class="p-5">
+                    <span class="category-label text-xs font-bold">${category}</span>
+                    <div class="image-container">
+                        <img src="${product.imageUrl}" alt="${product.productName}" class="my-4 rounded-lg" />
+                    </div>
+                    <p class="mt-2 text">${product.productName}</p>
+                    <p class="mt-2 sub-text">Expires On: ${product.expirationDate}</p>
+                    <button class="mt-2 text-xs text-white bg-red-500 px-2 py-1 rounded-full" onclick="deleteProduct('${key}')">Delete</button>
+                </div>
+                `;
+
+                card.innerHTML = cardContent;
+                searchResults.appendChild(card);
+            }
+        }
+
+        hideFromSearch.classList.add("hidden");
+
+        if (!resultsFound) {
+            searchHeading.style.display = "none";
+            const noResultsMessage = document.createElement("p");
+            noResultsMessage.className = "text-center text-gray-500 mb-5";
+            noResultsMessage.textContent = "No results found";
+            searchResults.appendChild(noResultsMessage);
+        }
+    };
+
     function resetSearchResults() {
         searchHeading.style.display = "none";
         searchResults.innerHTML = "";
