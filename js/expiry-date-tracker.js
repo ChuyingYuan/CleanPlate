@@ -16,6 +16,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const searchHeading = document.getElementById("searchHeading");
     const greetingElement = document.getElementById("greeting");
     const hideFromSearch = document.getElementById("hideFromSearch");
+    const cardViewBtn = document.getElementById('cardViewBtn');
+    const tableViewBtn = document.getElementById('tableViewBtn');
+    const bulkDeleteBtn = document.getElementById('bulkDeleteBtn');
     const currentHour = new Date().getHours();
     const currentDate = new Date();
 
@@ -330,7 +333,6 @@ document.addEventListener("DOMContentLoaded", function () {
         displayIdentifiedFoodItem();
         selectedIngredient = null;
         renderIngredientList();
-        listAllStoredProducts();
         checkExpirations();
         reset();
         updateGreeting();
@@ -381,6 +383,7 @@ document.addEventListener("DOMContentLoaded", function () {
             scanBarcodeBtn.appendChild(scanIcon)
             scanBarcodeBtn.appendChild(document.createTextNode(" Scan Barcode "));
         }
+        listAllStoredProducts();
         resetAll();
     };
 
@@ -594,7 +597,7 @@ document.addEventListener("DOMContentLoaded", function () {
                   ${storageInfo}
                 </p>
                 <p class="shelf-label text-sm text-center">
-                  Shelf life: ${productInfo.expirationDate}
+                  Expires On: ${productInfo.expirationDate}
                 </p>
             </div>
         `;
@@ -666,6 +669,10 @@ document.addEventListener("DOMContentLoaded", function () {
         checkExpirations();
         const products = [];
 
+        cardViewBtn.classList.add('selected');
+        tableViewBtn.classList.remove('selected');
+        bulkDeleteBtn.style.display = 'none';
+
         for (let i = 0; i < localStorage.length; i++) {
             const key = localStorage.key(i);
             const productInfo = JSON.parse(localStorage.getItem(key));
@@ -687,11 +694,10 @@ document.addEventListener("DOMContentLoaded", function () {
                         <img src="${product.imageUrl}" alt="${product.productName}" class="my-4 rounded-lg" />
                     </div>       
                     <p class="mt-2 text">${product.productName}</p>
-                    <p class="mt-2 sub-text">Shelf life: ${product.expirationDate}</p>
+                    <p class="mt-2 sub-text">Expires On: ${product.expirationDate}</p>
                     <button class="mt-2 text-xs text-white bg-red-500 px-2 py-1 rounded-full" onclick="deleteProduct('${product.key}')">Delete</button>
                 </div>
             `;
-
                 card.innerHTML = cardContent;
                 foodList.appendChild(card);
             });
@@ -699,6 +705,183 @@ document.addEventListener("DOMContentLoaded", function () {
             foodList.innerHTML = '<p class="text-center text-gray-500">No products stored.</p>';
         }
     }
+
+    window.listAllStoredProductsByType = function listAllStoredProductsByType(viewType) {
+        checkExpirations();
+        const products = [];
+        const productsPerPage = 10;
+        let currentPage = 1;
+
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            const productInfo = JSON.parse(localStorage.getItem(key));
+            products.push({ key, ...productInfo });
+        }
+
+        products.sort((a, b) => new Date(a.expirationDate) - new Date(b.expirationDate));
+
+        const dataTableView = document.getElementById('dataTableView');
+        const productTableBody = document.querySelector('#productTable tbody');
+
+        foodList.innerHTML = '';
+        dataTableView.style.display = viewType === 'table' ? 'block' : 'none';
+        bulkDeleteBtn.style.display = viewType === 'table' ? 'inline' : 'none';
+        ingredientList.style.display = viewType === 'card' ? 'flex' : 'none';;
+
+        if (viewType === 'card') {
+            foodList.style.display = 'flex';
+            ingredientList.style.display = 'flex';
+            dataTableView.style.display = 'none';
+            cardViewBtn.classList.add('selected');
+            tableViewBtn.classList.remove('selected');
+
+            if (products.length > 0) {
+                products.forEach(product => {
+                    const card = document.createElement('div');
+                    card.className = 'food-list-card';
+
+                    const cardContent = `
+          <div class="p-3">
+            <div class="image-container">
+              <img src="${product.imageUrl}" alt="${product.productName}" class="my-4 rounded-lg" />
+            </div>       
+            <p class="mt-2 text">${product.productName}</p>
+            <p class="mt-2 sub-text">Expires On: ${product.expirationDate}</p>
+            <button class="mt-2 text-xs text-white bg-red-500 px-2 py-1 rounded-full" onclick="deleteProduct('${product.key}')">Delete</button>
+          </div>
+        `;
+                    card.innerHTML = cardContent;
+                    foodList.appendChild(card);
+                });
+            } else {
+                foodList.innerHTML = '<p class="text-center text-gray-500">No products stored.</p>';
+            }
+        } else if (viewType === 'table') {
+            foodList.style.display = 'none';
+            productTableBody.innerHTML = '';
+            cardViewBtn.classList.remove('selected');
+            tableViewBtn.classList.add('selected');
+
+            displayTable(products, productsPerPage, currentPage);
+        }
+    };
+
+    function displayTable(products, productsPerPage, currentPage) {
+        const productTableBody = document.querySelector('#productTable tbody');
+        const pagination = document.getElementById('pagination');
+        const startIndex = (currentPage - 1) * productsPerPage;
+        const endIndex = startIndex + productsPerPage;
+        const paginatedProducts = products.slice(startIndex, endIndex);
+
+        productTableBody.innerHTML = '';
+
+        if (paginatedProducts.length > 0) {
+            paginatedProducts.forEach(product => {
+                const row = document.createElement('tr');
+                const rowContent = `
+        <td><input type="checkbox" class="product-checkbox w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 focus:ring-2" data-key="${product.key}" /></td>
+        <td><img src="${product.imageUrl}" alt="${product.productName}" class="w-12 h-12 object-cover rounded" /></td>
+        <td>${product.category}</td>
+        <td>${product.productName}</td>
+        <td>${product.expirationDate}</td>
+        <td><button class="text-xs text-white bg-red-500 px-2 py-1 rounded-full" onclick="deleteProduct('${product.key}')">Delete</button></td>
+      `;
+                row.innerHTML = rowContent;
+                productTableBody.appendChild(row);
+            });
+        } else {
+            productTableBody.innerHTML = '<tr><td colspan="5" class="text-center text-gray-500">No products stored.</td></tr>';
+        }
+
+        const totalPages = Math.ceil(products.length / productsPerPage);
+        pagination.innerHTML = '';
+
+        for (let i = 1; i <= totalPages; i++) {
+            const pageButton = document.createElement('button');
+            pageButton.className = 'pageBtn px-2 py-1 border rounded-full my-2 mx-1';
+            pageButton.innerText = i;
+
+            if (i === currentPage) {
+                pageButton.classList.add('selected');
+            }
+
+            pageButton.onclick = () => {
+                currentPage = i;
+                displayTable(products, productsPerPage, currentPage);
+            };
+            pagination.appendChild(pageButton);
+        }
+    }
+
+    window.sortTable = function sortTable(column) {
+        const products = [];
+
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            const productInfo = JSON.parse(localStorage.getItem(key));
+            products.push({ key, ...productInfo });
+        }
+
+        if (column === 'name') {
+            products.sort((a, b) => a.productName.localeCompare(b.productName));
+        } else if (column === 'date') {
+            products.sort((a, b) => new Date(a.expirationDate) - new Date(b.expirationDate));
+        } else {
+            products.sort((a, b) => a.category.localeCompare(b.category));
+        }
+
+        displayTable(products, 10, 1);
+    }
+
+    window.bulkDelete = function bulkDelete() {
+        const selectedCheckboxes = document.querySelectorAll('.product-checkbox:checked');
+
+        if (selectedCheckboxes.length === 0) {
+            alert('Please select at least one product to delete.');
+            return;
+        }
+
+        const modal = document.getElementById('popup-modal-bulk');
+        modal.classList.remove('hidden');
+        modal.setAttribute('data-product-keys', JSON.stringify(Array.from(selectedCheckboxes).map(checkbox => checkbox.getAttribute('data-key'))));
+    }
+
+    window.toggleSelectAll = function toggleSelectAll() {
+        const selectAllCheckbox = document.getElementById('selectAll');
+        const productCheckboxes = document.querySelectorAll('.product-checkbox');
+
+        productCheckboxes.forEach(checkbox => {
+            checkbox.checked = selectAllCheckbox.checked;
+        });
+    }
+
+    window.confirmBulkDelete = function confirmBulkDelete() {
+        const modal = document.getElementById('popup-modal-bulk');
+        const keys = JSON.parse(modal.getAttribute('data-product-keys'));
+
+        keys.forEach(key => {
+            console.log("Delete Product:", key);
+            localStorage.removeItem(key);
+        });
+        modal.classList.add('hidden');
+
+        listAllStoredProductsByType('table');
+
+        const currentPage = 1;
+        const productsPerPage = 10;
+        const products = [];
+
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            const productInfo = JSON.parse(localStorage.getItem(key));
+            products.push({ key, ...productInfo });
+        }
+
+        displayTable(products, productsPerPage, currentPage);
+        resetSearchResults();
+        resetAll();
+    };
+
 
     // Function to check expirations (expiring within 7 days)
     function checkExpirations() {
@@ -746,7 +929,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         <img src="${alert.imageUrl}" alt="${alert.productName}" class="my-4 rounded-lg" />
                     </div>
                     <p class="mt-2 text">${alert.productName}</p>
-                    <p class="mt-2 sub-text">Shelf life: ${alert.expirationDate}</p>
+                    <p class="mt-2 sub-text">Expires On: ${alert.expirationDate}</p>
                     <p class="mt-2 text-xs text-red-500 font-semibold">Expires in ${alert.daysUntilExpiry} day(s)</p>
                     <button class="mt-2 text-xs text-white bg-red-500 px-2 py-1 rounded-full" onclick="deleteProduct('${alert.key}')">Delete</button>
                 </div>
@@ -795,9 +978,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     window.cancelDelete = function cancelDelete() {
         const modal = document.getElementById('popup-modal');
+        const modalBulk = document.getElementById('popup-modal-bulk');
         modal.classList.add('hidden');
+        modalBulk.classList.add('hidden');
     }
-
 
     // Ingredients Filtering (Category)
     function renderIngredientList() {
@@ -879,7 +1063,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         <img src="${product.imageUrl}" alt="${product.productName}" class="my-4 rounded-lg" />
                     </div>                    
                     <p class="mt-2 text">${product.productName}</p>
-                    <p class="mt-2 sub-text">Shelf life: ${product.expirationDate}</p>
+                    <p class="mt-2 sub-text">Expires On: ${product.expirationDate}</p>
                     <button class="mt-2 text-xs text-white bg-red-500 px-2 py-1 rounded-full" onclick="deleteProduct('${product.key}')">Delete</button>
                 </div>
             `;

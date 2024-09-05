@@ -65,29 +65,6 @@ footer {
   line-height: 35px;
 }
 
-/* Dashboards */
-.tab-button {
-  display: inline-block;
-  padding: 1rem;
-  border-bottom: 2px solid transparent;
-  cursor: pointer;
-  text-align: center;
-  font-size: 1rem;
-  background-color: #f9f9f9;
-  transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
-}
-
-.tab-button.active {
-  border-color: #38a169;
-  color: #38a169;
-  font-weight: bold;
-}
-
-#dashboard2,
-#dashboard3 {
-  display: none;
-}
-
 /* Card Styles */
 .card,
 .food-list-card,
@@ -321,14 +298,18 @@ footer {
 }
 
 .ingredient:hover,
-.search-btn:hover {
+.search-btn:hover,
+.pageBtn:hover {
   background: #b7e72f;
 }
 
 .ingredient:active,
 #scanBarcodeBtn.selected,
 #uploadReceiptBtn.selected,
-#uploadBarcodeBtn.selected {
+#uploadBarcodeBtn.selected,
+#cardViewBtn.selected,
+#tableViewBtn.selected,
+.pageBtn.selected {
   background-color: #b7e72f;
 }
 
