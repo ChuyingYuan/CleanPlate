@@ -79,7 +79,7 @@ document.addEventListener("DOMContentLoaded", function () {
         } else if (currentHour < 18) {
             greeting = `
             <h1 class="page-label text-xl font-bold">
-                Good Afternoon <img src="https://img.icons8.com/?size=100&id=648&format=png&color=000000" class="w-6 h-6 ml-2 inline-block" />
+                Good Afternoon <img src="https://img.icons8.com/?size=100&id=648&format=png&color=000000" class="w-6 h-6 ml-2 inline-block"/>
             </h1>`;
         } else {
             greeting = `
@@ -775,11 +775,29 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Function to delete a product from local storage
     window.deleteProduct = function deleteProduct(key) {
+        const modal = document.getElementById('popup-modal');
+        modal.classList.remove('hidden');
+        modal.setAttribute('data-product-key', key);
+    }
+
+    window.confirmDelete = function confirmDelete() {
+        const modal = document.getElementById('popup-modal');
+        const key = modal.getAttribute('data-product-key');
         console.log("Delete Product:", key);
+
         localStorage.removeItem(key);
+        modal.classList.add('hidden');
+
+        listAllStoredProducts();
         resetSearchResults();
         resetAll();
-    };
+    }
+
+    window.cancelDelete = function cancelDelete() {
+        const modal = document.getElementById('popup-modal');
+        modal.classList.add('hidden');
+    }
+
 
     // Ingredients Filtering (Category)
     function renderIngredientList() {
