@@ -687,9 +687,11 @@ document.addEventListener("DOMContentLoaded", function () {
             products.forEach(product => {
                 const card = document.createElement('div');
                 card.className = 'food-list-card';
+                const category = product.category.charAt(0).toUpperCase() + product.category.slice(1);
 
                 const cardContent = `
                 <div class="p-3">
+                    <span class="category-label text-xs font-bold">${category}</span>
                     <div class="image-container">
                         <img src="${product.imageUrl}" alt="${product.productName}" class="my-4 rounded-lg" />
                     </div>       
@@ -739,9 +741,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 products.forEach(product => {
                     const card = document.createElement('div');
                     card.className = 'food-list-card';
+                    const category = product.category.charAt(0).toUpperCase() + product.category.slice(1);
 
                     const cardContent = `
           <div class="p-3">
+            <span class="category-label text-xs font-bold">${category}</span>
             <div class="image-container">
               <img src="${product.imageUrl}" alt="${product.productName}" class="my-4 rounded-lg" />
             </div>       
@@ -882,7 +886,6 @@ document.addEventListener("DOMContentLoaded", function () {
         resetAll();
     };
 
-
     // Function to check expirations (expiring within 7 days)
     function checkExpirations() {
         const today = new Date();
@@ -900,6 +903,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     alerts.push({
                         key: key,
                         productName: product.productName,
+                        category: product.category,
                         expirationDate: product.expirationDate,
                         imageUrl: product.imageUrl,
                         daysUntilExpiry: daysUntilExpiry
@@ -1030,7 +1034,7 @@ document.addEventListener("DOMContentLoaded", function () {
             selectedIngredient = null;
         }
 
-        console.log("Selected Ingredient after click:", selectedIngredient); // Debug statement
+        console.log("Selected Ingredient after click:", selectedIngredient);
 
         filterAndDisplayProducts(selectedIngredient);
     }
@@ -1056,9 +1060,11 @@ document.addEventListener("DOMContentLoaded", function () {
             products.forEach(product => {
                 const card = document.createElement('div');
                 card.className = 'food-list-card';
+                const category = product.category.charAt(0).toUpperCase() + product.category.slice(1);
 
                 const cardContent = `
                 <div class="p-3">
+                    <span class="category-label text-xs font-bold">${category}</span>
                     <div class="image-container">
                         <img src="${product.imageUrl}" alt="${product.productName}" class="my-4 rounded-lg" />
                     </div>                    

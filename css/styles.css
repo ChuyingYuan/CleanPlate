@@ -210,6 +210,14 @@ footer {
   padding: 10px;
 }
 
+/* Category Label */
+.category-label {
+  background: rgba(152, 227, 3, 0.152);
+  color: #212124;
+  border-radius: 30px;
+  padding: 10px;
+}
+
 /* Text Styles */
 .text {
   font-weight: 500;

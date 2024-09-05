@@ -538,7 +538,7 @@
                                 </svg>
                               </button>
                             </th>
-                            <th>Action</th>
+                            <th></th>
                           </tr>
                         </thead>
                         <tbody></tbody>
@@ -914,9 +914,13 @@
 
             const card = document.createElement("div");
             card.className = "food-list-card";
+            const category =
+              product.category.charAt(0).toUpperCase() +
+              product.category.slice(1);
 
             const cardContent = `
                 <div class="p-5">
+                    <span class="category-label text-xs font-bold">${category}</span>
                     <div class="image-container">
                         <img src="${product.imageUrl}" alt="${product.productName}" class="my-4 rounded-lg" />
                     </div>
