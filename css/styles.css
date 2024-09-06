@@ -31,7 +31,7 @@ footer {
   background-color: #f9f9f9;
   border-radius: 50%;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  border-bottom: 2px solid gray;
+  border: none;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
@@ -65,11 +65,34 @@ footer {
   line-height: 35px;
 }
 
+/* Dashboards */
+.tab-button {
+  display: inline-block;
+  padding: 1rem;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  text-align: center;
+  font-size: 1rem;
+  background-color: #f9f9f9;
+  transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+}
+
+.tab-button.active {
+  border-color: #38a169;
+  color: #38a169;
+  font-weight: bold;
+}
+
+#dashboard2,
+#dashboard3 {
+  display: none;
+}
+
 /* Card Styles */
 .card,
 .food-list-card,
 .ingredient-card,
-.feature-card {
+.home-card {
   border-radius: 30px;
   background: #ffffff;
   box-shadow: 0px 4px 30px rgba(193, 209, 146, 0.08);
@@ -80,22 +103,6 @@ footer {
   text-align: center;
   overflow: hidden;
   flex: 0 0 auto;
-  border: 2px solid transparent;
-}
-
-.info-card {
-  border-radius: 10px;
-  background: #e1f99c;
-  box-shadow: 0px 4px 30px rgba(193, 209, 146, 0.08);
-  transition: background 0.3s ease;
-  border: 1px solid #e1f99c;
-  margin: 8px;
-  padding: 16px;
-}
-
-.feature-card {
-  width: 280px;
-  min-height: 300px;
 }
 
 .card {
@@ -118,15 +125,11 @@ footer {
   position: relative;
 }
 
-.feature-card:hover {
-  background: #b7e72f;
-}
-
 .card:hover,
 .food-list-card:hover,
-.ingredient-card:hover {
-  border: 2px solid #b7e72f;
-  box-shadow: 0px 4px 30px rgba(193, 209, 146, 0.08);
+.ingredient-card:hover,
+.home-card:hover {
+  background: #b7e72f;
 }
 
 .ingredient-card.selected {
@@ -147,8 +150,8 @@ footer {
 
 .food-list-card .image-container img {
   max-height: 150px;
-  height: 50px;
-  width: 50px;
+  height: auto;
+  width: auto;
 }
 
 /* Ingredient Card Elements */
@@ -161,8 +164,8 @@ footer {
 }
 
 .ingredient-card img {
-  width: 30px;
-  height: 30px;
+  width: 50px;
+  height: 50px;
 }
 
 .ingredient-btn img {
@@ -210,14 +213,6 @@ footer {
   padding: 10px;
 }
 
-/* Category Label */
-.category-label {
-  background: rgba(152, 227, 3, 0.152);
-  color: #212124;
-  border-radius: 30px;
-  padding: 10px;
-}
-
 /* Text Styles */
 .text {
   font-weight: 500;
@@ -230,7 +225,7 @@ footer {
   font-weight: 400;
   font-size: 16px;
   line-height: 20px;
-  color: #858585;
+  color: #bfbfbf;
 }
 
 /* Expiry Date Tracker */
@@ -284,6 +279,7 @@ footer {
 /* Shelf Label */
 .shelf-label {
   padding: 0.5rem;
+  color: #f9f9f9;
   background: #b7e72fba;
   border-radius: 30px;
   width: 50%;
@@ -297,7 +293,7 @@ footer {
   background-color: #f9f9f9;
   border-radius: 50%;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  border-bottom: 2px solid gray;
+  border: none;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
@@ -305,20 +301,12 @@ footer {
   transition: background-color 0.3s ease;
 }
 
-.ingredient:hover,
-.search-btn:hover,
-.pageBtn:hover {
-  background: #b7e72f;
+.ingredient:hover {
+  background: #ffffff;
 }
 
-.ingredient:active,
-#scanBarcodeBtn.selected,
-#uploadReceiptBtn.selected,
-#uploadBarcodeBtn.selected,
-#cardViewBtn.selected,
-#tableViewBtn.selected,
-.pageBtn.selected {
-  background-color: #b7e72f;
+.ingredient:active {
+  background-color: #ffffff;
 }
 
 /* Upload / Scan */
@@ -342,17 +330,4 @@ footer {
   #takePhotoBtn {
     display: block;
   }
-}
-
-.search-btn {
-  padding: 0.5rem;
-  background-color: #f9f9f9;
-  border-radius: 50%;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  border-bottom: 2px solid gray;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color 0.3s ease;
 }

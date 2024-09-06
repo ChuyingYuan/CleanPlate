@@ -5,7 +5,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const takePhotoBtn = document.getElementById('takePhotoBtn');
     const uploadBarcodeBtn = document.getElementById('uploadBarcodeBtn');
     const scanBarcodeBtn = document.getElementById('scanBarcodeBtn');
-    const uploadReceiptBtn = document.getElementById('uploadReceiptBtn');
     const fileInput = document.getElementById('fileInput');
     const resultElement = document.getElementById('result');
     const criticalFood = document.getElementById('criticalFood');
@@ -15,10 +14,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const searchResults = document.getElementById('searchResults');
     const searchHeading = document.getElementById("searchHeading");
     const greetingElement = document.getElementById("greeting");
-    const hideFromSearch = document.getElementById("hideFromSearch");
-    const cardViewBtn = document.getElementById('cardViewBtn');
-    const tableViewBtn = document.getElementById('tableViewBtn');
-    const bulkDeleteBtn = document.getElementById('bulkDeleteBtn');
     const currentHour = new Date().getHours();
     const currentDate = new Date();
 
@@ -72,6 +67,8 @@ document.addEventListener("DOMContentLoaded", function () {
     let selectedIngredient = null;
     let tesseractWorker = null;
 
+    resetAll();
+
     function updateGreeting() {
         let greeting;
         if (currentHour < 12) {
@@ -82,7 +79,7 @@ document.addEventListener("DOMContentLoaded", function () {
         } else if (currentHour < 18) {
             greeting = `
             <h1 class="page-label text-xl font-bold">
-                Good Afternoon <img src="https://img.icons8.com/?size=100&id=648&format=png&color=000000" class="w-6 h-6 ml-2 inline-block"/>
+                Good Afternoon <img src="https://img.icons8.com/?size=100&id=648&format=png&color=000000" class="w-6 h-6 ml-2 inline-block" />
             </h1>`;
         } else {
             greeting = `
@@ -97,7 +94,6 @@ document.addEventListener("DOMContentLoaded", function () {
     window.handleUploadBarcode = function handleUploadBarcode() {
         console.log("Upload Barcode");
         reset();
-        uploadBarcodeBtn.classList.add('selected');
         fileInput.style.display = 'block';
         fileInput.focus();
         resetSearchResults();
@@ -107,7 +103,6 @@ document.addEventListener("DOMContentLoaded", function () {
     window.handleScanBarcode = function handleScanBarcode() {
         console.log("Scan Barcode");
         reset();
-        scanBarcodeBtn.classList.add('selected');
         takePhotoBtn.style.display = 'block';
         startCamera();
         resetSearchResults();
@@ -118,7 +113,6 @@ document.addEventListener("DOMContentLoaded", function () {
     window.handleUploadReceipt = function handleUploadReceipt() {
         console.log("Upload Receipt");
         reset();
-        uploadReceiptBtn.classList.add('selected');
         receiptInput.style.display = 'block';
         receiptInput.focus();
         resetSearchResults();
@@ -240,8 +234,8 @@ document.addEventListener("DOMContentLoaded", function () {
                         </div>`;
             fetchProducts(finalText);
         } else {
-            console.log("No Food Item is recognized from the barcode.");
-            resultElement.textContent = "No Food Item is recognized from the barcode.";
+            console.log("No barcode detected.");
+            resultElement.textContent = "No barcode detected.";
         }
     }
 
@@ -266,28 +260,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         const method = product.type || "Not available";
                         const expirationDate = product.Expiration_Date || "As Soon As Possible";
                         const category = product.category || "others";
-
-                        let imgUrl;
-                        switch (category) {
-                            case "vegetables":
-                                imgUrl = "https://img.icons8.com/?size=100&id=64432&format=png&color=000000";
-                                break;
-                            case "fruit":
-                                imgUrl = "https://img.icons8.com/?size=100&id=18957&format=png&color=000000";
-                                break;
-                            case "meat":
-                                imgUrl = "https://img.icons8.com/?size=100&id=13306&format=png&color=000000";
-                                break;
-                            case "seafood":
-                                imgUrl = "https://img.icons8.com/?size=100&id=dcNXeTC0SjGX&format=png&color=000000";
-                                break;
-                            case "dairy":
-                                imgUrl = "https://img.icons8.com/?size=100&id=12874&format=png&color=000000";
-                                break;
-                            default:
-                                imgUrl = "https://img.icons8.com/?size=100&id=32236&format=png&color=000000";
-
-                        }
+                        const imgUrl = product.imageUrl || "https://img.icons8.com/?size=100&id=32236&format=png&color=000000";
 
                         const uniqueKey = generateUniqueKey();
 
@@ -328,11 +301,11 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     // Reset all UI elements
-    window.resetAll = function resetAll() {
-        hideFromSearch.classList.remove('hidden');
+    function resetAll() {
         displayIdentifiedFoodItem();
         selectedIngredient = null;
         renderIngredientList();
+        listAllStoredProducts();
         checkExpirations();
         reset();
         updateGreeting();
@@ -340,16 +313,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Reset elements 
     function reset() {
-        stopCamera();
         canvas.style.display = 'none';
         video.style.display = 'none';
         takePhotoBtn.style.display = 'none';
         fileInput.style.display = 'none';
         receiptInput.style.display = 'none';
         resultElement.innerHTML = '';
-        uploadBarcodeBtn.classList.remove('selected');
-        scanBarcodeBtn.classList.remove('selected');
-        uploadReceiptBtn.classList.remove('selected');
     }
 
     function isMobileDevice() {
@@ -357,34 +326,16 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     window.onload = function () {
-        const uploadIcon = document.createElement("img");
-        uploadIcon.src = "https://img.icons8.com/?size=100&id=84056&format=png&color=000000";
-        uploadIcon.alt = "Upload";
-        uploadIcon.className = "w-4 h-4 me-1 inline-block";
-        const scanIcon = document.createElement("img");
-        scanIcon.src = "https://img.icons8.com/?size=100&id=nFrSaSmj6cIG&format=png&color=000000";
-        scanIcon.alt = "Scan";
-        scanIcon.className = "w-4 h-4 me-1 inline-block";
-
         if (isMobileDevice()) {
-            uploadBarcodeBtn.innerHTML = '';
-            uploadBarcodeBtn.appendChild(uploadIcon);
-            uploadBarcodeBtn.appendChild(document.createTextNode(" Upload/ Scan Barcode "));
-            uploadBarcodeBtn.appendChild(scanIcon)
+            uploadBarcodeBtn.textContent = 'Upload / Scan Barcode';
             document.getElementById("uploadText").innerHTML =
                 '<span class="font-semibold">Click to Scan / Upload</span>';
             scanBarcodeBtn.style.display = 'none';
         } else {
+            uploadBarcodeBtn.textContent = 'Upload Barcode';
             scanBarcodeBtn.style.display = 'inline-flex';
-            uploadBarcodeBtn.innerHTML = '';
-            uploadBarcodeBtn.appendChild(uploadIcon);
-            uploadBarcodeBtn.appendChild(document.createTextNode(" Upload Barcode "));
-            scanBarcodeBtn.innerHTML = '';
-            scanBarcodeBtn.appendChild(scanIcon)
-            scanBarcodeBtn.appendChild(document.createTextNode(" Scan Barcode "));
         }
-        listAllStoredProducts();
-        resetAll();
+
     };
 
     // Request camera access
@@ -471,8 +422,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
                         fetchProductInfo(barcode);
                     } else {
-                        console.log("No Food Item is recognized from the barcode.");
-                        resultElement.textContent = "No Food Item is recognized from the barcode.";
+                        console.log("No barcode detected.");
+                        resultElement.textContent = "No barcode detected.";
                     }
                 })
                 .catch(err => {
@@ -512,29 +463,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     const metrics = productData.metrics || "Not available";
                     const method = productData.method || "Not available";
                     const expirationDate = productData.expiration_date || "As Soon As Possible";
-
-                    let imgUrl;
-                    switch (category) {
-                        case "vegetables":
-                            imgUrl = "https://img.icons8.com/?size=100&id=64432&format=png&color=000000";
-                            break;
-                        case "fruit":
-                            imgUrl = "https://img.icons8.com/?size=100&id=18957&format=png&color=000000";
-                            break;
-                        case "meat":
-                            imgUrl = "https://img.icons8.com/?size=100&id=13306&format=png&color=000000";
-                            break;
-                        case "seafood":
-                            imgUrl = "https://img.icons8.com/?size=100&id=dcNXeTC0SjGX&format=png&color=000000";
-                            break;
-                        case "dairy":
-                            imgUrl = "https://img.icons8.com/?size=100&id=12874&format=png&color=000000";
-                            break;
-                        default:
-                            imgUrl = "https://img.icons8.com/?size=100&id=32236&format=png&color=000000";
-
-                    }
-
+                    const imgUrl = productData.image_url || "https://img.icons8.com/?size=100&id=32236&format=png&color=000000";
 
                     const uniqueKey = generateUniqueKey();
 
@@ -596,8 +525,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 <p class="text-sm text-center text mb-4">
                   ${storageInfo}
                 </p>
-                <p class="shelf-label text-sm text-center">
-                  Expires On: ${productInfo.expirationDate}
+                <p class="shelf-label sub-text text-sm text-center">
+                  Shelf life: ${productInfo.expirationDate}
                 </p>
             </div>
         `;
@@ -669,10 +598,6 @@ document.addEventListener("DOMContentLoaded", function () {
         checkExpirations();
         const products = [];
 
-        cardViewBtn.classList.add('selected');
-        tableViewBtn.classList.remove('selected');
-        bulkDeleteBtn.style.display = 'none';
-
         for (let i = 0; i < localStorage.length; i++) {
             const key = localStorage.key(i);
             const productInfo = JSON.parse(localStorage.getItem(key));
@@ -687,19 +612,18 @@ document.addEventListener("DOMContentLoaded", function () {
             products.forEach(product => {
                 const card = document.createElement('div');
                 card.className = 'food-list-card';
-                const category = product.category.charAt(0).toUpperCase() + product.category.slice(1);
 
                 const cardContent = `
                 <div class="p-3">
-                    <span class="category-label text-xs font-bold">${category}</span>
                     <div class="image-container">
                         <img src="${product.imageUrl}" alt="${product.productName}" class="my-4 rounded-lg" />
                     </div>       
                     <p class="mt-2 text">${product.productName}</p>
-                    <p class="mt-2 sub-text">Expires On: ${product.expirationDate}</p>
+                    <p class="mt-2 sub-text">Shelf life: ${product.expirationDate}</p>
                     <button class="mt-2 text-xs text-white bg-red-500 px-2 py-1 rounded-full" onclick="deleteProduct('${product.key}')">Delete</button>
                 </div>
             `;
+
                 card.innerHTML = cardContent;
                 foodList.appendChild(card);
             });
@@ -707,184 +631,6 @@ document.addEventListener("DOMContentLoaded", function () {
             foodList.innerHTML = '<p class="text-center text-gray-500">No products stored.</p>';
         }
     }
-
-    window.listAllStoredProductsByType = function listAllStoredProductsByType(viewType) {
-        checkExpirations();
-        const products = [];
-        const productsPerPage = 10;
-        let currentPage = 1;
-
-        for (let i = 0; i < localStorage.length; i++) {
-            const key = localStorage.key(i);
-            const productInfo = JSON.parse(localStorage.getItem(key));
-            products.push({ key, ...productInfo });
-        }
-
-        products.sort((a, b) => new Date(a.expirationDate) - new Date(b.expirationDate));
-
-        const dataTableView = document.getElementById('dataTableView');
-        const productTableBody = document.querySelector('#productTable tbody');
-
-        foodList.innerHTML = '';
-        dataTableView.style.display = viewType === 'table' ? 'block' : 'none';
-        bulkDeleteBtn.style.display = viewType === 'table' ? 'inline' : 'none';
-        ingredientList.style.display = viewType === 'card' ? 'flex' : 'none';;
-
-        if (viewType === 'card') {
-            foodList.style.display = 'flex';
-            ingredientList.style.display = 'flex';
-            dataTableView.style.display = 'none';
-            cardViewBtn.classList.add('selected');
-            tableViewBtn.classList.remove('selected');
-
-            if (products.length > 0) {
-                products.forEach(product => {
-                    const card = document.createElement('div');
-                    card.className = 'food-list-card';
-                    const category = product.category.charAt(0).toUpperCase() + product.category.slice(1);
-
-                    const cardContent = `
-          <div class="p-3">
-            <span class="category-label text-xs font-bold">${category}</span>
-            <div class="image-container">
-              <img src="${product.imageUrl}" alt="${product.productName}" class="my-4 rounded-lg" />
-            </div>       
-            <p class="mt-2 text">${product.productName}</p>
-            <p class="mt-2 sub-text">Expires On: ${product.expirationDate}</p>
-            <button class="mt-2 text-xs text-white bg-red-500 px-2 py-1 rounded-full" onclick="deleteProduct('${product.key}')">Delete</button>
-          </div>
-        `;
-                    card.innerHTML = cardContent;
-                    foodList.appendChild(card);
-                });
-            } else {
-                foodList.innerHTML = '<p class="text-center text-gray-500">No products stored.</p>';
-            }
-        } else if (viewType === 'table') {
-            foodList.style.display = 'none';
-            productTableBody.innerHTML = '';
-            cardViewBtn.classList.remove('selected');
-            tableViewBtn.classList.add('selected');
-
-            displayTable(products, productsPerPage, currentPage);
-        }
-    };
-
-    function displayTable(products, productsPerPage, currentPage) {
-        const productTableBody = document.querySelector('#productTable tbody');
-        const pagination = document.getElementById('pagination');
-        const startIndex = (currentPage - 1) * productsPerPage;
-        const endIndex = startIndex + productsPerPage;
-        const paginatedProducts = products.slice(startIndex, endIndex);
-
-        productTableBody.innerHTML = '';
-
-        if (paginatedProducts.length > 0) {
-            paginatedProducts.forEach(product => {
-                const row = document.createElement('tr');
-                const rowContent = `
-        <td><input type="checkbox" class="product-checkbox w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 focus:ring-2" data-key="${product.key}" /></td>
-        <td><img src="${product.imageUrl}" alt="${product.productName}" class="w-12 h-12 object-cover rounded" /></td>
-        <td>${product.category}</td>
-        <td>${product.productName}</td>
-        <td>${product.expirationDate}</td>
-        <td><button class="text-xs text-white bg-red-500 px-2 py-1 rounded-full" onclick="deleteProduct('${product.key}')">Delete</button></td>
-      `;
-                row.innerHTML = rowContent;
-                productTableBody.appendChild(row);
-            });
-        } else {
-            productTableBody.innerHTML = '<tr><td colspan="5" class="text-center text-gray-500">No products stored.</td></tr>';
-        }
-
-        const totalPages = Math.ceil(products.length / productsPerPage);
-        pagination.innerHTML = '';
-
-        for (let i = 1; i <= totalPages; i++) {
-            const pageButton = document.createElement('button');
-            pageButton.className = 'pageBtn px-2 py-1 border rounded-full my-2 mx-1';
-            pageButton.innerText = i;
-
-            if (i === currentPage) {
-                pageButton.classList.add('selected');
-            }
-
-            pageButton.onclick = () => {
-                currentPage = i;
-                displayTable(products, productsPerPage, currentPage);
-            };
-            pagination.appendChild(pageButton);
-        }
-    }
-
-    window.sortTable = function sortTable(column) {
-        const products = [];
-
-        for (let i = 0; i < localStorage.length; i++) {
-            const key = localStorage.key(i);
-            const productInfo = JSON.parse(localStorage.getItem(key));
-            products.push({ key, ...productInfo });
-        }
-
-        if (column === 'name') {
-            products.sort((a, b) => a.productName.localeCompare(b.productName));
-        } else if (column === 'date') {
-            products.sort((a, b) => new Date(a.expirationDate) - new Date(b.expirationDate));
-        } else {
-            products.sort((a, b) => a.category.localeCompare(b.category));
-        }
-
-        displayTable(products, 10, 1);
-    }
-
-    window.bulkDelete = function bulkDelete() {
-        const selectedCheckboxes = document.querySelectorAll('.product-checkbox:checked');
-
-        if (selectedCheckboxes.length === 0) {
-            alert('Please select at least one product to delete.');
-            return;
-        }
-
-        const modal = document.getElementById('popup-modal-bulk');
-        modal.classList.remove('hidden');
-        modal.setAttribute('data-product-keys', JSON.stringify(Array.from(selectedCheckboxes).map(checkbox => checkbox.getAttribute('data-key'))));
-    }
-
-    window.toggleSelectAll = function toggleSelectAll() {
-        const selectAllCheckbox = document.getElementById('selectAll');
-        const productCheckboxes = document.querySelectorAll('.product-checkbox');
-
-        productCheckboxes.forEach(checkbox => {
-            checkbox.checked = selectAllCheckbox.checked;
-        });
-    }
-
-    window.confirmBulkDelete = function confirmBulkDelete() {
-        const modal = document.getElementById('popup-modal-bulk');
-        const keys = JSON.parse(modal.getAttribute('data-product-keys'));
-
-        keys.forEach(key => {
-            console.log("Delete Product:", key);
-            localStorage.removeItem(key);
-        });
-        modal.classList.add('hidden');
-
-        listAllStoredProductsByType('table');
-
-        const currentPage = 1;
-        const productsPerPage = 10;
-        const products = [];
-
-        for (let i = 0; i < localStorage.length; i++) {
-            const key = localStorage.key(i);
-            const productInfo = JSON.parse(localStorage.getItem(key));
-            products.push({ key, ...productInfo });
-        }
-
-        displayTable(products, productsPerPage, currentPage);
-        resetSearchResults();
-        resetAll();
-    };
 
     // Function to check expirations (expiring within 7 days)
     function checkExpirations() {
@@ -903,7 +649,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     alerts.push({
                         key: key,
                         productName: product.productName,
-                        category: product.category,
                         expirationDate: product.expirationDate,
                         imageUrl: product.imageUrl,
                         daysUntilExpiry: daysUntilExpiry
@@ -933,7 +678,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         <img src="${alert.imageUrl}" alt="${alert.productName}" class="my-4 rounded-lg" />
                     </div>
                     <p class="mt-2 text">${alert.productName}</p>
-                    <p class="mt-2 sub-text">Expires On: ${alert.expirationDate}</p>
+                    <p class="mt-2 sub-text">Shelf life: ${alert.expirationDate}</p>
                     <p class="mt-2 text-xs text-red-500 font-semibold">Expires in ${alert.daysUntilExpiry} day(s)</p>
                     <button class="mt-2 text-xs text-white bg-red-500 px-2 py-1 rounded-full" onclick="deleteProduct('${alert.key}')">Delete</button>
                 </div>
@@ -962,30 +707,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Function to delete a product from local storage
     window.deleteProduct = function deleteProduct(key) {
-        const modal = document.getElementById('popup-modal');
-        modal.classList.remove('hidden');
-        modal.setAttribute('data-product-key', key);
-    }
-
-    window.confirmDelete = function confirmDelete() {
-        const modal = document.getElementById('popup-modal');
-        const key = modal.getAttribute('data-product-key');
         console.log("Delete Product:", key);
-
         localStorage.removeItem(key);
-        modal.classList.add('hidden');
-
-        listAllStoredProducts();
         resetSearchResults();
         resetAll();
-    }
-
-    window.cancelDelete = function cancelDelete() {
-        const modal = document.getElementById('popup-modal');
-        const modalBulk = document.getElementById('popup-modal-bulk');
-        modal.classList.add('hidden');
-        modalBulk.classList.add('hidden');
-    }
+    };
 
     // Ingredients Filtering (Category)
     function renderIngredientList() {
@@ -1034,7 +760,7 @@ document.addEventListener("DOMContentLoaded", function () {
             selectedIngredient = null;
         }
 
-        console.log("Selected Ingredient after click:", selectedIngredient);
+        console.log("Selected Ingredient after click:", selectedIngredient); // Debug statement
 
         filterAndDisplayProducts(selectedIngredient);
     }
@@ -1060,16 +786,14 @@ document.addEventListener("DOMContentLoaded", function () {
             products.forEach(product => {
                 const card = document.createElement('div');
                 card.className = 'food-list-card';
-                const category = product.category.charAt(0).toUpperCase() + product.category.slice(1);
 
                 const cardContent = `
                 <div class="p-3">
-                    <span class="category-label text-xs font-bold">${category}</span>
                     <div class="image-container">
                         <img src="${product.imageUrl}" alt="${product.productName}" class="my-4 rounded-lg" />
                     </div>                    
                     <p class="mt-2 text">${product.productName}</p>
-                    <p class="mt-2 sub-text">Expires On: ${product.expirationDate}</p>
+                    <p class="mt-2 sub-text">Shelf life: ${product.expirationDate}</p>
                     <button class="mt-2 text-xs text-white bg-red-500 px-2 py-1 rounded-full" onclick="deleteProduct('${product.key}')">Delete</button>
                 </div>
             `;
@@ -1081,73 +805,6 @@ document.addEventListener("DOMContentLoaded", function () {
             foodList.innerHTML = '<p class="text-center text-gray-500">No products found.</p>';
         }
     }
-
-    window.performSearch = function performSearch(event) {
-        event.preventDefault();
-        const hideFromSearch = document.getElementById("hideFromSearch");
-        console.log("Perform Search");
-        const searchQuery = document
-            .getElementById("simple-search")
-            .value.toLowerCase()
-            .trim();
-        searchResults.innerHTML = "";
-
-        if (!searchQuery) {
-            const noResultsMessage = document.createElement("p");
-            noResultsMessage.className = "text-center text-gray-500 mb-5";
-            noResultsMessage.textContent = "Please enter a search term.";
-            searchResults.appendChild(noResultsMessage);
-            return;
-        }
-
-        let resultsFound = false;
-
-        searchHeading.style.display = "block";
-
-        for (let i = 0; i < localStorage.length; i++) {
-            const key = localStorage.key(i);
-            const product = JSON.parse(localStorage.getItem(key));
-
-            if (
-                product &&
-                product.productName &&
-                product.productName.toLowerCase().includes(searchQuery)
-            ) {
-                resultsFound = true;
-
-                const card = document.createElement("div");
-                card.className = "food-list-card";
-                const category =
-                    product.category.charAt(0).toUpperCase() +
-                    product.category.slice(1);
-
-                const cardContent = `
-                <div class="p-5">
-                    <span class="category-label text-xs font-bold">${category}</span>
-                    <div class="image-container">
-                        <img src="${product.imageUrl}" alt="${product.productName}" class="my-4 rounded-lg" />
-                    </div>
-                    <p class="mt-2 text">${product.productName}</p>
-                    <p class="mt-2 sub-text">Expires On: ${product.expirationDate}</p>
-                    <button class="mt-2 text-xs text-white bg-red-500 px-2 py-1 rounded-full" onclick="deleteProduct('${key}')">Delete</button>
-                </div>
-                `;
-
-                card.innerHTML = cardContent;
-                searchResults.appendChild(card);
-            }
-        }
-
-        hideFromSearch.classList.add("hidden");
-
-        if (!resultsFound) {
-            searchHeading.style.display = "none";
-            const noResultsMessage = document.createElement("p");
-            noResultsMessage.className = "text-center text-gray-500 mb-5";
-            noResultsMessage.textContent = "No results found";
-            searchResults.appendChild(noResultsMessage);
-        }
-    };
 
     function resetSearchResults() {
         searchHeading.style.display = "none";

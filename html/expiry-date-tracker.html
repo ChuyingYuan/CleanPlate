@@ -3,24 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      rel="apple-touch-icon"
-      sizes="180x180"
-      href="../favicon/apple-touch-icon.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="32x32"
-      href="../favicon/favicon-32x32.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="16x16"
-      href="../favicon/favicon-16x16.png"
-    />
-    <link rel="icon" type="image/x-icon" href="../favicon/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" />
     <link
       href="https://fonts.googleapis.com/css?family=Lexend"
       rel="stylesheet"
@@ -30,7 +13,7 @@
       rel="stylesheet"
     />
     <link href="../css/styles.css" rel="stylesheet" />
-    <title>Expiry Tracker - CleanPlate</title>
+    <title>Food Expiry Tracker</title>
   </head>
   <body class="min-h-screen flex flex-col pt-10 sm:pt-24">
     <!-- Sticky Navigation Bar -->
@@ -91,7 +74,7 @@
                 <img
                   src="https://img.icons8.com/?size=100&id=73&format=png&color=000000"
                   class="w-6 h-6"
-                  alt="Home"
+                  alt="Dashboard"
                 />
                 <span class="block md:hidden text-center mt-2">Home</span>
               </a>
@@ -103,11 +86,29 @@
             </li>
             <li class="relative group">
               <a
+                href="../html/dashboard.html"
+                class="flex items-center space-x-2 py-2 px-3 md:p-0 nav-icon"
+              >
+                <img
+                  src="https://img.icons8.com/?size=100&id=sUJRwjfnGwbJ&format=png&color=000000"
+                  class="w-6 h-6"
+                  alt="Dashboard"
+                />
+                <span class="block md:hidden text-center mt-2">Dashboard</span>
+              </a>
+              <div
+                class="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 opacity-0 group-hover:opacity-100 transition-opacity bg-gray-800 text-white text-xs rounded-md py-1 px-2"
+              >
+                Dashboard
+              </div>
+            </li>
+            <li class="relative group">
+              <a
                 href="../html/expiry-date-tracker.html"
                 class="flex items-center space-x-2 py-2 px-3 md:p-0 nav-icon active"
               >
                 <img
-                  src="https://img.icons8.com/?size=100&id=283&format=png&color=000000"
+                  src="https://img.icons8.com/?size=100&id=23&format=png&color=000000"
                   class="w-6 h-6"
                   alt="Expiry Tracker"
                 />
@@ -121,192 +122,19 @@
                 Expiry Tracker
               </div>
             </li>
-            <!-- <li class="relative group">
-              <a
-                href="../html/notification.html"
-                class="flex items-center space-x-2 py-2 px-3 md:p-0 nav-icon"
-              >
-                <img
-                  src="https://img.icons8.com/?size=100&id=23&format=png&color=000000"
-                  class="w-6 h-6"
-                  alt="Notification"
-                />
-                <span class="block md:hidden text-center mt-2"
-                  >Notification</span
-                >
-              </a>
-              <div
-                class="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 opacity-0 group-hover:opacity-100 transition-opacity bg-gray-800 text-white text-xs rounded-md py-1 px-2"
-              >
-                Notification
-              </div>
-            </li> -->
-            <li class="relative group">
-              <a
-                href="../html/dashboard.html"
-                class="flex items-center space-x-2 py-2 px-3 md:p-0 nav-icon"
-              >
-                <img
-                  src="https://img.icons8.com/?size=100&id=6rfR2m3WUfBr&format=png&color=000000"
-                  class="w-6 h-6"
-                  alt="Dashboard"
-                />
-                <span class="block md:hidden text-center mt-2">Dashboard</span>
-              </a>
-              <div
-                class="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 opacity-0 group-hover:opacity-100 transition-opacity bg-gray-800 text-white text-xs rounded-md py-1 px-2"
-              >
-                Dashboard
-              </div>
-            </li>
           </ul>
         </div>
       </div>
     </nav>
 
-    <main class="container mx-auto mt-2 px-4 sm:px-8 flex-grow">
+    <main class="container mx-auto px-4 sm:px-8 flex-grow">
       <!-- Greeting + Notification + Search Bar -->
       <div class="mx-auto mt-10 sm:mt-16 sm:px-8">
-        <div class="grid grid-cols-1 md:grid-cols-3 items-center">
-          <!-- Greeting + Popover Button -->
-          <div id="greeting-container" class="flex items-center space-x-2">
-            <!-- Greeting-->
-            <div id="greeting" class="page-label text-xl font-bold"></div>
-
-            <!-- Popover Button -->
-            <button
-              data-popover-target="popover-description"
-              data-popover-placement="bottom-end"
-              type="button"
-            >
-              <svg
-                class="w-5 h-5 ms-2 text-gray-400 hover:text-gray-500"
-                aria-hidden="true"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z"
-                  clip-rule="evenodd"
-                ></path></svg
-              ><span class="sr-only">Show information</span>
-            </button>
-          </div>
-
-          <!-- Popover Content -->
-          <div
-            data-popover
-            id="popover-description"
-            role="tooltip"
-            class="absolute z-10 invisible inline-block text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 w-72"
-          >
-            <div class="p-3 space-y-2">
-              <h3 class="font-semibold text-gray-900">Expiring Food</h3>
-              <p>
-                Food that is about to expire in 7 days. You can view the list of
-                food that is about to expire.
-              </p>
-              <hr class="h-px my-8 bg-gray-200 border-0" />
-              <h3 class="font-semibold text-gray-900">My Food List</h3>
-              <p>
-                List of food that you have added to your inventory. You can view
-                the list of food that you have added.
-              </p>
-
-              <!-- Link to Notification -->
-              <!-- <a
-                href="#"
-                class="flex items-center font-medium text-green-600 hover:text-green-700 hover:underline"
-              >
-                Go to Notification
-                <svg
-                  class="w-2 h-2 ms-1.5 rtl:rotate-180"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 6 10"
-                >
-                  <path
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="m1 9 4-4-4-4"
-                  />
-                </svg>
-              </a> -->
-            </div>
-            <div data-popper-arrow></div>
-          </div>
-
-          <!-- Search Bar -->
-          <div class="col-span-1 mb-4">
-            <form
-              id="search-form"
-              onsubmit="performSearch(event)"
-              class="flex items-center max-w-sm mx-auto w-full sm:w-1/2 lg:w-1/3 mt-4 sm:mt-0"
-            >
-              <label for="simple-search" class="sr-only">Search</label>
-              <div class="relative w-full">
-                <div
-                  class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none"
-                >
-                  <img
-                    src="https://img.icons8.com/?size=100&id=YNYZM0o5w67u&format=png&color=000000"
-                    alt="grocery-icon"
-                    class="w-5 h-5"
-                    aria-hidden="true"
-                  />
-                </div>
-                <input
-                  type="text"
-                  id="simple-search"
-                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm block w-full ps-10 p-2.5 rounded-full shadow-md focus:outline-none"
-                  placeholder="Search by food name"
-                  required
-                />
-              </div>
-              <button type="submit" class="p-2.5 ms-2 search-btn">
-                <svg
-                  class="w-5 h-5"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-                  />
-                </svg>
-                <span class="sr-only">Search</span>
-              </button>
-              <!-- Reset Button -->
-              <button
-                type="reset"
-                class="p-2.5 ms-2 search-btn"
-                aria-label="Reset"
-                onclick="resetAll()"
-              >
-                <img
-                  src="https://img.icons8.com/?size=100&id=12494&format=png&color=000000"
-                  alt="Reset"
-                  class="w-5 h-5"
-                  aria-hidden="true"
-                />
-                <span class="sr-only">Reset</span>
-              </button>
-            </form>
-          </div>
+        <div class="grid grid-cols-1 md:grid-cols-3">
+          <!-- Greeting -->
+          <div class="col-span-1" id="greeting"></div>
           <!-- Notification -->
-          <div
-            class="col-span-1 flex justify-center lg:justify-end mb-4 lg:mb-0"
-          >
+          <div class="col-span-1">
             <div
               id="notification"
               class="flex items-center w-full max-w-xs p-4 text-gray-500 bg-white rounded-lg shadow hidden"
@@ -356,6 +184,56 @@
               </button>
             </div>
           </div>
+          <!-- Search Bar -->
+          <div class="col-span-1 mb-4">
+            <form
+              id="search-form"
+              onsubmit="performSearch(event)"
+              class="flex items-center max-w-sm mx-auto w-full sm:w-1/2 lg:w-1/3 mt-4 sm:mt-0"
+            >
+              <label for="simple-search" class="sr-only">Search</label>
+              <div class="relative w-full">
+                <div
+                  class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none"
+                >
+                  <img
+                    src="https://img.icons8.com/?size=100&id=YNYZM0o5w67u&format=png&color=000000"
+                    alt="grocery-icon"
+                    class="w-5 h-5"
+                    aria-hidden="true"
+                  />
+                </div>
+                <input
+                  type="text"
+                  id="simple-search"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm block w-full ps-10 p-2.5 rounded-full shadow-md focus:outline-none"
+                  placeholder="Search by food name"
+                  required
+                />
+              </div>
+              <button
+                type="submit"
+                class="p-2.5 ms-2 text-sm font-medium text-gray-900 bg-gray-200 rounded-full border border-gray-200 hover:bg-gray-300 focus:ring-4 focus:outline-none focus:ring-gray-300"
+              >
+                <svg
+                  class="w-5 h-5"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+                  />
+                </svg>
+                <span class="sr-only">Search</span>
+              </button>
+            </form>
+          </div>
         </div>
       </div>
 
@@ -373,181 +251,14 @@
                 Search Results
               </h2>
               <div class="food-container" id="searchResults"></div>
-              <!-- Expiring Food + Category + Food List -->
-              <div id="hideFromSearch">
-                <div
-                  id="accordion-open"
-                  data-accordion="open"
-                  data-active-classes="text-gray-900"
-                  data-inactive-classes="text-gray-500"
-                >
-                  <!-- Expiring Food -->
-                  <h2 id="accordion-open-heading-1">
-                    <button
-                      type="button"
-                      class="flex items-center justify-between w-full py-5 font-medium rtl:text-right text-gray-500 border-b border-gray-200 gap-3"
-                      data-accordion-target="#accordion-open-body-1"
-                      aria-expanded="true"
-                      aria-controls="accordion-open-body-1"
-                    >
-                      <h2 class="text-xl font-bold mb-2">Expiring Food</h2>
-                      <svg
-                        data-accordion-icon
-                        class="w-3 h-3 rotate-180 shrink-0"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 10 6"
-                      >
-                        <path
-                          stroke="currentColor"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M9 5 5 1 1 5"
-                        />
-                      </svg>
-                    </button>
-                  </h2>
-                  <div
-                    id="accordion-open-body-1"
-                    class="hidden"
-                    aria-labelledby="accordion-open-heading-1"
-                  >
-                    <div class="food-container" id="criticalFood"></div>
-                  </div>
-                  <!-- Category + Food List -->
-                  <h2 id="accordion-open-heading-2">
-                    <button
-                      type="button"
-                      class="flex items-center justify-between w-full py-5 font-medium rtl:text-right text-gray-500 border-b border-gray-200 gap-3"
-                      data-accordion-target="#accordion-open-body-2"
-                      aria-expanded="true"
-                      aria-controls="accordion-open-body-2"
-                    >
-                      <h2 class="text-xl font-bold mb-2 pt-6">My Food List</h2>
-                      <svg
-                        data-accordion-icon
-                        class="w-3 h-3 rotate-180 shrink-0"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 10 6"
-                      >
-                        <path
-                          stroke="currentColor"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M9 5 5 1 1 5"
-                        />
-                      </svg>
-                    </button>
-                  </h2>
-                  <div
-                    id="accordion-open-body-2"
-                    class="hidden"
-                    aria-labelledby="accordion-open-heading-2"
-                  >
-                    <!-- Buttons for Changing View -->
-                    <div class="view-toggle">
-                      <button
-                        onclick="listAllStoredProductsByType('card')"
-                        class="px-4 py-2 rounded-full me-2 hover:bg-gray-200 border border-gray-300 my-2"
-                        id="cardViewBtn"
-                      >
-                        Card
-                      </button>
-                      <button
-                        onclick="listAllStoredProductsByType('table')"
-                        class="px-4 py-2 rounded-full me-2 hover:bg-gray-200 border border-gray-300 my-2"
-                        id="tableViewBtn"
-                      >
-                        List
-                      </button>
-                      <button
-                        onclick="bulkDelete()"
-                        id="bulkDeleteBtn"
-                        class="px-4 py-1.5 rounded-full me-2 bg-red-500 text-white"
-                      >
-                        Delete Selected
-                      </button>
-                    </div>
-                    <!-- Category -->
-                    <div class="food-container" id="ingredientList"></div>
-                    <!-- Card View of Food -->
-                    <div id="foodList" class="food-container"></div>
-                    <!-- Table view of Food -->
-                    <div id="dataTableView" style="display: none">
-                      <table id="productTable" class="w-full text-left">
-                        <thead>
-                          <tr>
-                            <th>
-                              <input
-                                type="checkbox"
-                                id="selectAll"
-                                onclick="toggleSelectAll()"
-                                class="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 focus:ring-2"
-                              />
-                            </th>
-                            <th></th>
-                            <th>
-                              Category<button onclick="sortTable('category')">
-                                <svg
-                                  class="w-3 h-3 ms-1.5"
-                                  aria-hidden="true"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  fill="currentColor"
-                                  viewBox="0 0 24 24"
-                                >
-                                  <path
-                                    d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z"
-                                  />
-                                </svg>
-                              </button>
-                            </th>
-                            <th>
-                              Name
-                              <button onclick="sortTable('name')">
-                                <svg
-                                  class="w-3 h-3 ms-1.5"
-                                  aria-hidden="true"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  fill="currentColor"
-                                  viewBox="0 0 24 24"
-                                >
-                                  <path
-                                    d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z"
-                                  />
-                                </svg>
-                              </button>
-                            </th>
-                            <th>
-                              Expiration Date
-                              <button onclick="sortTable('date')">
-                                <svg
-                                  class="w-3 h-3 ms-1.5"
-                                  aria-hidden="true"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  fill="currentColor"
-                                  viewBox="0 0 24 24"
-                                >
-                                  <path
-                                    d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z"
-                                  />
-                                </svg>
-                              </button>
-                            </th>
-                            <th></th>
-                          </tr>
-                        </thead>
-                        <tbody></tbody>
-                      </table>
-                      <div id="pagination" class="mt-4"></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <!-- Critical Food (Expiring Soon) -->
+              <h2 class="text-xl font-bold mb-2">Critical Food</h2>
+              <div class="food-container" id="criticalFood"></div>
+              <h2 class="text-xl font-bold mb-2 pt-6">My Food List</h2>
+              <!-- Category -->
+              <div class="food-container" id="ingredientList"></div>
+              <!-- List of Food -->
+              <div id="foodList" class="food-container"></div>
             </div>
           </div>
 
@@ -579,11 +290,6 @@
                   onclick="handleUploadReceipt()"
                   class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 mt-2"
                 >
-                  <img
-                    src="https://img.icons8.com/?size=100&id=84056&format=png&color=000000"
-                    class="w-4 h-4 me-1 inline-block"
-                    alt="Upload"
-                  />
                   Upload Receipt
                 </button>
 
@@ -600,7 +306,7 @@
                       class="flex flex-col items-center justify-center pt-5 pb-6"
                     >
                       <svg
-                        class="w-8 h-8 mb-4 text-gray-500"
+                        class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
                         aria-hidden="true"
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
@@ -614,10 +320,15 @@
                           d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
                         />
                       </svg>
-                      <p id="uploadText" class="mb-2 text-sm text-gray-500">
+                      <p
+                        id="uploadText"
+                        class="mb-2 text-sm text-gray-500 dark:text-gray-400"
+                      >
                         <span class="font-semibold">Click to upload</span>
                       </p>
-                      <p class="text-xs text-gray-500">PNG, JPG</p>
+                      <p class="text-xs text-gray-500 dark:text-gray-400">
+                        PNG, JPG
+                      </p>
                     </div>
                     <input
                       id="barcodeImg"
@@ -652,7 +363,7 @@
                       class="flex flex-col items-center justify-center pt-5 pb-6"
                     >
                       <svg
-                        class="w-8 h-8 mb-4 text-gray-500"
+                        class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
                         aria-hidden="true"
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
@@ -666,10 +377,15 @@
                           d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
                         />
                       </svg>
-                      <p id="uploadText" class="mb-2 text-sm text-gray-500">
+                      <p
+                        id="uploadText"
+                        class="mb-2 text-sm text-gray-500 dark:text-gray-400"
+                      >
                         <span class="font-semibold">Click to upload</span>
                       </p>
-                      <p class="text-xs text-gray-500">PNG, JPG</p>
+                      <p class="text-xs text-gray-500 dark:text-gray-400">
+                        PNG, JPG
+                      </p>
                     </div>
                     <input
                       id="receiptImg"
@@ -704,160 +420,29 @@
           </div>
         </div>
       </div>
-
-      <!-- Popup Modal for Single Delete Confirmation -->
-      <div
-        id="popup-modal"
-        tabindex="-1"
-        class="hidden fixed inset-0 z-50 flex items-center justify-center w-full h-full"
-        style="background-color: rgba(0, 0, 0, 0.5)"
-      >
-        <div class="relative p-4 w-full max-w-md max-h-full">
-          <div class="relative bg-white rounded-lg shadow">
-            <button
-              type="button"
-              class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-full text-sm w-8 h-8 ms-auto inline-flex justify-center items-center"
-              data-modal-hide="popup-modal"
-              onclick="cancelDelete()"
-            >
-              <svg
-                class="w-3 h-3"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 14 14"
-              >
-                <path
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-                />
-              </svg>
-              <span class="sr-only">Close</span>
-            </button>
-            <div class="p-4 md:p-5 text-center">
-              <svg
-                class="mx-auto mb-4 text-gray-400 w-12 h-12"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 20 20"
-              >
-                <path
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                />
-              </svg>
-              <h3 class="mb-5 text-lg font-normal text-gray-500">
-                Are you sure you want to delete this item?
-              </h3>
-              <button
-                type="button"
-                class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium text-sm inline-flex items-center px-5 py-2.5 text-center rounded-full"
-                onclick="confirmDelete()"
-              >
-                Yes
-              </button>
-              <button
-                type="button"
-                class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white border border-gray-400 hover:bg-gray-200 hover:text-gray-700 focus:z-10 focus:ring-4 focus:ring-gray-100 rounded-full"
-                onclick="cancelDelete()"
-              >
-                No
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Popup Modal for Bulk Delete Confirmation -->
-      <div
-        id="popup-modal-bulk"
-        tabindex="-1"
-        class="hidden fixed inset-0 z-50 flex items-center justify-center w-full h-full"
-        style="background-color: rgba(0, 0, 0, 0.5)"
-      >
-        <div class="relative p-4 w-full max-w-md max-h-full">
-          <div class="relative bg-white rounded-lg shadow">
-            <button
-              type="button"
-              class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-full text-sm w-8 h-8 ms-auto inline-flex justify-center items-center"
-              data-modal-hide="popup-modal-bulk"
-              onclick="cancelDelete()"
-            >
-              <svg
-                class="w-3 h-3"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 14 14"
-              >
-                <path
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-                />
-              </svg>
-              <span class="sr-only">Close</span>
-            </button>
-            <div class="p-4 md:p-5 text-center">
-              <svg
-                class="mx-auto mb-4 text-gray-400 w-12 h-12"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 20 20"
-              >
-                <path
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                />
-              </svg>
-              <h3 class="mb-5 text-lg font-normal text-gray-500">
-                Are you sure you want to delete the selected item(s)?
-              </h3>
-              <button
-                type="button"
-                class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium text-sm inline-flex items-center px-5 py-2.5 text-center rounded-full"
-                onclick="confirmBulkDelete()"
-              >
-                Yes
-              </button>
-              <button
-                type="button"
-                class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white border border-gray-400 hover:bg-gray-200 hover:text-gray-700 focus:z-10 focus:ring-4 focus:ring-gray-100 rounded-full"
-                onclick="cancelDelete()"
-              >
-                No
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
     </main>
 
     <footer
       class="left-0 z-20 w-full p-4 bg-white border-t border-gray-200 shadow md:flex md:items-center md:justify-between"
     >
       <span class="text-sm text-gray-500 sm:text-center">
-        &copy; <span id="current-year"></span> CleanPlate All Rights Reserved.
+        &copy;
+        <script>
+          document.write(new Date().getFullYear());
+        </script>
+        CleanPlate All Rights Reserved.
       </span>
+      <!-- <ul
+        class="flex flex-wrap items-center mt-2 text-sm font-medium text-gray-500 sm:mt-0"
+      >
+        <li><a href="#" class="hover:underline me-4 md:me-6">About</a></li>
+        <li>
+          <a href="#" class="hover:underline me-4 md:me-6">Privacy Policy</a>
+        </li>
+        <li><a href="#" class="hover:underline me-4 md:me-6">Licensing</a></li>
+        <li><a href="#" class="hover:underline">Contact</a></li>
+      </ul> -->
     </footer>
-
-    <script>
-      document.getElementById("current-year").textContent =
-        new Date().getFullYear();
-    </script>
 
     <!-- Script for importing Flowbite CSS -->
     <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
@@ -877,5 +462,68 @@
 
     <!-- Script for handling functions for expiry date tracker -->
     <script src="../js/expiry-date-tracker.js"></script>
+
+    <!-- Script for searching food items -->
+    <script>
+      window.performSearch = function performSearch(event) {
+        event.preventDefault();
+        console.log("Perform Search");
+        const searchQuery = document
+          .getElementById("simple-search")
+          .value.toLowerCase()
+          .trim();
+        searchResults.innerHTML = "";
+
+        if (!searchQuery) {
+          const noResultsMessage = document.createElement("p");
+          noResultsMessage.className = "text-center text-gray-500 mb-5";
+          noResultsMessage.textContent = "Please enter a search term.";
+          searchResults.appendChild(noResultsMessage);
+          return;
+        }
+
+        let resultsFound = false;
+
+        searchHeading.style.display = "block";
+
+        for (let i = 0; i < localStorage.length; i++) {
+          const key = localStorage.key(i);
+          const product = JSON.parse(localStorage.getItem(key));
+
+          if (
+            product &&
+            product.productName &&
+            product.productName.toLowerCase().includes(searchQuery)
+          ) {
+            resultsFound = true;
+
+            const card = document.createElement("div");
+            card.className = "food-list-card";
+
+            const cardContent = `
+                <div class="p-5">
+                    <div class="image-container">
+                        <img src="${product.imageUrl}" alt="${product.productName}" class="my-4 rounded-lg" />
+                    </div>
+                    <p class="mt-2 text">${product.productName}</p>
+                    <p class="mt-2 sub-text">Shelf life: ${product.expirationDate}</p>
+                    <button class="mt-2 text-xs text-white bg-red-500 px-2 py-1 rounded-full" onclick="deleteProduct('${key}')">Delete</button>
+                </div>
+                `;
+
+            card.innerHTML = cardContent;
+            searchResults.appendChild(card);
+          }
+        }
+
+        if (!resultsFound) {
+          searchHeading.style.display = "none";
+          const noResultsMessage = document.createElement("p");
+          noResultsMessage.className = "text-center text-gray-500 mb-5";
+          noResultsMessage.textContent = "No results found";
+          searchResults.appendChild(noResultsMessage);
+        }
+      };
+    </script>
   </body>
 </html>

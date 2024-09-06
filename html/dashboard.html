@@ -3,24 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      rel="apple-touch-icon"
-      sizes="180x180"
-      href="../favicon/apple-touch-icon.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="32x32"
-      href="../favicon/favicon-32x32.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="16x16"
-      href="../favicon/favicon-16x16.png"
-    />
-    <link rel="icon" type="image/x-icon" href="../favicon/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" />
     <link
       href="https://fonts.googleapis.com/css?family=Lexend"
       rel="stylesheet"
@@ -30,7 +13,7 @@
       rel="stylesheet"
     />
     <link href="../css/styles.css" rel="stylesheet" />
-    <title>Dashboard - CleanPlate</title>
+    <title>Dashboard</title>
   </head>
   <body class="pt-10 sm:pt-24">
     <!-- Sticky Navigation Bar -->
@@ -91,7 +74,7 @@
                 <img
                   src="https://img.icons8.com/?size=100&id=73&format=png&color=000000"
                   class="w-6 h-6"
-                  alt="Home"
+                  alt="Dashboard"
                 />
                 <span class="block md:hidden text-center mt-2">Home</span>
               </a>
@@ -103,11 +86,29 @@
             </li>
             <li class="relative group">
               <a
+                href="../html/dashboard.html"
+                class="flex items-center space-x-2 py-2 px-3 md:p-0 nav-icon active"
+              >
+                <img
+                  src="https://img.icons8.com/?size=100&id=sUJRwjfnGwbJ&format=png&color=000000"
+                  class="w-6 h-6"
+                  alt="Dashboard"
+                />
+                <span class="block md:hidden text-center mt-2">Dashboard</span>
+              </a>
+              <div
+                class="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 opacity-0 group-hover:opacity-100 transition-opacity bg-gray-800 text-white text-xs rounded-md py-1 px-2"
+              >
+                Dashboard
+              </div>
+            </li>
+            <li class="relative group">
+              <a
                 href="../html/expiry-date-tracker.html"
                 class="flex items-center space-x-2 py-2 px-3 md:p-0 nav-icon"
               >
                 <img
-                  src="https://img.icons8.com/?size=100&id=283&format=png&color=000000"
+                  src="https://img.icons8.com/?size=100&id=23&format=png&color=000000"
                   class="w-6 h-6"
                   alt="Expiry Tracker"
                 />
@@ -121,62 +122,52 @@
                 Expiry Tracker
               </div>
             </li>
-            <!-- <li class="relative group">
-              <a
-                href="../html/notification.html"
-                class="flex items-center space-x-2 py-2 px-3 md:p-0 nav-icon"
-              >
-                <img
-                  src="https://img.icons8.com/?size=100&id=23&format=png&color=000000"
-                  class="w-6 h-6"
-                  alt="Notification"
-                />
-                <span class="block md:hidden text-center mt-2"
-                  >Notification</span
-                >
-              </a>
-              <div
-                class="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 opacity-0 group-hover:opacity-100 transition-opacity bg-gray-800 text-white text-xs rounded-md py-1 px-2"
-              >
-                Notification
-              </div>
-            </li> -->
-            <li class="relative group">
-              <a
-                href="../html/dashboard.html"
-                class="flex items-center space-x-2 py-2 px-3 md:p-0 nav-icon active"
-              >
-                <img
-                  src="https://img.icons8.com/?size=100&id=6rfR2m3WUfBr&format=png&color=000000"
-                  class="w-6 h-6"
-                  alt="Dashboard"
-                />
-                <span class="block md:hidden text-center mt-2">Dashboard</span>
-              </a>
-              <div
-                class="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 opacity-0 group-hover:opacity-100 transition-opacity bg-gray-800 text-white text-xs rounded-md py-1 px-2"
-              >
-                Dashboard
-              </div>
-            </li>
           </ul>
         </div>
       </div>
     </nav>
 
     <main class="container mx-auto mt-10 sm:mt-16 sm:px-8">
+      <div
+        class="text-sm font-medium text-center text-gray-500 border-b border-gray-200"
+      >
+        <div class="flex">
+          <button
+            onclick="switchDashboard(event)"
+            data-target="dashboard1"
+            class="tab-button active hover:text-gray-600 hover:border-gray-300"
+          >
+            Waste in Australia
+          </button>
+          <button
+            onclick="switchDashboard(event)"
+            data-target="dashboard2"
+            class="tab-button hover:text-gray-600 hover:border-gray-300"
+          >
+            Household Waste Insights
+          </button>
+          <button
+            onclick="switchDashboard(event)"
+            data-target="dashboard3"
+            class="tab-button hover:text-gray-600 hover:border-gray-300"
+          >
+            Melbourne Food Waste Simulator
+          </button>
+        </div>
+      </div>
+
       <!-- Dashboard 1 -->
-      <div>
+      <div id="dashboard1" class="active">
         <div
           class="tableauPlaceholder"
-          id="viz1725505975602"
+          id="viz1724830325625"
           style="position: relative"
         >
           <noscript
             ><a href="#"
               ><img
                 alt="Dashboard 3 "
-                src="https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Ep&#47;Epic1&#47;Dashboard3&#47;1_rss.png"
+                src="https://public.tableau.com/static/images/Ep/Epic1/Dashboard3/1_rss.png"
                 style="border: none" /></a></noscript
           ><object class="tableauViz" style="display: none">
             <param
@@ -185,12 +176,12 @@
             />
             <param name="embed_code_version" value="3" />
             <param name="site_root" value="" />
-            <param name="name" value="Epic1&#47;Dashboard3" />
+            <param name="name" value="Epic1/Dashboard3" />
             <param name="tabs" value="no" />
             <param name="toolbar" value="yes" />
             <param
               name="static_image"
-              value="https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Ep&#47;Epic1&#47;Dashboard3&#47;1.png"
+              value="https://public.tableau.com/static/images/Ep/Epic1/Dashboard3/1.png"
             />
             <param name="animate_transition" value="yes" />
             <param name="display_static_image" value="yes" />
@@ -202,7 +193,7 @@
           </object>
         </div>
         <script type="text/javascript">
-          var divElement = document.getElementById("viz1725505975602");
+          var divElement = document.getElementById("viz1724830325625");
           var vizElement = divElement.getElementsByTagName("object")[0];
           if (divElement.offsetWidth > 800) {
             vizElement.style.width = "100%";
@@ -212,7 +203,7 @@
             vizElement.style.height = divElement.offsetWidth * 0.75 + "px";
           } else {
             vizElement.style.width = "100%";
-            vizElement.style.height = "1427px";
+            vizElement.style.height = "727px";
           }
           var scriptElement = document.createElement("script");
           scriptElement.src =
@@ -222,10 +213,10 @@
       </div>
 
       <!-- Dashboard 2 -->
-      <div>
+      <div id="dashboard2">
         <div
           class="tableauPlaceholder"
-          id="viz1725506070735"
+          id="viz1724849828105"
           style="position: relative"
         >
           <noscript
@@ -258,7 +249,7 @@
           </object>
         </div>
         <script type="text/javascript">
-          var divElement = document.getElementById("viz1725506070735");
+          var divElement = document.getElementById("viz1724849828105");
           var vizElement = divElement.getElementsByTagName("object")[0];
           if (divElement.offsetWidth > 800) {
             vizElement.style.width = "100%";
@@ -268,7 +259,7 @@
             vizElement.style.height = divElement.offsetWidth * 0.75 + "px";
           } else {
             vizElement.style.width = "100%";
-            vizElement.style.height = "1877px";
+            vizElement.style.height = "727px";
           }
           var scriptElement = document.createElement("script");
           scriptElement.src =
@@ -277,11 +268,10 @@
         </script>
       </div>
 
-      <!-- Dashboard 3 -->
-      <div>
+      <div id="dashboard3">
         <div
           class="tableauPlaceholder"
-          id="viz1725507271446"
+          id="viz1724849906105"
           style="position: relative"
         >
           <noscript
@@ -314,7 +304,7 @@
           </object>
         </div>
         <script type="text/javascript">
-          var divElement = document.getElementById("viz1725507271446");
+          var divElement = document.getElementById("viz1724849906105");
           var vizElement = divElement.getElementsByTagName("object")[0];
           if (divElement.offsetWidth > 800) {
             vizElement.style.width = "100%";
@@ -324,7 +314,7 @@
             vizElement.style.height = divElement.offsetWidth * 0.75 + "px";
           } else {
             vizElement.style.width = "100%";
-            vizElement.style.height = "1827px";
+            vizElement.style.height = "727px";
           }
           var scriptElement = document.createElement("script");
           scriptElement.src =
@@ -338,16 +328,64 @@
       class="left-0 z-20 w-full p-4 bg-white border-t border-gray-200 shadow md:flex md:items-center md:justify-between"
     >
       <span class="text-sm text-gray-500 sm:text-center">
-        &copy; <span id="current-year"></span> CleanPlate All Rights Reserved.
+        &copy;
+        <script>
+          document.write(new Date().getFullYear());
+        </script>
+        CleanPlate All Rights Reserved.
       </span>
+      <!-- <ul
+        class="flex flex-wrap items-center mt-2 text-sm font-medium text-gray-500 sm:mt-0"
+      >
+        <li><a href="#" class="hover:underline me-4 md:me-6">About</a></li>
+        <li>
+          <a href="#" class="hover:underline me-4 md:me-6">Privacy Policy</a>
+        </li>
+        <li><a href="#" class="hover:underline me-4 md:me-6">Licensing</a></li>
+        <li><a href="#" class="hover:underline">Contact</a></li>
+      </ul> -->
     </footer>
 
-    <script>
-      document.getElementById("current-year").textContent =
-        new Date().getFullYear();
-    </script>
+    <script type="text/javascript">
+      function switchDashboard(event) {
+        var tabElements = document.querySelectorAll(".tab-button");
+        var dashboard1 = document.getElementById("dashboard1");
+        var dashboard2 = document.getElementById("dashboard2");
+        var dashboard3 = document.getElementById("dashboard3");
 
-    <!-- Script for importing Flowbite CSS -->
-    <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
+        tabElements.forEach(function (tab) {
+          tab.classList.remove("active");
+        });
+
+        var tabElement = event.currentTarget;
+        tabElement.classList.add("active");
+
+        if (tabElement.dataset.target === "dashboard1") {
+          dashboard1.style.display = "block";
+          dashboard2.style.display = "none";
+          dashboard3.style.display = "none";
+        } else if (tabElement.dataset.target === "dashboard2") {
+          dashboard1.style.display = "none";
+          dashboard2.style.display = "block";
+          dashboard3.style.display = "none";
+        } else {
+          dashboard1.style.display = "none";
+          dashboard2.style.display = "none";
+          dashboard3.style.display = "block";
+        }
+      }
+
+      function toggleMenu() {
+        const menu = document.getElementById("navbar-sticky");
+
+        if (menu.classList.contains("hidden")) {
+          menu.classList.remove("hidden");
+          menu.classList.add("block");
+        } else {
+          menu.classList.remove("block");
+          menu.classList.add("hidden");
+        }
+      }
+    </script>
   </body>
 </html>
