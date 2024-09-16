@@ -349,13 +349,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 for (const product of productData) {
                     try {
                         // console.log(product);
-                        const productNameRaw = product.product_name || "Not available";
+                        const productNameRaw = product.Name || "Not available";
                         const productName = productNameRaw.charAt(0).toUpperCase() + productNameRaw.slice(1);
-                        const minShelfLife = product.min_shelf_life || "Not available";
-                        const maxShelfLife = product.max_shelf_life || "Not available";
-                        const metrics = product.metrics || "Not available";
-                        const method = product.method || "Not available";
-                        const expirationDate = product.expiration_date || "As Soon As Possible";
+                        const minShelfLife = product.DOP_Refrigerate_Min || "Not available";
+                        const maxShelfLife = product.DOP_Refrigerate_Max || "Not available";
+                        const metrics = product.DOP_Refrigerate_Metric || "Not available";
+                        const method = product.type || "Not available";
+                        const expirationDate = product.Expiration_Date || "As Soon As Possible";
                         const category = product.category || "others";
                         const recordDate = product.receipt_date || currentDate.toISOString().split('T')[0];
 
