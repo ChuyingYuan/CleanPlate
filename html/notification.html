@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="../favicon/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="../favicon/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="../favicon/favicon-16x16.png"
+    />
+    <link rel="icon" type="image/x-icon" href="../favicon/favicon.ico" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Lexend"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.css"
+      rel="stylesheet"
+    />
+    <link href="../css/styles.css" rel="stylesheet" />
+    <title>Notification - CleanPlate</title>
+  </head>
+  <body class="min-h-screen flex flex-col pt-10 sm:pt-24">
+   <!-- Sticky Navigation Bar -->
+   <nav
+   class="bg-white fixed w-full z-20 top-0 start-0 border-b border-gray-200"
+ >
+   <div
+     class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4"
+   >
+     <a
+       href="../html/index.html"
+       class="flex items-center space-x-3 rtl:space-x-reverse"
+     >
+       <img src="../WEBSITE_LOGO.png" class="h-8" alt="Logo" />
+       <span class="self-center text-2xl font-semibold whitespace-nowrap"
+         >CleanPlate</span
+       >
+     </a>
+     <div class="flex md:order-2 space-x-3 rtl:space-x-reverse">
+       <button
+         data-collapse-toggle="navbar-sticky"
+         onclick="toggleMenu()"
+         type="button"
+         class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
+         aria-controls="navbar-sticky"
+         aria-expanded="false"
+       >
+         <span class="sr-only">Open main menu</span>
+         <svg
+           class="w-5 h-5"
+           aria-hidden="true"
+           xmlns="http://www.w3.org/2000/svg"
+           fill="none"
+           viewBox="0 0 17 14"
+         >
+           <path
+             stroke="currentColor"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             stroke-width="2"
+             d="M1 1h15M1 7h15M1 13h15"
+           />
+         </svg>
+       </button>
+     </div>
+     <div
+       class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1"
+       id="navbar-sticky"
+     >
+       <ul
+         class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white"
+       >
+         <li class="relative group">
+           <a
+             href="../html/index.html"
+             class="flex items-center space-x-2 py-2 px-3 md:p-0 nav-icon active"
+           >
+             <img
+               src="https://img.icons8.com/?size=100&id=73&format=png&color=000000"
+               class="w-6 h-6"
+               alt="Home"
+             />
+             <span class="block md:hidden text-center mt-2">Home</span>
+           </a>
+           <div
+             class="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 opacity-0 group-hover:opacity-100 transition-opacity bg-gray-800 text-white text-xs rounded-md py-1 px-2"
+           >
+             Home
+           </div>
+         </li>
+         <li class="relative group">
+           <a
+             href="../html/expiry-date-tracker.html"
+             class="flex items-center space-x-2 py-2 px-3 md:p-0 nav-icon"
+           >
+             <img
+               src="https://img.icons8.com/?size=100&id=283&format=png&color=000000"
+               class="w-6 h-6"
+               alt="Expiry Tracker"
+             />
+             <span class="block md:hidden text-center mt-2"
+               >Expiry Tracker</span
+             >
+           </a>
+           <div
+             class="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 opacity-0 group-hover:opacity-100 transition-opacity bg-gray-800 text-white text-xs rounded-md py-1 px-2"
+           >
+             Expiry Tracker
+           </div>
+         </li>
+         <li class="relative group">
+           <a
+             href="../html/recipe.html"
+             class="flex items-center space-x-2 py-2 px-3 md:p-0 nav-icon"
+           >
+             <img
+               src="https://img.icons8.com/?size=100&id=idEQE7TsG0NA&format=png&color=000000"
+               class="w-6 h-6"
+               alt="Recipe"
+             />
+             <span class="block md:hidden text-center mt-2">Recipe</span>
+           </a>
+           <div
+             class="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 opacity-0 group-hover:opacity-100 transition-opacity bg-gray-800 text-white text-xs rounded-md py-1 px-2"
+           >
+             Recipe
+           </div>
+         </li>
+         <li class="relative group">
+           <a
+             href="../html/notification.html"
+             class="flex items-center space-x-2 py-2 px-3 md:p-0 nav-icon"
+           >
+             <img
+               src="https://img.icons8.com/?size=100&id=23&format=png&color=000000"
+               class="w-6 h-6"
+               alt="Notification"
+             />
+             <span class="block md:hidden text-center mt-2"
+               >Notification</span
+             >
+           </a>
+           <div
+             class="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 opacity-0 group-hover:opacity-100 transition-opacity bg-gray-800 text-white text-xs rounded-md py-1 px-2"
+           >
+             Notification
+           </div>
+         </li>
+         <li class="relative group">
+           <a
+             href="../html/dashboard.html"
+             class="flex items-center space-x-2 py-2 px-3 md:p-0 nav-icon"
+           >
+             <img
+               src="https://img.icons8.com/?size=100&id=6rfR2m3WUfBr&format=png&color=000000"
+               class="w-6 h-6"
+               alt="Dashboard"
+             />
+             <span class="block md:hidden text-center mt-2">Dashboard</span>
+           </a>
+           <div
+             class="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 opacity-0 group-hover:opacity-100 transition-opacity bg-gray-800 text-white text-xs rounded-md py-1 px-2"
+           >
+             Dashboard
+           </div>
+         </li>
+       </ul>
+     </div>
+   </div>
+ </nav>
+
+    <main class="container mx-auto px-4 sm:px-8 flex-grow">
+      <!-- Greeting + Popover Button + Search Bar -->
+      <div class="mx-auto mt-10 sm:mt-16 sm:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 items-center">
+          <!-- Greeting + Popover Button -->
+          <div id="greeting-container" class="flex items-center space-x-2">
+            <!-- Greeting-->
+            <div id="greeting" class="page-label text-xl font-bold"></div>
+
+            <!-- Popover Button -->
+            <button
+              data-popover-target="popover-description"
+              data-popover-placement="bottom-end"
+              type="button"
+            >
+              <svg
+                class="w-5 h-5 ms-2 text-gray-400 hover:text-gray-500"
+                aria-hidden="true"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z"
+                  clip-rule="evenodd"
+                ></path></svg
+              ><span class="sr-only">Show information</span>
+            </button>
+          </div>
+
+          <!-- Popover Content -->
+          <div
+            data-popover
+            id="popover-description"
+            role="tooltip"
+            class="absolute z-10 invisible inline-block text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 w-72"
+          >
+            <div class="p-3 space-y-2">
+              <h3 class="font-semibold text-gray-900">Calendar</h3>
+              <p>
+                Visualise the number of upcoming expiry items in a calendar
+                view.
+              </p>
+              <hr class="h-px my-8 bg-gray-200 border-0" />
+              <h3 class="font-semibold text-gray-900">List</h3>
+              <p>View the list of expiring food in different time frames.</p>
+            </div>
+            <div data-popper-arrow></div>
+          </div>
+
+          <!-- Search Bar -->
+          <div class="col-span-1 my-2">
+            <form
+              id="search-form"
+              onsubmit="performSearch(event)"
+              class="flex items-center max-w-sm mx-auto w-full sm:w-1/2 lg:w-1/3 mt-4 sm:mt-0"
+            >
+              <label for="simple-search" class="sr-only">Search</label>
+              <div class="relative w-full">
+                <div
+                  class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none"
+                >
+                  <img
+                    src="https://img.icons8.com/?size=100&id=YNYZM0o5w67u&format=png&color=000000"
+                    alt="grocery-icon"
+                    class="w-5 h-5"
+                    aria-hidden="true"
+                  />
+                </div>
+                <input
+                  type="text"
+                  id="simple-search"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm block w-full ps-10 p-2.5 rounded-full shadow-md focus:outline-none"
+                  placeholder="Search by food name"
+                  required
+                />
+              </div>
+              <button type="submit" class="p-2.5 ms-2 search-btn">
+                <svg
+                  class="w-5 h-5"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+                  />
+                </svg>
+                <span class="sr-only">Search</span>
+              </button>
+              <!-- Reset Button -->
+              <button
+                type="reset"
+                class="p-2.5 ms-2 search-btn"
+                aria-label="Reset"
+                onclick="resetAll()"
+              >
+                <img
+                  src="https://img.icons8.com/?size=100&id=12494&format=png&color=000000"
+                  alt="Reset"
+                  class="w-5 h-5"
+                  aria-hidden="true"
+                />
+                <span class="sr-only">Reset</span>
+              </button>
+            </form>
+          </div>
+          <div
+            class="col-span-1 flex justify-center lg:justify-end mb-4 lg:mb-0"
+          ></div>
+        </div>
+      </div>
+
+      <!-- Search Heading + Results -->
+      <div class="mx-auto sm:mt-16 sm:px-8">
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+          <div class="col-span-2">
+            <!-- Search Heading + Results -->
+            <div>
+              <h2
+                class="text-xl font-bold mb-2"
+                id="searchHeading"
+                style="display: none"
+              >
+                Search Results
+              </h2>
+              <div class="food-container" id="searchResults"></div>
+            </div>
+
+            <!-- Calendar View -->
+            <div id="hideFromSearch">
+              <div
+                class="w-full max-w-7xl mx-auto bg-white rounded-lg p-4 mt-2 mb-2"
+                id="calendarView"
+              ></div>
+            </div>
+          </div>
+          <!-- List View -->
+          <div class="col-span-1 mt-2 flex flex-col items-center">
+            <div
+              class="w-full max-w-7xl mx-auto bg-white rounded-lg p-4 justify-center"
+            >
+              <h2 class="text-l font-bold mb-2 text-center" id="list-title">
+                Items Expiring Today
+              </h2>
+              <div class="flex flex-wrap gap-2 justify-center">
+                <button
+                  class="w-full lg:w-auto px-4 py-2 rounded-full border border-gray-300 text-sm font-medium selected"
+                  id="today"
+                  onclick="changeListView(0)"
+                >
+                  Today
+                </button>
+                <button
+                  class="w-full lg:w-auto px-4 py-2 rounded-full border border-gray-300 text-sm font-medium"
+                  id="day3btn"
+                  onclick="changeListView(3)"
+                >
+                  Within 3 days
+                </button>
+                <button
+                  class="w-full lg:w-auto px-4 py-2 rounded-full border border-gray-300 text-sm font-medium"
+                  id="day15btn"
+                  onclick="changeListView(15)"
+                >
+                  Within 15 days
+                </button>
+              </div>
+              <hr class="h-px my-4 bg-gray-200 border-0" />
+              <div id="listView"></div>
+              <div id="pagination" class="mt-2 flex justify-center"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Popup Modal for displaying expiring items -->
+      <div
+        id="expiringItemsPopup"
+        tabindex="-1"
+        class="hidden fixed inset-0 z-50 flex items-center justify-center w-full h-full"
+        style="background-color: rgba(0, 0, 0, 0.5)"
+      >
+        <div class="relative p-4 w-full max-w-md max-h-full">
+          <div class="relative bg-white rounded-lg shadow">
+            <button
+              type="button"
+              class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-full text-sm w-8 h-8 ms-auto inline-flex justify-center items-center"
+              data-modal-hide="expiringItemsPopup"
+              onclick="hidePopup()"
+            >
+              <svg
+                class="w-3 h-3"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 14 14"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+                />
+              </svg>
+              <span class="sr-only">Close</span>
+            </button>
+            <div class="p-4 md:p-5 text-center" id="popup-title"></div>
+            <div class="p-4 md:p-5" id="popup-content"></div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer
+      class="left-0 z-20 w-full p-4 bg-white border-t border-gray-200 shadow md:flex md:items-center md:justify-between"
+    >
+      <span class="text-sm text-gray-500 sm:text-center">
+        &copy; <span id="current-year"></span> CleanPlate All Rights Reserved.
+      </span>
+    </footer>
+
+    <script>
+      document.getElementById("current-year").textContent =
+        new Date().getFullYear();
+    </script>
+
+    <!-- Script for importing Flowbite CSS -->
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
+
+    <script src="../js/notification.js"></script>
+  </body>
+</html>

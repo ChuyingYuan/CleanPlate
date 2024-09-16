@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="../favicon/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="../favicon/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="../favicon/favicon-16x16.png"
+    />
+    <link rel="icon" type="image/x-icon" href="../favicon/favicon.ico" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Lexend"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.css"
+      rel="stylesheet"
+    />
+    <link href="../css/styles.css" rel="stylesheet" />
+    <title>Home - CleanPlate</title>
+  </head>
+  <body class="pt-10 sm:pt-24">
+    <!-- Sticky Navigation Bar -->
+    <nav
+      class="bg-white fixed w-full z-20 top-0 start-0 border-b border-gray-200"
+    >
+      <div
+        class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4"
+      >
+        <a
+          href="../html/index.html"
+          class="flex items-center space-x-3 rtl:space-x-reverse"
+        >
+          <img src="../WEBSITE_LOGO.png" class="h-8" alt="Logo" />
+          <span class="self-center text-2xl font-semibold whitespace-nowrap"
+            >CleanPlate</span
+          >
+        </a>
+        <div class="flex md:order-2 space-x-3 rtl:space-x-reverse">
+          <button
+            data-collapse-toggle="navbar-sticky"
+            onclick="toggleMenu()"
+            type="button"
+            class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
+            aria-controls="navbar-sticky"
+            aria-expanded="false"
+          >
+            <span class="sr-only">Open main menu</span>
+            <svg
+              class="w-5 h-5"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 17 14"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M1 1h15M1 7h15M1 13h15"
+              />
+            </svg>
+          </button>
+        </div>
+        <div
+          class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1"
+          id="navbar-sticky"
+        >
+          <ul
+            class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white"
+          >
+            <li class="relative group">
+              <a
+                href="../html/index.html"
+                class="flex items-center space-x-2 py-2 px-3 md:p-0 nav-icon active"
+              >
+                <img
+                  src="https://img.icons8.com/?size=100&id=73&format=png&color=000000"
+                  class="w-6 h-6"
+                  alt="Home"
+                />
+                <span class="block md:hidden text-center mt-2">Home</span>
+              </a>
+              <div
+                class="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 opacity-0 group-hover:opacity-100 transition-opacity bg-gray-800 text-white text-xs rounded-md py-1 px-2"
+              >
+                Home
+              </div>
+            </li>
+            <li class="relative group">
+              <a
+                href="../html/expiry-date-tracker.html"
+                class="flex items-center space-x-2 py-2 px-3 md:p-0 nav-icon"
+              >
+                <img
+                  src="https://img.icons8.com/?size=100&id=283&format=png&color=000000"
+                  class="w-6 h-6"
+                  alt="Expiry Tracker"
+                />
+                <span class="block md:hidden text-center mt-2"
+                  >Expiry Tracker</span
+                >
+              </a>
+              <div
+                class="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 opacity-0 group-hover:opacity-100 transition-opacity bg-gray-800 text-white text-xs rounded-md py-1 px-2"
+              >
+                Expiry Tracker
+              </div>
+            </li>
+            <li class="relative group">
+              <a
+                href="../html/recipe.html"
+                class="flex items-center space-x-2 py-2 px-3 md:p-0 nav-icon"
+              >
+                <img
+                  src="https://img.icons8.com/?size=100&id=idEQE7TsG0NA&format=png&color=000000"
+                  class="w-6 h-6"
+                  alt="Recipe"
+                />
+                <span class="block md:hidden text-center mt-2">Recipe</span>
+              </a>
+              <div
+                class="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 opacity-0 group-hover:opacity-100 transition-opacity bg-gray-800 text-white text-xs rounded-md py-1 px-2"
+              >
+                Recipe
+              </div>
+            </li>
+            <li class="relative group">
+              <a
+                href="../html/notification.html"
+                class="flex items-center space-x-2 py-2 px-3 md:p-0 nav-icon"
+              >
+                <img
+                  src="https://img.icons8.com/?size=100&id=23&format=png&color=000000"
+                  class="w-6 h-6"
+                  alt="Notification"
+                />
+                <span class="block md:hidden text-center mt-2"
+                  >Notification</span
+                >
+              </a>
+              <div
+                class="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 opacity-0 group-hover:opacity-100 transition-opacity bg-gray-800 text-white text-xs rounded-md py-1 px-2"
+              >
+                Notification
+              </div>
+            </li>
+            <li class="relative group">
+              <a
+                href="../html/dashboard.html"
+                class="flex items-center space-x-2 py-2 px-3 md:p-0 nav-icon"
+              >
+                <img
+                  src="https://img.icons8.com/?size=100&id=6rfR2m3WUfBr&format=png&color=000000"
+                  class="w-6 h-6"
+                  alt="Dashboard"
+                />
+                <span class="block md:hidden text-center mt-2">Dashboard</span>
+              </a>
+              <div
+                class="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 opacity-0 group-hover:opacity-100 transition-opacity bg-gray-800 text-white text-xs rounded-md py-1 px-2"
+              >
+                Dashboard
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <main class="container mx-auto p-4 sm:mt-16 sm:px-8 mt-10">
+      <!-- Info Card -->
+      <div class="flex flex-col items-center md:flex-row md:space-x-8">
+        <div
+          class="flex flex-col md:flex-row items-center info-card md:max-w-lg w-full"
+          style="border-radius: 30px"
+        >
+          <img
+            src="https://images.unsplash.com/photo-1594058573823-d8edf1ad3380?q=80&w=2562&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            class="object-cover w-full h-96 md:h-auto md:w-full p-3 mt-2"
+            style="max-height: 400px; width: auto; border-radius: 30px"
+            alt="Sustainability Picture Obtained from Unsplash"
+          />
+          <div
+            class="flex flex-col justify-between px-8 pb-2 leading-normal text-left"
+          >
+            <p class="text-2xl mt-2 font-bold">
+              Transforming Your Kitchen, Reducing Food Waste
+            </p>
+            <br />
+            <h5 class="mb-2 mt-2 text-xl sm:text-lg">
+              Do you know that every year, millions of tonnes of perfectly good
+              food end up in the trash?
+            </h5>
+            <p class="mb-3 font-normal text-gray-700">
+              In Melbourne alone, over 900,000 tonnes of edible food is wasted,
+              contributing to harmful greenhouse gases.
+            </p>
+            <br />
+            <div class="mb-2">
+              <a
+                href="../html/dashboard.html"
+                class="text-gray-900 bg-white border border-gray-100 font-medium rounded-full text-sm px-5 py-2.5 button"
+                >Learn More About Food Waste</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Feature Cards -->
+      <h2 class="text-xl font-bold mb-2 mx-4 mt-5 text-center">- Features -</h2>
+      <div
+        class="flex flex-col items-center md:flex-row md:space-x-8"
+        id="features"
+      >
+        <!-- Expiry Tracker Card -->
+        <a
+          href="../html/expiry-date-tracker.html"
+          class="feature-card border border-gray-200 shadow p-4 sm:p-8 rounded-lg"
+        >
+          <div class="text-center p-3">
+            <h1
+              class="sm:text-lg mb-4 text-xl font-bold text-gray-900 text-left"
+            >
+              Expiry Tracker
+            </h1>
+            <ul class="list-disc list-inside text-left space-y-4">
+              <li>Scan / Upload Barcode</li>
+              <li>Upload Receipt</li>
+              <li>Food Recogniion</li>
+            </ul>
+          </div>
+        </a>
+
+        <!-- Notification Card -->
+        <a
+          href="../html/notification.html"
+          class="feature-card border border-gray-200 shadow p-4 sm:p-8 rounded-lg"
+        >
+          <div class="text-center p-3">
+            <h1
+              class="sm:text-lg mb-4 text-xl font-bold text-gray-900 text-left"
+            >
+              Notification
+            </h1>
+            <ul class="list-disc list-inside text-left space-y-4">
+              <li>View Total Number of Upcoming Expiring Items</li>
+              <li>Calendar</li>
+              <li>List</li>
+            </ul>
+          </div>
+        </a>
+
+        <!-- Recipe Card -->
+        <a
+          href="../html/recipe.html"
+          class="feature-card border border-gray-200 shadow p-4 sm:p-8 rounded-lg w-full md:w-auto"
+        >
+          <div class="text-center p-3">
+            <h1
+              class="sm:text-lg mb-4 text-xl font-bold text-gray-900 text-left"
+            >
+              Recipe Search
+            </h1>
+            <ul class="list-disc list-inside text-left space-y-4">
+              <li>Recipe Name and ingredients</li>
+              <li>Recipe CO2 Index</li>
+            </ul>
+          </div>
+        </a>
+
+        <!-- Dashboard Card -->
+        <a
+          href="../html/dashboard.html"
+          class="feature-card border border-gray-200 shadow p-4 sm:p-8 rounded-lg w-full md:w-auto"
+        >
+          <div class="text-center p-3">
+            <h1
+              class="sm:text-lg mb-4 text-xl font-bold text-gray-900 text-left"
+            >
+              Dashboard
+            </h1>
+            <ul class="list-disc list-inside text-left space-y-4">
+              <li>Overview of Food Waste in Australia</li>
+              <li>Insights on Waste Produced by Households</li>
+              <li>Estimated Melbourne Food Waste (Per Year)</li>
+            </ul>
+          </div>
+        </a>
+      </div>
+    </main>
+
+    <footer
+      class="left-0 z-20 w-full p-4 bg-white border-t border-gray-200 shadow md:flex md:items-center md:justify-between"
+    >
+      <span class="text-sm text-gray-500 sm:text-center">
+        &copy; <span id="current-year"></span> CleanPlate All Rights Reserved.
+      </span>
+    </footer>
+
+    <script>
+      document.getElementById("current-year").textContent =
+        new Date().getFullYear();
+    </script>
+
+    <!-- Script for importing Flowbite CSS -->
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
+  </body>
+</html>

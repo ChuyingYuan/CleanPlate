@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="../favicon/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="../favicon/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="../favicon/favicon-16x16.png"
+    />
+    <link rel="icon" type="image/x-icon" href="../favicon/favicon.ico" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Lexend"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.css"
+      rel="stylesheet"
+    />
+    <link href="../css/styles.css" rel="stylesheet" />
+    <title>Expiry Tracker - CleanPlate</title>
+  </head>
+  <body class="min-h-screen flex flex-col pt-10 sm:pt-24">
+    <!-- Sticky Navigation Bar -->
+    <nav
+      class="bg-white fixed w-full z-20 top-0 start-0 border-b border-gray-200"
+    >
+      <div
+        class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4"
+      >
+        <a
+          href="../html/index.html"
+          class="flex items-center space-x-3 rtl:space-x-reverse"
+        >
+          <img src="../WEBSITE_LOGO.png" class="h-8" alt="Logo" />
+          <span class="self-center text-2xl font-semibold whitespace-nowrap"
+            >CleanPlate</span
+          >
+        </a>
+        <div class="flex md:order-2 space-x-3 rtl:space-x-reverse">
+          <button
+            data-collapse-toggle="navbar-sticky"
+            onclick="toggleMenu()"
+            type="button"
+            class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
+            aria-controls="navbar-sticky"
+            aria-expanded="false"
+          >
+            <span class="sr-only">Open main menu</span>
+            <svg
+              class="w-5 h-5"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 17 14"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M1 1h15M1 7h15M1 13h15"
+              />
+            </svg>
+          </button>
+        </div>
+        <div
+          class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1"
+          id="navbar-sticky"
+        >
+          <ul
+            class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white"
+          >
+            <li class="relative group">
+              <a
+                href="../html/index.html"
+                class="flex items-center space-x-2 py-2 px-3 md:p-0 nav-icon active"
+              >
+                <img
+                  src="https://img.icons8.com/?size=100&id=73&format=png&color=000000"
+                  class="w-6 h-6"
+                  alt="Home"
+                />
+                <span class="block md:hidden text-center mt-2">Home</span>
+              </a>
+              <div
+                class="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 opacity-0 group-hover:opacity-100 transition-opacity bg-gray-800 text-white text-xs rounded-md py-1 px-2"
+              >
+                Home
+              </div>
+            </li>
+            <li class="relative group">
+              <a
+                href="../html/expiry-date-tracker.html"
+                class="flex items-center space-x-2 py-2 px-3 md:p-0 nav-icon"
+              >
+                <img
+                  src="https://img.icons8.com/?size=100&id=283&format=png&color=000000"
+                  class="w-6 h-6"
+                  alt="Expiry Tracker"
+                />
+                <span class="block md:hidden text-center mt-2"
+                  >Expiry Tracker</span
+                >
+              </a>
+              <div
+                class="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 opacity-0 group-hover:opacity-100 transition-opacity bg-gray-800 text-white text-xs rounded-md py-1 px-2"
+              >
+                Expiry Tracker
+              </div>
+            </li>
+            <li class="relative group">
+              <a
+                href="../html/recipe.html"
+                class="flex items-center space-x-2 py-2 px-3 md:p-0 nav-icon"
+              >
+                <img
+                  src="https://img.icons8.com/?size=100&id=idEQE7TsG0NA&format=png&color=000000"
+                  class="w-6 h-6"
+                  alt="Recipe"
+                />
+                <span class="block md:hidden text-center mt-2">Recipe</span>
+              </a>
+              <div
+                class="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 opacity-0 group-hover:opacity-100 transition-opacity bg-gray-800 text-white text-xs rounded-md py-1 px-2"
+              >
+                Recipe
+              </div>
+            </li>
+            <li class="relative group">
+              <a
+                href="../html/notification.html"
+                class="flex items-center space-x-2 py-2 px-3 md:p-0 nav-icon"
+              >
+                <img
+                  src="https://img.icons8.com/?size=100&id=23&format=png&color=000000"
+                  class="w-6 h-6"
+                  alt="Notification"
+                />
+                <span class="block md:hidden text-center mt-2"
+                  >Notification</span
+                >
+              </a>
+              <div
+                class="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 opacity-0 group-hover:opacity-100 transition-opacity bg-gray-800 text-white text-xs rounded-md py-1 px-2"
+              >
+                Notification
+              </div>
+            </li>
+            <li class="relative group">
+              <a
+                href="../html/dashboard.html"
+                class="flex items-center space-x-2 py-2 px-3 md:p-0 nav-icon"
+              >
+                <img
+                  src="https://img.icons8.com/?size=100&id=6rfR2m3WUfBr&format=png&color=000000"
+                  class="w-6 h-6"
+                  alt="Dashboard"
+                />
+                <span class="block md:hidden text-center mt-2">Dashboard</span>
+              </a>
+              <div
+                class="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 opacity-0 group-hover:opacity-100 transition-opacity bg-gray-800 text-white text-xs rounded-md py-1 px-2"
+              >
+                Dashboard
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <main class="container mx-auto mt-2 px-4 sm:px-8 flex-grow">
+      <!-- Greeting + Notification + Search Bar -->
+      <div class="mx-auto mt-10 sm:mt-16 sm:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 items-center">
+          <!-- Greeting + Popover Button -->
+          <div id="greeting-container" class="flex items-center space-x-2">
+            <!-- Greeting-->
+            <div id="greeting" class="page-label text-xl font-bold"></div>
+
+            <!-- Popover Button -->
+            <button
+              data-popover-target="popover-description"
+              data-popover-placement="bottom-end"
+              type="button"
+            >
+              <svg
+                class="w-5 h-5 ms-2 text-gray-400 hover:text-gray-500"
+                aria-hidden="true"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z"
+                  clip-rule="evenodd"
+                ></path></svg
+              ><span class="sr-only">Show information</span>
+            </button>
+          </div>
+
+          <!-- Popover Content -->
+          <div
+            data-popover
+            id="popover-description"
+            role="tooltip"
+            class="absolute z-10 invisible inline-block text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 w-72"
+          >
+            <div class="p-3 space-y-2">
+              <h3 class="font-semibold text-gray-900">Expiring Food</h3>
+              <p>
+                First 3 food items that are expiring within 7 days will be shown
+                here. You can view all the expiring food items by clicking the
+                link below.
+              </p>
+              <!-- Link to Notification -->
+              <a
+                href="../html/notification.html"
+                class="flex items-center font-medium text-green-600 hover:text-green-700 hover:underline"
+              >
+                Go to Notification
+                <svg
+                  class="w-2 h-2 ms-1.5 rtl:rotate-180"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 6 10"
+                >
+                  <path
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="m1 9 4-4-4-4"
+                  />
+                </svg>
+              </a>
+              <hr class="h-px my-8 bg-gray-200 border-0" />
+              <h3 class="font-semibold text-gray-900">My Food List</h3>
+              <p>
+                List of food that you have added to your inventory. You can view
+                the list of food that you have added.
+              </p>
+            </div>
+            <div data-popper-arrow></div>
+          </div>
+
+          <!-- Search Bar -->
+          <div class="col-span-1 mb-4">
+            <form
+              id="search-form"
+              onsubmit="performSearch(event)"
+              class="flex items-center max-w-sm mx-auto w-full sm:w-1/2 lg:w-1/3 mt-4 sm:mt-0"
+            >
+              <label for="simple-search" class="sr-only">Search</label>
+              <div class="relative w-full">
+                <div
+                  class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none"
+                >
+                  <img
+                    src="https://img.icons8.com/?size=100&id=YNYZM0o5w67u&format=png&color=000000"
+                    alt="grocery-icon"
+                    class="w-5 h-5"
+                    aria-hidden="true"
+                  />
+                </div>
+                <input
+                  type="text"
+                  id="simple-search"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm block w-full ps-10 p-2.5 rounded-full shadow-md focus:outline-none"
+                  placeholder="Search by food name"
+                  required
+                />
+              </div>
+              <button type="submit" class="p-2.5 ms-2 search-btn">
+                <svg
+                  class="w-5 h-5"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+                  />
+                </svg>
+                <span class="sr-only">Search</span>
+              </button>
+              <!-- Reset Button -->
+              <button
+                type="reset"
+                class="p-2.5 ms-2 search-btn"
+                aria-label="Reset"
+                onclick="resetAll()"
+              >
+                <img
+                  src="https://img.icons8.com/?size=100&id=12494&format=png&color=000000"
+                  alt="Reset"
+                  class="w-5 h-5"
+                  aria-hidden="true"
+                />
+                <span class="sr-only">Reset</span>
+              </button>
+            </form>
+          </div>
+          <!-- Notification -->
+          <div
+            class="col-span-1 flex justify-center lg:justify-end mb-4 lg:mb-0"
+          >
+            <div
+              id="notification"
+              class="flex items-center w-full max-w-xs p-4 text-gray-500 bg-white rounded-lg shadow hidden"
+              role="alert"
+            >
+              <div
+                class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-green-500 bg-green-100 rounded-lg"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-4 h-4"
+                  viewBox="0 0 50 50"
+                >
+                  <path
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M 25 0 C 22.800781 0 21 1.800781 21 4 C 21 4.515625 21.101563 5.015625 21.28125 5.46875 C 15.65625 6.929688 12 11.816406 12 18 C 12 25.832031 10.078125 29.398438 8.25 31.40625 C 7.335938 32.410156 6.433594 33.019531 5.65625 33.59375 C 5.265625 33.878906 4.910156 34.164063 4.59375 34.53125 C 4.277344 34.898438 4 35.421875 4 36 C 4 37.375 4.84375 38.542969 6.03125 39.3125 C 7.21875 40.082031 8.777344 40.578125 10.65625 40.96875 C 13.09375 41.472656 16.101563 41.738281 19.40625 41.875 C 19.15625 42.539063 19 43.253906 19 44 C 19 47.300781 21.699219 50 25 50 C 28.300781 50 31 47.300781 31 44 C 31 43.25 30.847656 42.535156 30.59375 41.875 C 33.898438 41.738281 36.90625 41.472656 39.34375 40.96875 C 41.222656 40.578125 42.78125 40.082031 43.96875 39.3125 C 45.15625 38.542969 46 37.375 46 36 C 46 35.421875 45.722656 34.898438 45.40625 34.53125 C 45.089844 34.164063 44.734375 33.878906 44.34375 33.59375 C 43.566406 33.019531 42.664063 32.410156 41.75 31.40625 C 39.921875 29.398438 38 25.832031 38 18 C 38 11.820313 34.335938 6.9375 28.71875 5.46875 C 28.898438 5.015625 29 4.515625 29 4 C 29 1.800781 27.199219 0 25 0 Z M 25 2 C 26.117188 2 27 2.882813 27 4 C 27 5.117188 26.117188 6 25 6 C 23.882813 6 23 5.117188 23 4 C 23 2.882813 23.882813 2 25 2 Z M 27.34375 7.1875 C 32.675781 8.136719 36 12.257813 36 18 C 36 26.167969 38.078125 30.363281 40.25 32.75 C 41.335938 33.941406 42.433594 34.6875 43.15625 35.21875 C 43.515625 35.484375 43.785156 35.707031 43.90625 35.84375 C 44.027344 35.980469 44 35.96875 44 36 C 44 36.625 43.710938 37.082031 42.875 37.625 C 42.039063 38.167969 40.679688 38.671875 38.9375 39.03125 C 35.453125 39.753906 30.492188 40 25 40 C 19.507813 40 14.546875 39.753906 11.0625 39.03125 C 9.320313 38.671875 7.960938 38.167969 7.125 37.625 C 6.289063 37.082031 6 36.625 6 36 C 6 35.96875 5.972656 35.980469 6.09375 35.84375 C 6.214844 35.707031 6.484375 35.484375 6.84375 35.21875 C 7.566406 34.6875 8.664063 33.941406 9.75 32.75 C 11.921875 30.363281 14 26.167969 14 18 C 14 12.261719 17.328125 8.171875 22.65625 7.21875 C 23.320313 7.707031 24.121094 8 25 8 C 25.886719 8 26.679688 7.683594 27.34375 7.1875 Z M 21.5625 41.9375 C 22.683594 41.960938 23.824219 42 25 42 C 26.175781 42 27.316406 41.960938 28.4375 41.9375 C 28.792969 42.539063 29 43.25 29 44 C 29 46.222656 27.222656 48 25 48 C 22.777344 48 21 46.222656 21 44 C 21 43.242188 21.199219 42.539063 21.5625 41.9375 Z"
+                  ></path>
+                </svg>
+                <span class="sr-only">Notification icon</span>
+              </div>
+              <div class="ms-3 text-sm font-normal"></div>
+              <button
+                type="button"
+                class="ms-auto -mx-1.5 -my-1.5 bg-white text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex items-center justify-center h-8 w-8"
+                data-dismiss-target="#notification"
+                aria-label="Close"
+              >
+                <span class="sr-only">Close</span>
+                <svg
+                  class="w-3 h-3"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 14 14"
+                >
+                  <path
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Search Result + Critial Food + Category + Food List -->
+      <div class="mx-auto sm:mt-16 sm:px-8">
+        <!-- Upload / Scan Buttons + Identified Food -->
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+          <div
+            class="col-span-1 mt-2 flex flex-col items-center md:order-2 order-1"
+          >
+            <!-- Buttons / Input for Scanning / Uploading Barcode / Receipt -->
+            <div class="input flex flex-col items-center justify-center mb-6">
+              <div class="p-5 flex flex-col items-center">
+                <p class="sub-text mt-2 mb-2">Scan or Upload Image(s)</p>
+
+                <!-- Upload Barcode Button -->
+                <button
+                  id="uploadBarcodeBtn"
+                  type="button"
+                  onclick="handleUploadBarcode()"
+                  class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 mt-2"
+                >
+                  <img
+                    src="https://img.icons8.com/?size=100&id=84056&format=png&color=000000"
+                    class="w-4 h-4 me-1 inline-block"
+                    alt="Upload"
+                  />
+                  Upload Barcode
+                </button>
+
+                <!-- Scan Barcode Button -->
+                <button
+                  id="scanBarcodeBtn"
+                  type="button"
+                  onclick="handleScanBarcode()"
+                  style="display: none"
+                  class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 mt-2"
+                >
+                  <img
+                    src="https://img.icons8.com/?size=100&id=nFrSaSmj6cIG&format=png&color=000000"
+                    class="w-4 h-4 me-1 inline-block"
+                    alt="Scan"
+                  />
+                  Scan Barcode
+                </button>
+
+                <!-- Upload Receipt Button -->
+                <button
+                  id="uploadReceiptBtn"
+                  type="button"
+                  onclick="handleUploadReceipt()"
+                  class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 mt-2"
+                >
+                  <img
+                    src="https://img.icons8.com/?size=100&id=84056&format=png&color=000000"
+                    class="w-4 h-4 me-1 inline-block"
+                    alt="Upload"
+                  />
+                  Upload Receipt
+                </button>
+
+                <!-- Food Recognition Button -->
+                <button
+                  id="foodRecognitionBtn"
+                  type="button"
+                  onclick="handleFoodRecognition()"
+                  class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 mt-2"
+                >
+                  <img
+                    src="https://img.icons8.com/?size=100&id=84056&format=png&color=000000"
+                    class="w-4 h-4 me-1 inline-block"
+                    alt="Upload"
+                  />
+                  Upload Food Image
+                </button>
+
+                <!-- File Input (Barcode) -->
+                <div
+                  id="fileInput"
+                  style="display: none"
+                  class="flex items-center justify-center w-full mt-2"
+                >
+                  <label
+                    for="barcodeImg"
+                    class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100"
+                  >
+                    <div
+                      class="flex flex-col items-center justify-center pt-5 pb-6"
+                    >
+                      <svg
+                        class="w-8 h-8 mb-4 text-gray-500"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 20 16"
+                      >
+                        <path
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+                        />
+                      </svg>
+                      <p id="uploadText" class="mb-2 text-sm text-gray-500">
+                        <span class="font-semibold">Click to upload</span>
+                      </p>
+                      <p class="text-xs text-gray-500">PNG, JPG</p>
+                    </div>
+                    <input
+                      id="barcodeImg"
+                      type="file"
+                      class="hidden"
+                      accept="image/*"
+                      onchange="handleUploadBarcodeImg(event)"
+                    />
+                  </label>
+                </div>
+
+                <!-- File Input (Food Recognition) -->
+                <div
+                  id="foodImgInput"
+                  style="display: none"
+                  class="flex items-center justify-center w-full mt-2"
+                >
+                  <label
+                    for="foodImg"
+                    class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100"
+                  >
+                    <div
+                      class="flex flex-col items-center justify-center pt-5 pb-6"
+                    >
+                      <svg
+                        class="w-8 h-8 mb-4 text-gray-500"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 20 16"
+                      >
+                        <path
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+                        />
+                      </svg>
+                      <p id="uploadText1" class="mb-2 text-sm text-gray-500">
+                        <span class="font-semibold">Click to upload</span>
+                      </p>
+                      <p class="text-xs text-gray-500">PNG, JPG</p>
+                    </div>
+                    <input
+                      id="foodImg"
+                      type="file"
+                      class="hidden"
+                      accept="image/*"
+                      onchange="handleUploadFoodImg(event)"
+                    />
+                  </label>
+                </div>
+
+                <!-- File Input (Receipt) -->
+                <div
+                  id="receiptInput"
+                  style="display: none"
+                  class="flex items-center justify-center w-full mt-2"
+                >
+                  <label
+                    for="receiptImg"
+                    class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100"
+                  >
+                    <div
+                      class="flex flex-col items-center justify-center pt-5 pb-6"
+                    >
+                      <svg
+                        class="w-8 h-8 mb-4 text-gray-500"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 20 16"
+                      >
+                        <path
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+                        />
+                      </svg>
+                      <p id="uploadText2" class="mb-2 text-sm text-gray-500">
+                        <span class="font-semibold">Click to upload</span>
+                      </p>
+                      <p class="text-xs text-gray-500">PNG, JPG</p>
+                    </div>
+                    <input
+                      id="receiptImg"
+                      type="file"
+                      class="hidden"
+                      accept="image/*"
+                      onchange="handleUploadReceiptImg(event)"
+                    />
+                  </label>
+                </div>
+
+                <video id="video"></video>
+                <canvas id="canvas"></canvas>
+                <p id="result"></p>
+
+                <!-- Take Photo Button -->
+                <button
+                  id="takePhotoBtn"
+                  onclick="handleTakePhoto()"
+                  style="display: none"
+                  type="button"
+                  class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 mt-4"
+                >
+                  Take Photo
+                </button>
+              </div>
+            </div>
+
+            <!-- Identified Food -->
+            <div
+              class="food-item flex flex-col items-center justify-center mb-6 min-h-64"
+              id="identifiedFood"
+            ></div>
+          </div>
+
+          <!-- Search Result + Expiring Food + Category + Food List -->
+          <div class="col-span-2 md:order-1 order-2">
+            <div>
+              <!-- Search Heading + Results -->
+              <h2
+                class="text-xl font-bold mb-2"
+                id="searchHeading"
+                style="display: none"
+              >
+                Search Results
+              </h2>
+              <div class="food-container" id="searchResults"></div>
+              <!-- Expiring Food + Category + Food List -->
+              <div id="hideFromSearch">
+                <div
+                  id="accordion-open"
+                  data-accordion="open"
+                  data-active-classes="text-gray-900"
+                  data-inactive-classes="text-gray-500"
+                >
+                  <!-- Expiring Food -->
+                  <h2 id="accordion-open-heading-1">
+                    <button
+                      type="button"
+                      class="flex items-center justify-between w-full py-5 font-medium rtl:text-right text-gray-500 border-b border-gray-200 gap-3"
+                      data-accordion-target="#accordion-open-body-1"
+                      aria-expanded="true"
+                      aria-controls="accordion-open-body-1"
+                    >
+                      <h2 class="text-xl font-bold mb-2">Expiring Food</h2>
+                      <svg
+                        data-accordion-icon
+                        class="w-3 h-3 rotate-180 shrink-0"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 10 6"
+                      >
+                        <path
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M9 5 5 1 1 5"
+                        />
+                      </svg>
+                    </button>
+                  </h2>
+                  <div
+                    id="accordion-open-body-1"
+                    class="hidden"
+                    aria-labelledby="accordion-open-heading-1"
+                  >
+                    <div class="food-container" id="criticalFood"></div>
+                    <div class="flex justify-center mt-4">
+                      <a
+                        href="../html/notification.html"
+                        class="text-gray-900 bg-white border border-gray-300 focus:outline-none focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2.5 button"
+                      >
+                        View All Expiring Food</a
+                      >
+                    </div>
+                  </div>
+                  <!-- Category + Food List -->
+                  <h2 id="accordion-open-heading-2">
+                    <button
+                      type="button"
+                      class="flex items-center justify-between w-full py-5 font-medium rtl:text-right text-gray-500 border-b border-gray-200 gap-3"
+                      data-accordion-target="#accordion-open-body-2"
+                      aria-expanded="true"
+                      aria-controls="accordion-open-body-2"
+                    >
+                      <h2 class="text-xl font-bold mb-2 pt-6">My Food List</h2>
+                      <svg
+                        data-accordion-icon
+                        class="w-3 h-3 rotate-180 shrink-0"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 10 6"
+                      >
+                        <path
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M9 5 5 1 1 5"
+                        />
+                      </svg>
+                    </button>
+                  </h2>
+                  <div
+                    id="accordion-open-body-2"
+                    class="hidden"
+                    aria-labelledby="accordion-open-heading-2"
+                  >
+                    <!-- Buttons for Changing View -->
+                    <div class="view-toggle">
+                      <button
+                        onclick="listAllStoredProductsByType('card')"
+                        class="px-4 py-2 rounded-full me-2 hover:bg-gray-200 border border-gray-300 my-2"
+                        id="cardViewBtn"
+                      >
+                        Card
+                      </button>
+                      <button
+                        onclick="listAllStoredProductsByType('table')"
+                        class="px-4 py-2 rounded-full me-2 hover:bg-gray-200 border border-gray-300 my-2"
+                        id="tableViewBtn"
+                      >
+                        List
+                      </button>
+                      <button
+                        onclick="bulkDelete()"
+                        id="bulkDeleteBtn"
+                        class="px-4 py-1.5 rounded-full me-2 bg-red-500 text-white"
+                      >
+                        Delete Selected
+                      </button>
+                    </div>
+                    <!-- Category -->
+                    <div class="food-container" id="ingredientList"></div>
+                    <!-- Card View of Food -->
+                    <div id="foodList" class="food-container"></div>
+                    <!-- Table view of Food -->
+                    <div id="dataTableView" style="display: none">
+                      <table id="productTable" class="w-full text-left">
+                        <thead>
+                          <tr>
+                            <th>
+                              <input
+                                type="checkbox"
+                                id="selectAll"
+                                onclick="toggleSelectAll()"
+                                class="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 focus:ring-2"
+                              />
+                            </th>
+                            <th></th>
+                            <th>
+                              Category
+                              <button onclick="sortTable('category')">
+                                <svg
+                                  class="w-3 h-3"
+                                  aria-hidden="true"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="currentColor"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <path
+                                    d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z"
+                                  />
+                                </svg>
+                              </button>
+                            </th>
+                            <th>
+                              Name
+                              <button onclick="sortTable('name')">
+                                <svg
+                                  class="w-3 h-3"
+                                  aria-hidden="true"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="currentColor"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <path
+                                    d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z"
+                                  />
+                                </svg>
+                              </button>
+                            </th>
+                            <th>
+                              Use By
+                              <button onclick="sortTable('date')">
+                                <svg
+                                  class="w-3 h-3"
+                                  aria-hidden="true"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="currentColor"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <path
+                                    d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z"
+                                  />
+                                </svg>
+                              </button>
+                            </th>
+                            <th>
+                              Recorded On
+                              <button onclick="sortTable('record')">
+                                <svg
+                                  class="w-3 h-3"
+                                  aria-hidden="true"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="currentColor"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <path
+                                    d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z"
+                                  />
+                                </svg>
+                              </button>
+                            </th>
+                            <th></th>
+                          </tr>
+                        </thead>
+                        <tbody></tbody>
+                      </table>
+                      <div id="pagination" class="mt-4"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Popup Modal for Single Delete Confirmation -->
+      <div
+        id="popup-modal"
+        tabindex="-1"
+        class="hidden fixed inset-0 z-50 flex items-center justify-center w-full h-full"
+        style="background-color: rgba(0, 0, 0, 0.5)"
+      >
+        <div class="relative p-4 w-full max-w-md max-h-full">
+          <div class="relative bg-white rounded-lg shadow">
+            <button
+              type="button"
+              class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-full text-sm w-8 h-8 ms-auto inline-flex justify-center items-center"
+              data-modal-hide="popup-modal"
+              onclick="cancelDelete()"
+            >
+              <svg
+                class="w-3 h-3"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 14 14"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+                />
+              </svg>
+              <span class="sr-only">Close</span>
+            </button>
+            <div class="p-4 md:p-5 text-center">
+              <svg
+                class="mx-auto mb-4 text-gray-400 w-12 h-12"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                />
+              </svg>
+              <h3 class="mb-5 text-lg font-normal text-gray-500">
+                Are you sure you want to delete this item?
+              </h3>
+              <button
+                type="button"
+                class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium text-sm inline-flex items-center px-5 py-2.5 text-center rounded-full"
+                onclick="confirmDelete()"
+              >
+                Yes
+              </button>
+              <button
+                type="button"
+                class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white border border-gray-400 hover:bg-gray-200 hover:text-gray-700 focus:z-10 focus:ring-4 focus:ring-gray-100 rounded-full"
+                onclick="cancelDelete()"
+              >
+                No
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Popup Modal for Bulk Delete Confirmation -->
+      <div
+        id="popup-modal-bulk"
+        tabindex="-1"
+        class="hidden fixed inset-0 z-50 flex items-center justify-center w-full h-full"
+        style="background-color: rgba(0, 0, 0, 0.5)"
+      >
+        <div class="relative p-4 w-full max-w-md max-h-full">
+          <div class="relative bg-white rounded-lg shadow">
+            <button
+              type="button"
+              class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-full text-sm w-8 h-8 ms-auto inline-flex justify-center items-center"
+              data-modal-hide="popup-modal-bulk"
+              onclick="cancelDelete()"
+            >
+              <svg
+                class="w-3 h-3"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 14 14"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+                />
+              </svg>
+              <span class="sr-only">Close</span>
+            </button>
+            <div class="p-4 md:p-5 text-center">
+              <svg
+                class="mx-auto mb-4 text-gray-400 w-12 h-12"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                />
+              </svg>
+              <h3 class="mb-5 text-lg font-normal text-gray-500">
+                Are you sure you want to delete the selected item(s)?
+              </h3>
+              <button
+                type="button"
+                class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium text-sm inline-flex items-center px-5 py-2.5 text-center rounded-full"
+                onclick="confirmBulkDelete()"
+              >
+                Yes
+              </button>
+              <button
+                type="button"
+                class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white border border-gray-400 hover:bg-gray-200 hover:text-gray-700 focus:z-10 focus:ring-4 focus:ring-gray-100 rounded-full"
+                onclick="cancelDelete()"
+              >
+                No
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Popup Modal for Modificiation -->
+      <div
+        id="modify-popup-modal"
+        tabindex="-1"
+        class="hidden fixed inset-0 z-50 flex items-center justify-center w-full h-full"
+        style="background-color: rgba(0, 0, 0, 0.5)"
+      >
+        <div class="relative p-4 w-full max-w-md max-h-full">
+          <div class="relative bg-white rounded-lg shadow">
+            <button
+              type="button"
+              class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-full text-sm w-8 h-8 ms-auto inline-flex justify-center items-center"
+              data-modal-hide="popup-modal"
+              onclick="closeModal()"
+            >
+              <svg
+                class="w-3 h-3"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 14 14"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+                />
+              </svg>
+              <span class="sr-only">Close</span>
+            </button>
+            <div class="p-4 md:p-5 text-center">
+              <h2>Edit Product Info</h2>
+              <br />
+              <form id="product-form">
+                <div class="my-2 text-left">
+                  <label for="productName">Product Name:</label>
+                  <input
+                    type="text"
+                    id="productName"
+                    name="productName"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5 my-2"
+                  /><br />
+                </div>
+
+                <div class="my-2 text-left">
+                  <label for="productCategory">Category:</label>
+                  <select
+                    id="productCategory"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 my-2"
+                  >
+                    <option value="vegetables">Vegetable</option>
+                    <option value="fruit">Fruit</option>
+                    <option value="meat">Meat</option>
+                    <option value="seafood">Seafood</option>
+                    <option value="dairy">Dairy</option>
+                    <option value="others">Others</option>
+                  </select>
+                </div>
+
+                <div class="my-2 text-left">
+                  <label for="productExpirationDate">Expiration Date:</label>
+                  <input
+                    type="date"
+                    id="productExpirationDate"
+                    name="expirationDate"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full block p-2.5 my-2"
+                  />
+                </div>
+                <br />
+
+                <button
+                  type="button"
+                  onclick="confirmModify()"
+                  class="text-white bg-green-500 hover:bg-green-800 font-medium text-sm inline-flex items-center px-5 py-2.5 text-center rounded-full"
+                >
+                  Save
+                </button>
+                <button
+                  type="button"
+                  onclick="closeModal()"
+                  class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 bg-white border border-gray-400 hover:bg-gray-200 hover:text-gray-700 rounded-full"
+                >
+                  Cancel
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer
+      class="left-0 z-20 w-full p-4 bg-white border-t border-gray-200 shadow md:flex md:items-center md:justify-between"
+    >
+      <span class="text-sm text-gray-500 sm:text-center">
+        &copy; <span id="current-year"></span> CleanPlate All Rights Reserved.
+      </span>
+    </footer>
+
+    <script>
+      document.getElementById("current-year").textContent =
+        new Date().getFullYear();
+    </script>
+
+    <!-- Script for importing Flowbite CSS -->
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
+
+    <!-- Scripts for importing barcode detector -->
+    <script
+      type="module"
+      src="https://fastly.jsdelivr.net/npm/barcode-detector@2/dist/es/side-effects.min.js"
+    ></script>
+
+    <!-- Scripts for importing tesseract.js -->
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.0.269/pdf.min.mjs"
+      type="module"
+    ></script>
+
+    <!-- Script for handling functions for expiry date tracker -->
+    <script src="../js/expiry-date-tracker.js"></script>
+  </body>
+</html>
