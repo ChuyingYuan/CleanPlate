@@ -86,7 +86,7 @@
             <li class="relative group">
               <a
                 href="../html/index.html"
-                class="flex items-center space-x-2 py-2 px-3 md:p-0 nav-icon active"
+                class="flex items-center space-x-2 py-2 px-3 md:p-0 nav-icon"
               >
                 <img
                   src="https://img.icons8.com/?size=100&id=73&format=png&color=000000"
@@ -124,7 +124,7 @@
             <li class="relative group">
               <a
                 href="../html/recipe.html"
-                class="flex items-center space-x-2 py-2 px-3 md:p-0 nav-icon"
+                class="flex items-center space-x-2 py-2 px-3 md:p-0 nav-icon active"
               >
                 <img
                   src="https://img.icons8.com/?size=100&id=idEQE7TsG0NA&format=png&color=000000"
@@ -263,6 +263,12 @@
     <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
 
     <script>
+      window.onload = function () {
+        updateGreeting();
+        const currentYear = new Date().getFullYear();
+        document.getElementById("current-year").textContent = currentYear;
+      };
+
       async function performSearch(event) {
         event.preventDefault();
 
@@ -296,7 +302,7 @@
         const resultsContainer = document.createElement("div");
         resultsContainer.id = "recipe-results";
         resultsContainer.className =
-          "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-8";
+          "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 my-4";
 
         recipes.forEach((recipeData) => {
           const recipe = recipeData.recipe;
@@ -317,7 +323,9 @@
         <h3 class="text-xl font-bold">${recipe.label}</h3> <!-- Display the recipe name -->
         <p class="text-gray-600"><strong>Top Ingredients:</strong> ${topIngredients}</p> <!-- Display top 3 ingredients -->
         <p><strong>Calories:</strong> ${calories} kcal</p> <!-- Display the calories from the API response -->
-        <a href="${recipe.url}" target="_blank" class="text-indigo-500 hover:underline">View Recipe</a>
+        <div class="mt-4">
+          <a href="${recipe.url}" target="_blank" class="button w-full lg:w-auto px-4 py-2 rounded-full border border-gray-300 text-sm font-medium">View Recipe</a>
+        </div>
       </div>
     `;
 
@@ -332,6 +340,29 @@
         }
 
         mainContainer.appendChild(resultsContainer);
+      }
+
+      function updateGreeting() {
+        const currentHour = new Date().getHours();
+        const greetingElement = document.getElementById("greeting");
+        let greeting;
+        if (currentHour < 12) {
+          greeting = `
+            <h1 class="page-label text-xl font-bold">
+                Good Morning <img src="https://img.icons8.com/?size=100&id=648&format=png&color=000000" class="w-6 h-6 ml-2 inline-block"/>
+            </h1>`;
+        } else if (currentHour < 18) {
+          greeting = `
+            <h1 class="page-label text-xl font-bold">
+                Good Afternoon <img src="https://img.icons8.com/?size=100&id=648&format=png&color=000000" class="w-6 h-6 ml-2 inline-block"/>
+            </h1>`;
+        } else {
+          greeting = `
+            <h1 class="page-label text-xl font-bold">
+                Good Evening <img src="https://img.icons8.com/?size=100&id=25031&format=png&color=000000" class="w-6 h-6 ml-2 inline-block"/>
+            </h1>`;
+        }
+        greetingElement.innerHTML = greeting;
       }
     </script>
   </body>
