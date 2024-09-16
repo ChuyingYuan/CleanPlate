@@ -235,6 +235,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 });
 
                 if (!response.ok) {
+                    resultElement.textContent = 'No food is recognized from the image.';
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
 
@@ -328,8 +329,8 @@ document.addEventListener("DOMContentLoaded", function () {
                         </div>`;
             fetchProducts(finalText);
         } else {
-            console.log("No Food Item is recognized from the barcode.");
-            resultElement.textContent = "No Food Item is recognized from the barcode.";
+            console.log("No food item is recognized from the receipt.");
+            resultElement.textContent = "No food item is recognized from the receipt.";
         }
     }
 
@@ -403,7 +404,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         listAllStoredProducts();
                     } catch (error) {
                         console.log('Error parsing product data:', error);
-                        resultElement.innerHTML = "Unable to identify food item.";
+                        resultElement.innerHTML = "No food item is recognized from the receipt.";
                     }
                 }
             })
@@ -634,8 +635,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
                         fetchProductInfo(barcode);
                     } else {
-                        console.log("No Food Item is recognized from the barcode.");
-                        resultElement.textContent = "No Food Item is recognized from the barcode.";
+                        console.log("No food item is recognized from the barcode.");
+                        resultElement.textContent = "No food item is recognized from the barcode.";
                     }
                 })
                 .catch(err => {
@@ -722,12 +723,12 @@ document.addEventListener("DOMContentLoaded", function () {
                     listAllStoredProducts();
                 } catch (error) {
                     console.log('Error parsing product data:', error);
-                    resultElement.innerHTML = "Unable to identify food item.";
+                    resultElement.innerHTML = "No food item is recognized from the barcode.";
                 }
             })
             .catch(error => {
                 console.log('Error fetching product information:', error);
-                resultElement.innerHTML = "Unable to identify food item.";
+                resultElement.innerHTML = "No food item is recognized from the barcode.";
             });
     }
 
