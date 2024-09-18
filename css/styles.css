@@ -72,7 +72,7 @@ footer {
 .feature-card {
   border-radius: 30px;
   background: #ffffff;
-  box-shadow: 0px 4px 30px rgba(193, 209, 146, 0.08);
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
   transition: background 0.3s ease;
   box-sizing: border-box;
   margin: 8px;
@@ -84,18 +84,13 @@ footer {
 }
 
 .info-card {
-  border-radius: 10px;
-  background: #e1f99c;
-  box-shadow: 0px 4px 30px rgba(193, 209, 146, 0.08);
+  border-radius: 30px;
+  background: #b7e72f;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
   transition: background 0.3s ease;
-  border: 1px solid #e1f99c;
+  border: 1px solid #b7e72f;
   margin: 8px;
   padding: 16px;
-}
-
-.feature-card {
-  width: 280px;
-  min-height: 300px;
 }
 
 .card {
@@ -108,7 +103,8 @@ footer {
   min-height: 240px;
 }
 
-.ingredient-card {
+.ingredient-card,
+.feature-card {
   width: 110px;
   min-height: 140px;
   display: flex;
@@ -118,19 +114,17 @@ footer {
   position: relative;
 }
 
-.feature-card:hover {
-  background: #b7e72f;
-}
-
 .card:hover,
 .food-list-card:hover,
 .ingredient-card:hover {
   border: 2px solid #b7e72f;
-  box-shadow: 0px 4px 30px rgba(193, 209, 146, 0.08);
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-.ingredient-card.selected {
+.ingredient-card.selected,
+.feature-card:hover {
   background-color: #b7e72f;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .image-container {
@@ -152,7 +146,8 @@ footer {
 }
 
 /* Ingredient Card Elements */
-.ingredient-card .p-5 {
+.ingredient-card .p-5,
+.feature-card .p-5 {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -221,7 +216,7 @@ footer {
 
 .input-box {
   padding: 1rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
   border: none;
   cursor: pointer;
   display: inline-flex;
@@ -248,7 +243,7 @@ footer {
   background: #cdea78;
   padding: 1rem;
   border-radius: 50%;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
   border: none;
   cursor: pointer;
   display: inline-flex;
@@ -272,7 +267,7 @@ footer {
   padding: 0.5rem;
   background-color: #f9f9f9;
   border-radius: 50%;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
   border-bottom: 2px solid gray;
   cursor: pointer;
   display: inline-flex;
@@ -302,7 +297,8 @@ footer {
 #day15btn.selected,
 .button:hover,
 .button404:hover,
-#foodRecognitionBtn.selected {
+#foodRecognitionBtn.selected,
+#notification-link {
   background-color: #b7e72f;
 }
 
@@ -312,6 +308,15 @@ footer {
 #today:hover,
 #day3btn:hover,
 #day15btn:hover {
+  border: 1px solid #b7e72f;
+}
+
+#get-started:hover {
+  background: #e1f99c;
+}
+
+#notification-link:hover {
+  background: white;
   border: 1px solid #b7e72f;
 }
 
@@ -342,7 +347,7 @@ footer {
   padding: 0.5rem;
   background-color: #f9f9f9;
   border-radius: 50%;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
   border-bottom: 2px solid gray;
   cursor: pointer;
   display: inline-flex;
@@ -378,4 +383,101 @@ footer {
 
 .upcoming-expiring {
   background: #e9f5db;
+}
+
+.chat-container {
+  width: 100%;
+  margin: 20px auto;
+  padding: 10px;
+  background-color: white;
+  border-radius: 30px;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.chat-bubble {
+  max-width: 75%;
+  padding: 10px 15px;
+  margin: 20px 0;
+  border-radius: 15px;
+  font-size: 14px;
+  line-height: 1.4;
+  position: relative;
+}
+
+.user1 {
+  background-color: #f3f2f7;
+  color: #212124;
+  align-self: flex-start;
+  border-top-left-radius: 0;
+}
+
+.user2 {
+  background-color: #119236;
+  color: #f3f2f7;
+  align-self: flex-end;
+  border-top-right-radius: 0;
+}
+
+.user1 {
+  text-align: left;
+  margin-left: 10px;
+}
+
+.user2 {
+  text-align: right;
+  margin-left: auto;
+  margin-right: 10px;
+}
+
+@media (max-width: 600px) {
+  .chat-bubble {
+    max-width: 90%;
+  }
+}
+
+.squareCard {
+  background: #f2f7f5;
+  width: 350px;
+  min-height: 350px;
+  justify-content: center;
+  border-radius: 30px;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+  transition: background 0.3s ease;
+  box-sizing: border-box;
+  padding: 16px;
+  text-align: center;
+  overflow: hidden;
+  flex: 0 0 auto;
+  border: 2px solid transparent;
+}
+
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .squareCard {
+    width: 100%; /* Full width on small screens */
+    min-height: 200px; /* Adjust height as needed */
+  }
+
+  .card-container {
+    gap: 10px; /* Adjust gap for smaller screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .squareCard {
+    min-height: 150px; /* Further adjust height for very small screens */
+    font-size: 14px; /* Adjust font size for small screens */
+  }
+
+  .card-container {
+    flex-direction: column; /* Stack cards vertically on very small screens */
+  }
 }
