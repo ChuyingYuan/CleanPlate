@@ -114,6 +114,10 @@ footer {
   position: relative;
 }
 
+.feature-card {
+  cursor: pointer;
+}
+
 .card:hover,
 .food-list-card:hover,
 .ingredient-card:hover {
@@ -298,7 +302,8 @@ footer {
 .button:hover,
 .button404:hover,
 #foodRecognitionBtn.selected,
-#notification-link {
+#notification-link,
+.feature-card.selected {
   background-color: #b7e72f;
 }
 
@@ -462,22 +467,22 @@ footer {
 /* Mobile responsiveness */
 @media (max-width: 768px) {
   .squareCard {
-    width: 100%; /* Full width on small screens */
-    min-height: 200px; /* Adjust height as needed */
+    width: 100%;
+    min-height: 200px;
   }
 
   .card-container {
-    gap: 10px; /* Adjust gap for smaller screens */
+    gap: 10px;
   }
 }
 
 @media (max-width: 480px) {
   .squareCard {
-    min-height: 150px; /* Further adjust height for very small screens */
-    font-size: 14px; /* Adjust font size for small screens */
+    min-height: 150px;
+    font-size: 14px;
   }
 
   .card-container {
-    flex-direction: column; /* Stack cards vertically on very small screens */
+    flex-direction: column;
   }
 }

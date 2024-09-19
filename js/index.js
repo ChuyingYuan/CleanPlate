@@ -2,9 +2,36 @@ document.addEventListener('DOMContentLoaded', function () {
     const greetingElement = document.getElementById('greeting');
     const day3 = document.getElementById('day3message');
     const day7 = document.getElementById('day7message');
-    const day14 = document.getElementById('day14message');
+    const day15 = document.getElementById('day15message');
     const currentHour = new Date().getHours();
     const today = new Date();
+
+    const featureData = {
+        'expiry-tracker': {
+            title: 'Expiry Tracker',
+            description: ['Scan / Upload Barcode', 'Upload Receipt', 'Food Recognition'],
+            link: '../html/expiry-date-tracker.html',
+            screenshot: '../static/expiry-tracker.png'
+        },
+        'recipe-search': {
+            title: 'Recipe Search',
+            description: ['Search by Ingredients', 'Search by Recipe Name', 'Calories'],
+            link: '../html/recipe.html',
+            screenshot: '../static/recipe.png'
+        },
+        'notification': {
+            title: 'Notification',
+            description: ['View Total Number of Upcoming Expiring Items ', 'Calendar', 'List'],
+            link: '../html/notification.html',
+            screenshot: '../static/notification.png'
+        },
+        'dashboard': {
+            title: 'Dashboard',
+            description: ['Overview of Food Waste in Australia', 'Track WasteInsights on Waste Produced by Households', 'Estimated Melbourne Food Waste (Per Year)'],
+            link: '../html/dashboard.html',
+            screenshot: '../static/dashboard.png'
+        }
+    };
 
     window.onload = function () {
         updateGreeting();
@@ -31,6 +58,34 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         greetingElement.innerHTML = greeting;
     }
+
+    // Event listener for displaying feature info card
+    document.querySelectorAll('.feature-card').forEach(card => {
+        card.addEventListener('click', function (event) {
+            event.preventDefault();
+            const featureKey = this.getAttribute('data-feature');
+            const feature = featureData[featureKey];
+
+            document.querySelectorAll('.feature-card').forEach(c => c.classList.remove('selected'));
+
+            this.classList.add('selected');
+
+            document.getElementById('feature-title').innerText = feature.title;
+
+            const featureDescriptionElement = document.getElementById('feature-description');
+            featureDescriptionElement.innerHTML = '';
+            feature.description.forEach(item => {
+                const listItem = document.createElement('li');
+                listItem.textContent = item;
+                featureDescriptionElement.appendChild(listItem);
+            });
+
+            document.getElementById('feature-link').setAttribute('href', feature.link);
+            document.getElementById('feature-screenshot').setAttribute('src', feature.screenshot);
+
+            document.getElementById('feature-info-box').classList.remove('hidden');
+        });
+    });
 
     // Function to check for expiring items
     function getExpiringItems(range) {
@@ -82,14 +137,14 @@ document.addEventListener('DOMContentLoaded', function () {
             day7.textContent = `You have no items expiring in 7 days.`;
         }
 
-        const expiringItems14Days = getExpiringItems(14);
-        const items14Days = expiringItems14Days.length;
+        const expiringItems15Days = getExpiringItems(15);
+        const items15Days = expiringItems15Days.length;
 
-        if (items14Days > 0) {
-            day14.textContent = `You have ${items14Days} item(s) about to expire within 14 days!`;
+        if (items15Days > 0) {
+            day15.textContent = `You have ${items15Days} item(s) about to expire within 15 days!`;
         }
         else {
-            day14.textContent = `You have no items expiring in 14 days.`;
+            day15.textContent = `You have no items expiring in 15 days.`;
         }
     }
 });

@@ -192,142 +192,8 @@
 
       <div class="mx-auto sm:mt-16 sm:px-8">
         <div class="grid grid-cols-1 md:grid-cols-3">
-          <!-- Banner + Features + Dialogs -->
-          <div class="col-span-2 mt-2 flex flex-col items-center">
-            <!-- Banner -->
-            <div class="info-card w-full flex items-center justify-between">
-              <div class="text-2xl font-bold p-5" style="width: 60%">
-                <h1>Save Food</h1>
-                <h1>Save the Planet!</h1>
-                <p class="text-sm font-normal mt-2">
-                  "Start with small actions to eliminate waste."
-                </p>
-                <br />
-                <button
-                  id="get-started"
-                  class="text-gray-900 bg-white font-medium rounded-full text-lg px-5 py-2.5"
-                  onclick="window.location.href='../html/dashboard.html'"
-                >
-                  Get Started
-                </button>
-              </div>
-              <div style="width: 40%">
-                <img
-                  src="../illustration-human-avatar-with-environment.png"
-                  alt="Banner"
-                  class="max-w-full h-auto"
-                />
-              </div>
-            </div>
-
-            <!-- Features -->
-            <div class="w-full">
-              <div id="feature-list" class="food-container">
-                <!-- Expiry Tracker -->
-                <a href="../html/expiry-date-tracker.html" class="feature-card">
-                  <div class="p-5">
-                    <img
-                      src="https://img.icons8.com/?size=100&id=283&format=png&color=000000"
-                      class="w-6 h-6"
-                      alt="Expiry Tracker"
-                    />
-                    <p class="text-sm mt-2">Expiry Tracker</p>
-                  </div>
-                </a>
-
-                <!-- Recipe Search -->
-                <a href="../html/recipe.html" class="feature-card">
-                  <div class="p-5">
-                    <img
-                      src="https://img.icons8.com/?size=100&id=idEQE7TsG0NA&format=png&color=000000"
-                      class="w-6 h-6"
-                      alt="Recipe"
-                    />
-                    <p class="text-sm mt-2">Recipe Search</p>
-                  </div>
-                </a>
-
-                <!-- Notification -->
-                <a href="../html/notification.html" class="feature-card">
-                  <div class="p-5">
-                    <img
-                      src="https://img.icons8.com/?size=100&id=23&format=png&color=000000"
-                      class="w-6 h-6"
-                      alt="Notification"
-                    />
-                    <p class="text-sm mt-2">Notification</p>
-                  </div>
-                </a>
-
-                <!-- Dashboard -->
-                <a href="../html/dashboard.html" class="feature-card">
-                  <div class="p-5">
-                    <img
-                      src="https://img.icons8.com/?size=100&id=6rfR2m3WUfBr&format=png&color=000000"
-                      class="w-6 h-6"
-                      alt="Dashboard"
-                    />
-                    <p class="text-sm mt-2">Dashboard</p>
-                  </div>
-                </a>
-
-                <!-- Wasted Food Scale -->
-                <!-- <a href="" class="feature-card">
-                  <div class="p-5">
-                    <p class="text-sm mt-2">Wasted Food Scale</p>
-                  </div>
-                </a> -->
-
-                <!-- Shopping List -->
-                <!-- <a href="" class="feature-card">
-                  <div class="p-5">
-                    <p class="text-sm mt-2">Shopping List</p>
-                  </div>
-                </a> -->
-              </div>
-            </div>
-
-            <!-- Dialogs -->
-            <div class="chat-container">
-              <div class="chat-bubble user1">
-                <p>
-                  You know, I’ve been thinking about how much food we throw out
-                  each week. It feels like every time we clean out the fridge,
-                  there's always something going bad.
-                </p>
-              </div>
-
-              <div class="chat-bubble user2">
-                <p>
-                  Yeah, same here. It’s so frustrating! I mean, we plan meals,
-                  but somehow stuff just gets forgotten in the back of the
-                  fridge or the kids don’t eat as much as we expected.
-                </p>
-              </div>
-
-              <div class="chat-bubble user1">
-                <p>
-                  Exactly! And it’s not just the wasted food, it’s like throwing
-                  money away too. I can’t help but feel guilty when I see how
-                  much we’re tossing out. I read somewhere that households are
-                  one of the biggest contributors to food waste. That hit me
-                  hard.
-                </p>
-              </div>
-
-              <div class="chat-bubble user2">
-                <p>
-                  It’s crazy when you think about it. I keep telling myself we
-                  need to do better, but life is just so busy. Between the kids,
-                  work, and everything else, sometimes I forget about that
-                  leftover lasagna from a few days ago until it’s too late.
-                </p>
-              </div>
-            </div>
-          </div>
-
           <!-- Notification + Wasted Food Scale-->
-          <div class="col-span-1 mt-2">
+          <div class="col-span-1 mt-2 md:order-2 order-1">
             <div class="card-container mt-2">
               <!-- Day 3 Notification-->
               <div
@@ -429,9 +295,9 @@
                 </button>
               </div>
 
-              <!-- Day 14 Notification-->
+              <!-- Day 15 Notification-->
               <div
-                id="day14Notification"
+                id="day15Notification"
                 class="flex items-center w-full max-w-xs p-5 text-gray-500 bg-white rounded-lg shadow"
                 role="alert"
               >
@@ -453,11 +319,11 @@
                   </svg>
                   <span class="sr-only">Notification icon</span>
                 </div>
-                <div class="ms-3 text-sm font-normal" id="day14message"></div>
+                <div class="ms-3 text-sm font-normal" id="day15message"></div>
                 <button
                   type="button"
                   class="ms-auto -mx-1.5 -my-1.5 bg-white text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex items-center justify-center h-8 w-8"
-                  data-dismiss-target="#day14Notification"
+                  data-dismiss-target="#day15Notification"
                   aria-label="Close"
                 >
                   <span class="sr-only">Close</span>
@@ -492,6 +358,175 @@
               <!-- <div id="wastedFoodScale" class="squareCard">
                 wasted food scale
               </div> -->
+            </div>
+          </div>
+
+          <!-- Banner + Features + Dialogs -->
+          <div
+            class="col-span-2 mt-2 flex flex-col items-center md:order-1 order-2"
+          >
+            <!-- Banner -->
+            <div class="info-card w-full flex items-center justify-between">
+              <div class="text-2xl font-bold p-5" style="width: 60%">
+                <h1>Save Food</h1>
+                <h1>Save the Planet!</h1>
+                <p class="text-sm font-normal mt-2">
+                  "Start with small actions to eliminate waste."
+                </p>
+                <br />
+                <button
+                  id="get-started"
+                  class="text-gray-900 bg-white font-medium rounded-full text-lg px-5 py-2.5"
+                  onclick="window.location.href='../html/dashboard.html'"
+                >
+                  Get Started
+                </button>
+              </div>
+              <div style="width: 40%">
+                <img
+                  src="../static/illustration-human-avatar-with-environment.png"
+                  alt="Banner"
+                  class="max-w-full h-auto"
+                />
+              </div>
+            </div>
+
+            <!-- Features -->
+            <div id="feature-list" class="w-full food-container">
+              <!-- Expiry Tracker -->
+              <div class="feature-card" data-feature="expiry-tracker">
+                <div class="p-5">
+                  <img
+                    src="https://img.icons8.com/?size=100&id=283&format=png&color=000000"
+                    class="w-6 h-6"
+                    alt="Expiry Tracker"
+                  />
+                  <p class="text-sm mt-2">Expiry Tracker</p>
+                </div>
+              </div>
+
+              <!-- Recipe Search -->
+              <div class="feature-card" data-feature="recipe-search">
+                <div class="p-5">
+                  <img
+                    src="https://img.icons8.com/?size=100&id=idEQE7TsG0NA&format=png&color=000000"
+                    class="w-6 h-6"
+                    alt="Recipe"
+                  />
+                  <p class="text-sm mt-2">Recipe Search</p>
+                </div>
+              </div>
+
+              <!-- Notification -->
+              <div class="feature-card" data-feature="notification">
+                <div class="p-5">
+                  <img
+                    src="https://img.icons8.com/?size=100&id=23&format=png&color=000000"
+                    class="w-6 h-6"
+                    alt="Notification"
+                  />
+                  <p class="text-sm mt-2">Notification</p>
+                </div>
+              </div>
+
+              <!-- Dashboard -->
+              <div class="feature-card" data-feature="dashboard">
+                <div class="p-5">
+                  <img
+                    src="https://img.icons8.com/?size=100&id=6rfR2m3WUfBr&format=png&color=000000"
+                    class="w-6 h-6"
+                    alt="Dashboard"
+                  />
+                  <p class="text-sm mt-2">Dashboard</p>
+                </div>
+              </div>
+
+              <!-- Wasted Food Scale -->
+              <!-- <a href="" class="feature-card">
+                  <div class="p-5">
+                    <p class="text-sm mt-2">Wasted Food Scale</p>
+                  </div>
+                </a> -->
+
+              <!-- Shopping List -->
+              <!-- <a href="" class="feature-card">
+                  <div class="p-5">
+                    <p class="text-sm mt-2">Shopping List</p>
+                  </div>
+                </a> -->
+            </div>
+
+            <!-- Feature Info Box -->
+            <div
+              id="feature-info-box"
+              class="w-full p-5 mt-5 chat-container hidden"
+            >
+              <div class="flex flex-col lg:flex-row p-5">
+                <div class="w-full lg:w-1/2 mb-4 lg:mb-0 md:order-2 order-1">
+                  <img
+                    id="feature-screenshot"
+                    src=""
+                    alt="Feature Screenshot"
+                    class="w-full h-auto rounded-lg"
+                  />
+                </div>
+                <div class="w-full lg:w-1/2 md:order-1 order-2">
+                  <div class="text-center p-2 mb-5">
+                    <p
+                      id="feature-title"
+                      class="sm:text-lg mb-4 text-xl font-bold text-gray-900 text-left"
+                    ></p>
+                    <ul
+                      id="feature-description"
+                      class="list-disc list-inside text-left space-y-2 text-sm"
+                    ></ul>
+                  </div>
+                  <a
+                    id="feature-link"
+                    href="#"
+                    class="w-full lg:w-auto px-4 py-2 rounded-full border border-gray-300 text-sm font-medium button"
+                    >Take Me There!</a
+                  >
+                </div>
+              </div>
+            </div>
+
+            <!-- Dialogs -->
+            <div class="chat-container">
+              <div class="chat-bubble user1">
+                <p>
+                  You know, I’ve been thinking about how much food we throw out
+                  each week. It feels like every time we clean out the fridge,
+                  there's always something going bad.
+                </p>
+              </div>
+
+              <div class="chat-bubble user2">
+                <p>
+                  Yeah, same here. It’s so frustrating! I mean, we plan meals,
+                  but somehow stuff just gets forgotten in the back of the
+                  fridge or the kids don’t eat as much as we expected.
+                </p>
+              </div>
+
+              <div class="chat-bubble user1">
+                <p>
+                  Exactly! And it’s not just the wasted food, it’s like throwing
+                  money away too. I can’t help but feel guilty when I see how
+                  much we’re tossing out. I read somewhere that households are
+                  one of the biggest contributors to food waste. That hit me
+                  hard.
+                </p>
+              </div>
+
+              <div class="chat-bubble user2">
+                <p>
+                  It’s crazy when you think about it. I keep telling myself we
+                  need to do better, but life is just so busy. Between the kids,
+                  work, and everything else, sometimes I forget about that
+                  leftover lasagna from a few days ago until it’s too late.
+                </p>
+              </div>
             </div>
           </div>
         </div>
