@@ -500,7 +500,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             foodRecognitionBtn.innerHTML = '';
             foodRecognitionBtn.appendChild(createUploadIcon());
-            foodRecognitionBtn.appendChild(document.createTextNode(" Upload/ Take Food Image "));
+            foodRecognitionBtn.appendChild(document.createTextNode(" Upload/ Take Produce Image "));
             foodRecognitionBtn.appendChild(createScanIcon());
 
             document.getElementById("uploadText").innerHTML = '<span class="font-semibold">Click to Upload/ Capture</span>';
@@ -524,7 +524,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             foodRecognitionBtn.innerHTML = '';
             foodRecognitionBtn.appendChild(createUploadIcon());
-            foodRecognitionBtn.appendChild(document.createTextNode(" Upload/ Capture Food "));
+            foodRecognitionBtn.appendChild(document.createTextNode(" Upload/ Capture Produce "));
             foodRecognitionBtn.appendChild(createScanIcon());
             foodRecognitionBtn.appendChild(createInputField());
 
