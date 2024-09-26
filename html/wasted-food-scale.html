@@ -30,7 +30,7 @@
       rel="stylesheet"
     />
     <link href="../css/styles.css" rel="stylesheet" />
-    <title>Recipe Search - CleanPlate</title>
+    <title>Wasted Food Scale - CleanPlate</title>
   </head>
   <body class="pt-10 sm:pt-24">
     <!-- Sticky Navigation Bar -->
@@ -124,7 +124,7 @@
             <li class="relative group">
               <a
                 href="../html/recipe.html"
-                class="flex items-center space-x-2 py-2 px-3 md:p-0 nav-icon active"
+                class="flex items-center space-x-2 py-2 px-3 md:p-0 nav-icon"
               >
                 <img
                   src="https://img.icons8.com/?size=100&id=idEQE7TsG0NA&format=png&color=000000"
@@ -162,7 +162,7 @@
             <li class="relative group">
               <a
                 href="../html/wasted-food-scale.html"
-                class="flex items-center space-x-2 py-2 px-3 md:p-0 nav-icon"
+                class="flex items-center space-x-2 py-2 px-3 md:p-0 nav-icon active"
               >
                 <img
                   src="https://img.icons8.com/?size=100w&id=XxG3TLBUs4k5&format=png&color=000000"
@@ -203,71 +203,209 @@
     </nav>
 
     <main class="container mx-auto mt-2 px-4 sm:px-8 flex-grow">
-      <!-- Greeting + Search Bar -->
+      <!-- Greeting -->
       <div class="mx-auto mt-10 sm:mt-16 sm:px-8">
         <div class="grid grid-cols-1 md:grid-cols-3 items-center">
           <!-- Greeting -->
           <div id="greeting-container" class="flex items-center space-x-2">
-            <div id="greeting" class="page-label text-xl font-bold">
-              Good Morning
+            <div id="greeting" class="page-label text-xl font-bold"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Wasted Food Scale Decision Tool -->
+      <div class="mx-auto mt-4 sm:mt-16 sm:px-8">
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+          <div class="col-span-2">
+            <div id="wfs" class="wfs-container">
+              <div
+                class="pt-8 justify-center flex flex-col md:flex-row gap-8 items-center"
+              >
+                <p class="text-xl font-bold">Wasted Food Scale Decision Tool</p>
+                <!-- Restart Button -->
+                <div class="flex justify-center">
+                  <button
+                    onclick="restartTool()"
+                    class="w-full lg:w-auto px-4 py-2 rounded-full border border-gray-300 text-sm font-medium button"
+                  >
+                    Restart
+                  </button>
+                </div>
+              </div>
+
+              <!-- Is the Food Still Edible? -->
+              <div
+                id="isEdible"
+                class="p-8 justify-center flex flex-col items-center"
+              >
+                <p class="text-lg font-bold">Is the Food Still Edible?</p>
+                <div class="font-normal mt-2 px-8">
+                  <p class="text-sm">
+                    Evaluate whether the food is safe for consumption. Check
+                    whether the food has expired or not. Look for signs of
+                    spoilage such as mold, off odors, or unusual textures. If
+                    the food still looks, smells, and tastes fine, it may still
+                    be edible.
+                  </p>
+                </div>
+                <div
+                  class="flex flex-col items-center justify-center space-y-6 mt-8"
+                >
+                  <button
+                    onclick="isFoodEdible('yes')"
+                    class="w-full lg:w-auto px-4 py-2 rounded-full border border-gray-300 text-sm font-medium button"
+                  >
+                    Yes
+                  </button>
+                  <button
+                    onclick="isFoodEdible('no')"
+                    class="w-full lg:w-auto px-4 py-2 rounded-full border border-gray-300 text-sm font-medium button"
+                  >
+                    No
+                  </button>
+                </div>
+              </div>
+
+              <!-- Plan to Consume or Donate -->
+              <div
+                id="planToConsume"
+                class="p-8 justify-center flex flex-col items-center hidden"
+              >
+                <p class="text-lg font-bold">Can you consume it soon?</p>
+                <div class="font-normal mt-2 px-8">
+                  <p class="text-sm">
+                    If the food is edible, consider whether you can use it in
+                    your next meal or prepare it for upcoming days. Planning
+                    your meals or freezing food can help prevent waste. If
+                    you're unable to consume it soon, think about donating it to
+                    those in need.
+                  </p>
+                </div>
+                <div
+                  class="flex flex-col items-center justify-center space-y-6 mt-8"
+                >
+                  <button
+                    onclick="consumeOrDonate('consume')"
+                    class="w-full lg:w-auto px-4 py-2 rounded-full border border-gray-300 text-sm font-medium button"
+                  >
+                    Yes, I will eat it soon
+                  </button>
+                  <button
+                    onclick="consumeOrDonate('donate')"
+                    class="w-full lg:w-auto px-4 py-2 rounded-full border border-gray-300 text-sm font-medium button"
+                  >
+                    No, I will donate it
+                  </button>
+                </div>
+              </div>
+
+              <!-- Can it be Composted? -->
+              <div
+                id="compostCheck"
+                class="p-8 justify-center flex flex-col items-center hidden"
+              >
+                <p class="text-lg font-bold">Can it be composted?</p>
+                <div class="font-normal mt-2 px-8">
+                  <p class="text-sm">
+                    If the food is no longer fit for consumption, consider
+                    composting it. Composting helps reduce waste and provides
+                    valuable nutrients for soil. Check if the food is suitable
+                    for home or community composting, such as fruit and
+                    vegetable scraps, coffee grounds, and eggshells. If it can't
+                    be composted, it may need to be disposed of responsibly.
+                  </p>
+                </div>
+                <div
+                  class="flex flex-col items-center justify-center space-y-6 mt-8"
+                >
+                  <button
+                    onclick="compostOrLandfill('compost')"
+                    class="w-full lg:w-auto px-4 py-2 rounded-full border border-gray-300 text-sm font-medium button"
+                  >
+                    Yes, compost it
+                  </button>
+                  <button
+                    onclick="compostOrLandfill('landfill')"
+                    class="w-full lg:w-auto px-4 py-2 rounded-full border border-gray-300 text-sm font-medium button"
+                  >
+                    No, dispose of it
+                  </button>
+                </div>
+              </div>
+
+              <!--  Final Decision -->
+              <div
+                id="finalDecision"
+                class="p-8 justify-center flex flex-col items-center hidden"
+              >
+                <p class="text-lg font-bold">Final Decision</p>
+                <div class="font-normal mt-2 px-8"></div>
+                <p id="finalDecisionText"></p>
+              </div>
+
+              <!-- Input Tracker -->
+              <div id="inputTracker" class="hidden">
+                <label for="wasteAmount" class="font-normal mt-2 px-8"
+                  >Amount of food (in kg):</label
+                >
+                <input type="number" id="wasteAmount" min="0" step="0.01" />
+                <button
+                  onclick="logWaste()"
+                  class="w-full lg:w-auto px-4 py-2 rounded-full border border-gray-300 text-sm font-medium button"
+                >
+                  Submit
+                </button>
+              </div>
             </div>
           </div>
 
-          <!-- Search Bar with Button -->
-          <form
-            id="search-form"
-            onsubmit="performSearch(event)"
-            class="flex items-center max-w-sm mx-auto w-full sm:w-1/2 lg:w-1/3 mt-4 sm:mt-0"
-          >
-            <label for="simple-search" class="sr-only">Search</label>
-            <div class="relative w-full">
+          <div class="col-span-1 flex flex-col items-center">
+            <div class="wfs-container">
+              <!-- Effort Tracker -->
               <div
-                class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none"
+                id="effortTracker"
+                class="p-5 justify-center flex flex-col items-center"
               >
-                <img
-                  src="https://img.icons8.com/?size=100&id=YNYZM0o5w67u&format=png&color=000000"
-                  alt="grocery-icon"
-                  class="w-5 h-5"
-                  aria-hidden="true"
-                />
+                <p class="text-lg font-bold">Effort Tracker</p>
+                <div class="font-normal mt-4 space-y-4">
+                  <p>
+                    Total Food Waste Saved: <span id="totalWaste">0</span> kg
+                  </p>
+                  <p>
+                    Estimated CO2 Reduction: <span id="co2Reduction">0</span> kg
+                  </p>
+                  <p>Total Score: <span id="score">0</span></p>
+                </div>
               </div>
-              <input
-                type="text"
-                id="simple-search"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm block w-full ps-10 p-2.5 rounded-full shadow-md focus:outline-none"
-                placeholder="Search by Recipe"
-                required
-              />
             </div>
-            <button type="submit" class="p-2.5 ms-2 search-btn">
-              <svg
-                class="w-5 h-5"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 20 20"
+
+            <!-- Local Resources -->
+            <div class="wfs-container">
+              <div
+                id="localResources"
+                class="p-3 justify-center flex flex-col items-center"
               >
-                <path
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-                />
-              </svg>
-              <span class="sr-only">Search</span>
-            </button>
-          </form>
+                <p class="text-lg font-bold">Find Local Resources</p>
+                <div class="font-normal mt-2">
+                  <p>
+                    Mock feature: Find composting centers or food banks nearby.
+                  </p>
+                </div>
+                <div
+                  class="flex flex-col items-center justify-center space-y-6 mt-6"
+                >
+                  <button
+                    onclick="findResources()"
+                    class="w-full lg:w-auto px-4 py-2 rounded-full border border-gray-300 text-sm font-medium button"
+                  >
+                    Search
+                  </button>
+                </div>
+                <div class="font-normal mt-2"><p id="resourceResult"></p></div>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-      <!-- Divider Line -->
-      <hr class="my-8 border-gray-200" />
-      <!-- Search Results Container -->
-      <div
-        id="search-results"
-        class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-10"
-      >
-        <!-- Cards will be dynamically generated here -->
       </div>
     </main>
 
@@ -281,86 +419,13 @@
 
     <!-- Script for importing Flowbite CSS -->
     <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
-
+    <script src="../js/wasted-food-scale.js"></script>
     <script>
       window.onload = function () {
         updateGreeting();
         const currentYear = new Date().getFullYear();
         document.getElementById("current-year").textContent = currentYear;
       };
-
-      async function performSearch(event) {
-        event.preventDefault();
-
-        const query = document.getElementById("simple-search").value;
-
-        if (!query) {
-          alert("Please enter a search term");
-          return;
-        }
-
-        const appId = "8b041dc0";
-        const appKey = "cca93dc7d6629315197f5225454fe7bf";
-        const apiUrl = `https://api.edamam.com/search?q=${encodeURIComponent(
-          query
-        )}&app_id=${appId}&app_key=${appKey}&to=10`;
-
-        try {
-          const response = await fetch(apiUrl);
-          if (!response.ok) {
-            throw new Error("Network response was not ok");
-          }
-
-          const data = await response.json();
-          displayResults(data.hits);
-        } catch (error) {
-          console.error("Error fetching the data: ", error);
-        }
-      }
-
-      function displayResults(recipes) {
-        const resultsContainer = document.createElement("div");
-        resultsContainer.id = "recipe-results";
-        resultsContainer.className =
-          "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 my-4";
-
-        recipes.forEach((recipeData) => {
-          const recipe = recipeData.recipe;
-
-          // Get the top 3 ingredients (or less if there are fewer than 3)
-          const topIngredients = recipe.ingredientLines.slice(0, 3).join(", ");
-
-          // Get calories from the API response
-          const calories = Math.round(recipe.calories); // Rounding calories to a whole number
-
-          const recipeCard = document.createElement("div");
-          recipeCard.className =
-            "bg-white shadow-md rounded-lg overflow-hidden";
-
-          recipeCard.innerHTML = `
-      <img src="${recipe.image}" alt="${recipe.label}" class="w-full h-48 object-cover">
-      <div class="p-4">
-        <h3 class="text-xl font-bold">${recipe.label}</h3> <!-- Display the recipe name -->
-        <p class="text-gray-600"><strong>Top Ingredients:</strong> ${topIngredients}</p> <!-- Display top 3 ingredients -->
-        <p><strong>Calories:</strong> ${calories} kcal</p> <!-- Display the calories from the API response -->
-        <div class="mt-4">
-          <a href="${recipe.url}" target="_blank" class="button w-full lg:w-auto px-4 py-2 rounded-full border border-gray-300 text-sm font-medium">View Recipe</a>
-        </div>
-      </div>
-    `;
-
-          resultsContainer.appendChild(recipeCard);
-        });
-
-        const mainContainer = document.querySelector("main");
-        const existingResults = document.getElementById("recipe-results");
-
-        if (existingResults) {
-          existingResults.remove();
-        }
-
-        mainContainer.appendChild(resultsContainer);
-      }
 
       function updateGreeting() {
         const currentHour = new Date().getHours();

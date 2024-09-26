@@ -30,7 +30,14 @@ document.addEventListener('DOMContentLoaded', function () {
             description: ['Overview of Food Waste in Australia', 'Track WasteInsights on Waste Produced by Households', 'Estimated Melbourne Food Waste (Per Year)'],
             link: '../html/dashboard.html',
             screenshot: '../static/dashboard.png'
+        },
+        'wastedFoodScale': {
+            title: 'Wasted Food Scale',
+            description: ['Guided Decision Making Tool', 'Effort Tracker', 'Local Resources'],
+            link: '../html/wasted-food-scale.html',
+            screenshot: '../static/wastedFoodScale.png'
         }
+
     };
 
     window.onload = function () {
