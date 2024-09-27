@@ -249,7 +249,7 @@
                   </p>
                 </div>
                 <div
-                  class="flex flex-col items-center justify-center space-y-6 mt-8"
+                  class="flex flex-row items-center justify-center space-x-8 mt-8"
                 >
                   <button
                     onclick="isFoodEdible('yes')"
@@ -282,7 +282,7 @@
                   </p>
                 </div>
                 <div
-                  class="flex flex-col items-center justify-center space-y-6 mt-8"
+                  class="flex flex-col md:flex-row items-center justify-center space-y-6 md:space-x-8 md:space-y-0 mt-8"
                 >
                   <button
                     onclick="consumeOrDonate('consume')"
@@ -316,7 +316,7 @@
                   </p>
                 </div>
                 <div
-                  class="flex flex-col items-center justify-center space-y-6 mt-8"
+                  class="flex flex-col md:flex-row items-center justify-center space-y-6 md:space-x-8 md:space-y-0 mt-8"
                 >
                   <button
                     onclick="compostOrLandfill('compost')"
@@ -339,26 +339,51 @@
                 class="p-8 justify-center flex flex-col items-center hidden"
               >
                 <p class="text-lg font-bold">Final Decision</p>
-                <div class="font-normal mt-2 px-8"></div>
-                <p id="finalDecisionText"></p>
+                <div class="font-normal mt-2 px-8">
+                  <p id="finalDecisionText"></p>
+                </div>
               </div>
 
               <!-- Input Tracker -->
-              <div id="inputTracker" class="hidden">
-                <label for="wasteAmount" class="font-normal mt-2 px-8"
+              <div
+                id="inputTracker"
+                class="flex flex-col justify-center items-center hidden"
+              >
+                <label for="wasteAmount" class="block mb-2 font-normal px-8"
                   >Amount of food (in kg):</label
                 >
-                <input type="number" id="wasteAmount" min="0" step="0.01" />
+                <input
+                  type="number"
+                  id="wasteAmount"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 inline-flex w-1/2 p-2.5 mt-1"
+                  min="0"
+                  required
+                />
                 <button
                   onclick="logWaste()"
-                  class="w-full lg:w-auto px-4 py-2 rounded-full border border-gray-300 text-sm font-medium button"
+                  class="lg:w-auto px-4 py-2 rounded-full border border-gray-300 text-sm font-medium button mt-4"
                 >
                   Submit
+                </button>
+              </div>
+
+              <!-- Navigating to Related Pages -->
+              <div
+                id="navigating"
+                class="p-4 justify-center flex flex-col items-center hidden"
+              >
+                <div id="navigatingText" class="font-normal mt-2 px-8"></div>
+                <button
+                  id="navigateButton"
+                  class="w-full lg:w-auto px-4 py-2 rounded-full border border-gray-300 text-sm font-medium button mt-4 hidden"
+                >
+                  Proceed
                 </button>
               </div>
             </div>
           </div>
 
+          <!-- Effort Tracker and Local Resources -->
           <div class="col-span-1 flex flex-col items-center">
             <div class="wfs-container">
               <!-- Effort Tracker -->
