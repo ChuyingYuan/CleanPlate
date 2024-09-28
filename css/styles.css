@@ -490,3 +490,8 @@ footer {
   border-radius: 30px;
   box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
 }
+
+.circle {
+  background-color: #e1f99c;
+  border: #e1f99c 1px solid;
+}

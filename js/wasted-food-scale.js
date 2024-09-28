@@ -74,41 +74,73 @@ function navigateToRelatedPage(decision) {
         navigatingText.innerHTML = "Click the button below to find recipe ideas!";
         navigateButton.textContent = "Go to Search for Recipes";
         navigateButton.onclick = () => {
-            window.location.href = 'recipe.html';
+            window.open('recipe.html', '_blank');
         };
     }
     else if (decision === 'donate') {
         navigatingText.textContent = "Click the button below to find local food banks!";
         navigateButton.textContent = "Go to Donation Resources";
         navigateButton.onclick = () => {
-            window.location.href = 'donate.html';
+            window.open('donate.html', '_blank');
         };
     }
     else if (decision === 'compost') {
         navigatingText.textContent = "Click the button below to explore composting resources!";
         navigateButton.textContent = "Go to Composting Resources";
         navigateButton.onclick = () => {
-            window.location.href = 'compost.html';
+            window.open('compost.html', '_blank');
         };
     } else {
+        navigatingDiv.classList.add('hidden');
+        navigatingText.classList.add('hidden');
         navigateButton.classList.add('hidden');
     }
 }
 
-// TODO: API call to get the CO2 reduction based on the waste amount
-function logWaste() {
+async function logWaste() {
     const wasteAmount = parseFloat(document.getElementById('wasteAmount').value);
 
     if (!isNaN(wasteAmount) && wasteAmount > 0) {
-        totalWaste += wasteAmount;
-        co2Reduction += wasteAmount * 1.37;
+        try {
+            const response = await fetch('https://api.climatiq.io/data/v1/estimate', {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer B08A8BYFXX0CKDS061DKKD945R',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    emission_factor: {
+                        activity_id: 'waste-type_food_waste-disposal_method_landfilled',
+                        data_version: '^0'
+                    },
+                    parameters: {
+                        weight: wasteAmount,
+                        weight_unit: 'kg'
+                    }
+                })
+            });
 
-        localStorage.setItem('totalWaste', totalWaste.toFixed(2));
-        localStorage.setItem('co2Reduction', co2Reduction.toFixed(2));
-        localStorage.setItem('score', score);
+            if (response.ok) {
+                const data = await response.json();
+                const co2Emission = data.co2e;
+                console.log("CO2 emission:", co2Emission);
 
-        updateDashboard();
-        restartTool();
+                totalWaste += wasteAmount;
+                co2Reduction += co2Emission;
+
+                localStorage.setItem('totalWaste', totalWaste.toFixed(2));
+                localStorage.setItem('co2Reduction', co2Reduction.toFixed(2));
+                localStorage.setItem('score', score);
+
+                updateDashboard();
+                restartTool();
+            } else {
+                console.error("API error:", response.statusText);
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            alert("An error occurred while recording the waste. Please try again.");
+        }
     } else {
         console.log("Invalid input: Please enter a valid waste amount.");
         alert("Please enter a valid amount.");

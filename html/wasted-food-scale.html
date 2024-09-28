@@ -217,6 +217,28 @@
       <div class="mx-auto mt-4 sm:mt-16 sm:px-8">
         <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
           <div class="col-span-2">
+            <div class="wfs-container">
+              <div
+                class="p-2 justify-center flex flex-col md:flex-row gap-8 items-center"
+              >
+                <p>
+                  Consume:
+                  <span class="p-2 rounded-full circle"> +3</span>
+                </p>
+                <p>
+                  Donate:
+                  <span class="p-2 rounded-full circle"> +2</span>
+                </p>
+                <p>
+                  Compost:
+                  <span class="p-2 rounded-full circle"> +1</span>
+                </p>
+                <p>
+                  Landfill:
+                  <span class="p-2 rounded-full circle"> +0</span>
+                </p>
+              </div>
+            </div>
             <div id="wfs" class="wfs-container">
               <div
                 class="pt-8 justify-center flex flex-col md:flex-row gap-8 items-center"
@@ -239,13 +261,23 @@
                 class="p-8 justify-center flex flex-col items-center"
               >
                 <p class="text-lg font-bold">Is the Food Still Edible?</p>
-                <div class="font-normal mt-2 px-8">
+                <div class="font-normal mt-2 px-8 text-center">
                   <p class="text-sm">
-                    Evaluate whether the food is safe for consumption. Check
-                    whether the food has expired or not. Look for signs of
-                    spoilage such as mold, off odors, or unusual textures. If
-                    the food still looks, smells, and tastes fine, it may still
-                    be edible.
+                    Check whether the food has expired or not.
+                  </p>
+                  <div class="justify-center flex">
+                    <button
+                      onclick="window.open('notification.html', '_blank')"
+                      class="w-full lg:w-auto px-4 py-2 rounded-full border border-gray-300 text-sm font-medium button mt-3 mb-3"
+                    >
+                      Check Here!
+                    </button>
+                  </div>
+                  <p class="text-sm">
+                    Evaluate whether the food is safe for consumption.
+                    <br />Look for signs of spoilage such as mold, off odors, or
+                    unusual textures. <br />If the food still looks, smells, and
+                    tastes fine, it may still be edible.
                   </p>
                 </div>
                 <div
@@ -272,7 +304,7 @@
                 class="p-8 justify-center flex flex-col items-center hidden"
               >
                 <p class="text-lg font-bold">Can you consume it soon?</p>
-                <div class="font-normal mt-2 px-8">
+                <div class="font-normal mt-2 px-8 text-center">
                   <p class="text-sm">
                     If the food is edible, consider whether you can use it in
                     your next meal or prepare it for upcoming days. Planning
@@ -305,7 +337,7 @@
                 class="p-8 justify-center flex flex-col items-center hidden"
               >
                 <p class="text-lg font-bold">Can it be composted?</p>
-                <div class="font-normal mt-2 px-8">
+                <div class="font-normal mt-2 px-8 text-center">
                   <p class="text-sm">
                     If the food is no longer fit for consumption, consider
                     composting it. Composting helps reduce waste and provides
@@ -339,15 +371,32 @@
                 class="p-8 justify-center flex flex-col items-center hidden"
               >
                 <p class="text-lg font-bold">Final Decision</p>
-                <div class="font-normal mt-2 px-8">
+                <div class="font-normal mt-2 px-8 text-center">
                   <p id="finalDecisionText"></p>
                 </div>
+              </div>
+
+              <!-- Navigating to Related Pages -->
+              <div
+                id="navigating"
+                class="justify-center flex flex-col items-center hidden"
+              >
+                <div
+                  id="navigatingText"
+                  class="font-normal px-8 text-center"
+                ></div>
+                <button
+                  id="navigateButton"
+                  class="w-full lg:w-auto px-4 py-2 rounded-full border border-gray-300 text-sm font-medium button mt-4 hidden"
+                >
+                  Proceed
+                </button>
               </div>
 
               <!-- Input Tracker -->
               <div
                 id="inputTracker"
-                class="flex flex-col justify-center items-center hidden"
+                class="p-4 mt-2 flex flex-col justify-center items-center hidden"
               >
                 <label for="wasteAmount" class="block mb-2 font-normal px-8"
                   >Amount of food (in kg):</label
@@ -364,20 +413,6 @@
                   class="lg:w-auto px-4 py-2 rounded-full border border-gray-300 text-sm font-medium button mt-4"
                 >
                   Submit
-                </button>
-              </div>
-
-              <!-- Navigating to Related Pages -->
-              <div
-                id="navigating"
-                class="p-4 justify-center flex flex-col items-center hidden"
-              >
-                <div id="navigatingText" class="font-normal mt-2 px-8"></div>
-                <button
-                  id="navigateButton"
-                  class="w-full lg:w-auto px-4 py-2 rounded-full border border-gray-300 text-sm font-medium button mt-4 hidden"
-                >
-                  Proceed
                 </button>
               </div>
             </div>
