@@ -375,9 +375,46 @@
               </button>
 
               <!-- Wasted Food Scale -->
-              <!-- <div id="wastedFoodScale" class="squareCard">
-                wasted food scale
-              </div> -->
+              <div id="wastedFoodScale" class="squareCard">
+                <p class="text-xl font-bold">How Much Food I Saved</p>
+                <div class="pt-4 relative">
+                  <svg
+                    id="gauge"
+                    class="w-full h-full"
+                    viewBox="0 0 36 36"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <!-- Background Arc (Full Gauge) -->
+                    <path
+                      d="M 5 18 a 13 13 0 0 1 26 0"
+                      fill="none"
+                      stroke="#e5e7eb"
+                      stroke-width="2"
+                    ></path>
+
+                    <!-- Gauge Progress Arc -->
+                    <path
+                      id="gauge-progress"
+                      d="M 5 18 a 13 13 0 0 1 26 0"
+                      fill="none"
+                      stroke="#119236"
+                      stroke-width="2"
+                      stroke-dasharray="0, 100"
+                      stroke-linecap="round"
+                    ></path>
+                  </svg>
+
+                  <!-- Value Text in the Center -->
+                  <div
+                    id="gauge-value"
+                    class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center"
+                  >
+                    <span id="gauge-text" class="text-4xl font-bold green"
+                      >0</span
+                    >
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 

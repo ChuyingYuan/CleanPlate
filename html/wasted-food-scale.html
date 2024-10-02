@@ -213,37 +213,86 @@
         </div>
       </div>
 
-      <!-- Wasted Food Scale Decision Tool -->
-      <div class="mx-auto mt-4 sm:mt-16 sm:px-8">
-        <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
-          <div class="col-span-2">
-            <div class="wfs-container">
-              <div
-                class="p-2 justify-center flex flex-col md:flex-row gap-8 items-center"
-              >
-                <p>
-                  Consume:
-                  <span class="p-2 rounded-full circle"> +3</span>
-                </p>
-                <p>
-                  Donate:
-                  <span class="p-2 rounded-full circle"> +2</span>
-                </p>
-                <p>
-                  Compost:
-                  <span class="p-2 rounded-full circle"> +1</span>
-                </p>
-                <p>
-                  Landfill:
-                  <span class="p-2 rounded-full circle"> +0</span>
-                </p>
+      <!-- Wasted Food Scale Decision Tool + Effort Tracker -->
+      <div class="mx-auto sm:mt-16 sm:px-8">
+        <!-- Effort Tracker + WFS Decision Tool + Visualisation-->
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <!-- Effort Tracker + Decision Tool -->
+          <div class="col-span-1">
+            <!-- Effort Tracker -->
+            <div class="col-span-1">
+              <div class="wfs-container">
+                <div
+                  id="effortTracker"
+                  class="p-5 pt-0 flex flex-col lg:flex-row justify-between items-center"
+                >
+                  <div
+                    id="effort-text"
+                    class="lg:w-1/2 flex flex-col items-left"
+                  >
+                    <p class="text-lg font-bold">Effort Tracker</p>
+
+                    <div class="font-normal mt-2 space-y-2">
+                      <p>
+                        Total Food Waste Saved:
+                        <span id="totalWaste">0</span> kg
+                      </p>
+                      <p>
+                        Estimated CO2 Reduction:
+                        <span id="co2Reduction">0</span> kg
+                      </p>
+                      <p>Total Count: <span id="count">0</span></p>
+                      <p>Total Score: <span id="score">0</span></p>
+                    </div>
+                  </div>
+
+                  <!-- Gauge Section -->
+                  <div class="pt-4 relative w-40 h-40">
+                    <svg
+                      id="gauge"
+                      class="w-full h-full"
+                      viewBox="0 0 36 36"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <!-- Background Arc (Full Gauge) -->
+                      <path
+                        d="M 5 18 a 13 13 0 0 1 26 0"
+                        fill="none"
+                        stroke="#e5e7eb"
+                        stroke-width="2"
+                      ></path>
+
+                      <!-- Gauge Progress Arc -->
+                      <path
+                        id="gauge-progress"
+                        d="M 5 18 a 13 13 0 0 1 26 0"
+                        fill="none"
+                        stroke="#119236"
+                        stroke-width="2"
+                        stroke-dasharray="0, 100"
+                        stroke-linecap="round"
+                      ></path>
+                    </svg>
+
+                    <!-- Value Text in the Center -->
+                    <div
+                      id="gauge-value"
+                      class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center"
+                    >
+                      <span id="gauge-text" class="text-4xl font-bold green"
+                        >0</span
+                      >
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
+
             <div id="wfs" class="wfs-container">
               <div
                 class="pt-8 justify-center flex flex-col md:flex-row gap-8 items-center"
               >
-                <p class="text-xl font-bold">Wasted Food Scale Decision Tool</p>
+                <p class="text-xl font-bold">Decision Tool</p>
                 <!-- Restart Button -->
                 <div class="flex justify-center">
                   <button
@@ -331,6 +380,39 @@
                 </div>
               </div>
 
+              <!-- Is it suitable for feeding animals? -->
+              <div
+                id="feedAnimalsCheck"
+                class="p-8 justify-center flex flex-col items-center hidden"
+              >
+                <p class="text-lg font-bold">
+                  Is it suitable for feeding animals?
+                </p>
+                <div class="font-normal mt-2 px-8 text-center">
+                  <p class="text-sm">
+                    If the food is not fit for human consumption, check if it
+                    can be repurposed as animal feed. Consider options such as
+                    fruit scraps, stale bread, or leftover grains.
+                  </p>
+                </div>
+                <div
+                  class="flex flex-row items-center justify-center space-x-8 mt-8"
+                >
+                  <button
+                    onclick="isFoodForAnimals('yes')"
+                    class="w-full lg:w-auto px-4 py-2 rounded-full border border-gray-300 text-sm font-medium button"
+                  >
+                    Yes, feed it to animals
+                  </button>
+                  <button
+                    onclick="isFoodForAnimals('no')"
+                    class="w-full lg:w-auto px-4 py-2 rounded-full border border-gray-300 text-sm font-medium button"
+                  >
+                    No, not suitable for animals
+                  </button>
+                </div>
+              </div>
+
               <!-- Can it be Composted? -->
               <div
                 id="compostCheck"
@@ -351,13 +433,47 @@
                   class="flex flex-col md:flex-row items-center justify-center space-y-6 md:space-x-8 md:space-y-0 mt-8"
                 >
                   <button
-                    onclick="compostOrLandfill('compost')"
+                    onclick="compostOrBiofuel('compost')"
                     class="w-full lg:w-auto px-4 py-2 rounded-full border border-gray-300 text-sm font-medium button"
                   >
                     Yes, compost it
                   </button>
                   <button
-                    onclick="compostOrLandfill('landfill')"
+                    onclick="compostOrBiofuel('biofuel')"
+                    class="w-full lg:w-auto px-4 py-2 rounded-full border border-gray-300 text-sm font-medium button"
+                  >
+                    No, check for anaerobic digestion
+                  </button>
+                </div>
+              </div>
+
+              <!-- Can it be used for industrial purposes, such as biofuel? -->
+              <div
+                id="biofuelCheck"
+                class="p-8 justify-center flex flex-col items-center hidden"
+              >
+                <p class="text-lg font-bold">
+                  Can it be used for industrial purposes, such as biofuel?
+                </p>
+                <div class="font-normal mt-2 px-8 text-center">
+                  <p class="text-sm">
+                    If the food is not suitable for composting, check if it can
+                    be used for industrial purposes, like biofuel or other
+                    energy production. Many food waste programs utilize this
+                    approach for sustainability.
+                  </p>
+                </div>
+                <div
+                  class="flex flex-row items-center justify-center space-x-8 mt-8"
+                >
+                  <button
+                    onclick="canUseForBiofuel('yes')"
+                    class="w-full lg:w-auto px-4 py-2 rounded-full border border-gray-300 text-sm font-medium button"
+                  >
+                    Yes, use for anaerobic digestion
+                  </button>
+                  <button
+                    onclick="canUseForBiofuel('no')"
                     class="w-full lg:w-auto px-4 py-2 rounded-full border border-gray-300 text-sm font-medium button"
                   >
                     No, dispose of it
@@ -365,7 +481,7 @@
                 </div>
               </div>
 
-              <!--  Final Decision -->
+              <!-- Final Decision -->
               <div
                 id="finalDecision"
                 class="p-8 justify-center flex flex-col items-center hidden"
@@ -418,50 +534,161 @@
             </div>
           </div>
 
-          <!-- Effort Tracker and Local Resources -->
-          <div class="col-span-1 flex flex-col items-center">
+          <!-- WFS -->
+          <div class="col-span-1">
             <div class="wfs-container">
-              <!-- Effort Tracker -->
-              <div
-                id="effortTracker"
-                class="p-5 justify-center flex flex-col items-center"
-              >
-                <p class="text-lg font-bold">Effort Tracker</p>
-                <div class="font-normal mt-4 space-y-4">
-                  <p>
-                    Total Food Waste Saved: <span id="totalWaste">0</span> kg
-                  </p>
-                  <p>
-                    Estimated CO2 Reduction: <span id="co2Reduction">0</span> kg
-                  </p>
-                  <p>Total Score: <span id="score">0</span></p>
-                </div>
-              </div>
-            </div>
+              <div class="p-5 justify-center flex flex-col items-center">
+                <p class="text-xl font-bold mb-5">Wasted Food Scale</p>
+                <ol class="relative border-s border-green-200">
+                  <li class="mb-10 ms-6">
+                    <span
+                      class="absolute flex items-center justify-center w-6 h-6 bg-white rounded-full -start-3 ring-8 ring-white"
+                    >
+                      <img
+                        src="https://img.icons8.com/?size=100&id=21068&format=png&color=000000"
+                        alt="Do"
+                      />
+                    </span>
+                    <h3
+                      class="flex items-center mb-1 text-lg font-semibold text-gray-900"
+                    >
+                      Prevent Wasted Food
+                      <span
+                        class="bg-green-100 text-green-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded-full ms-3"
+                        >DO</span
+                      >
+                      <span class="px-2.5 py-0.5 rounded-full text-sm circle">
+                        +5</span
+                      >
+                    </h3>
 
-            <!-- Local Resources -->
-            <div class="wfs-container">
-              <div
-                id="localResources"
-                class="p-3 justify-center flex flex-col items-center"
-              >
-                <p class="text-lg font-bold">Find Local Resources</p>
-                <div class="font-normal mt-2">
-                  <p>
-                    Mock feature: Find composting centers or food banks nearby.
-                  </p>
-                </div>
-                <div
-                  class="flex flex-col items-center justify-center space-y-6 mt-6"
-                >
-                  <button
-                    onclick="findResources()"
-                    class="w-full lg:w-auto px-4 py-2 rounded-full border border-gray-300 text-sm font-medium button"
-                  >
-                    Search
-                  </button>
-                </div>
-                <div class="font-normal mt-2"><p id="resourceResult"></p></div>
+                    <p class="mb-4 text-base font-normal text-gray-500">
+                      Produce, buy and serve only what is needed
+                    </p>
+                  </li>
+
+                  <li class="mb-10 ms-6">
+                    <span
+                      class="absolute flex items-center justify-center w-6 h-6 bg-white rounded-full -start-3 ring-8 ring-white"
+                    >
+                      <img
+                        src="https://img.icons8.com/?size=100&id=32639&format=png&color=000000"
+                        alt="Dash"
+                      />
+                    </span>
+                    <h3
+                      class="flex items-center mb-1 text-lg font-semibold text-gray-900"
+                    >
+                      Donate
+                      <span
+                        class="px-2.5 py-0.5 ml-2 rounded-full text-sm circle"
+                      >
+                        +4</span
+                      >
+                    </h3>
+
+                    <p class="mb-4 text-base font-normal text-gray-500">
+                      Rescue and redistribute food to people
+                    </p>
+                  </li>
+
+                  <li class="mb-10 ms-6">
+                    <span
+                      class="absolute flex items-center justify-center w-6 h-6 bg-white rounded-full -start-3 ring-8 ring-white"
+                    >
+                      <img
+                        src="https://img.icons8.com/?size=100&id=32639&format=png&color=000000"
+                        alt="Dash"
+                      />
+                    </span>
+                    <h3
+                      class="flex items-center mb-1 text-lg font-semibold text-gray-900"
+                    >
+                      Feed Animals
+                      <span
+                        class="px-2.5 py-0.5 ml-2 rounded-full text-sm circle"
+                      >
+                        +3</span
+                      >
+                    </h3>
+
+                    <p class="mb-4 text-base font-normal text-gray-500">
+                      Turn wasted food into animal feed
+                    </p>
+                  </li>
+
+                  <li class="mb-10 ms-6">
+                    <span
+                      class="absolute flex items-center justify-center w-6 h-6 bg-white rounded-full -start-3 ring-8 ring-white"
+                    >
+                      <img
+                        src="https://img.icons8.com/?size=100&id=32639&format=png&color=000000"
+                        alt="Dash"
+                      />
+                    </span>
+                    <h3
+                      class="flex items-center mb-1 text-lg font-semibold text-gray-900"
+                    >
+                      Compost
+                      <span
+                        class="px-2.5 py-0.5 ml-2 rounded-full text-sm circle"
+                      >
+                        +2</span
+                      >
+                    </h3>
+
+                    <p class="mb-4 text-base font-normal text-gray-500">
+                      Process wasted food into a soil amendment
+                    </p>
+                  </li>
+
+                  <li class="mb-10 ms-6">
+                    <span
+                      class="absolute flex items-center justify-center w-6 h-6 bg-white rounded-full -start-3 ring-8 ring-white"
+                    >
+                      <img
+                        src="https://img.icons8.com/?size=100&id=32639&format=png&color=000000"
+                        alt="Dash"
+                      />
+                    </span>
+                    <h3
+                      class="flex items-center mb-1 text-lg font-semibold text-gray-900"
+                    >
+                      Anaerobic Digestion
+                      <span
+                        class="px-2.5 py-0.5 ml-2 rounded-full text-sm circle"
+                      >
+                        +1</span
+                      >
+                    </h3>
+
+                    <p class="mb-4 text-base font-normal text-gray-500">
+                      Break down wasted food to create energy
+                    </p>
+                  </li>
+
+                  <li class="mb-10 ms-6">
+                    <span
+                      class="absolute flex items-center justify-center w-6 h-6 bg-white rounded-full -start-3 ring-8 ring-white"
+                    >
+                      <img
+                        src="https://img.icons8.com/?size=100&id=21067&format=png&color=000000"
+                        alt="Don't"
+                      />
+                    </span>
+                    <h3 class="mb-1 text-lg font-semibold text-gray-900">
+                      Send Down the Drain Landfill
+                      <span
+                        class="bg-red-100 text-red-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded-full ms-3"
+                        >DON'T</span
+                      >
+                    </h3>
+
+                    <p class="text-base font-normal text-gray-500">
+                      with or without energy recovery
+                    </p>
+                  </li>
+                </ol>
               </div>
             </div>
           </div>

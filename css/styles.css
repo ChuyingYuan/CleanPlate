@@ -435,7 +435,7 @@ footer {
 }
 
 .squareCard {
-  background: #f2f7f5;
+  background: white;
   width: 350px;
   min-height: 350px;
   justify-content: center;
@@ -448,6 +448,7 @@ footer {
   overflow: hidden;
   flex: 0 0 auto;
   border: 2px solid transparent;
+  margin-top: 10px;
 }
 
 .card-container {
@@ -494,4 +495,8 @@ footer {
 .circle {
   background-color: #e1f99c;
   border: #e1f99c 1px solid;
+}
+
+.green {
+  color: #119236;
 }

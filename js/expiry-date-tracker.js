@@ -843,6 +843,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
         for (let i = 0; i < localStorage.length; i++) {
             const key = localStorage.key(i);
+
+            if (['co2Reduction', 'score', 'totalWaste', 'count'].includes(key)) {
+                continue;
+            }
+
             const productInfo = JSON.parse(localStorage.getItem(key));
             products.push({ key, ...productInfo });
         }
@@ -888,6 +893,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
         for (let i = 0; i < localStorage.length; i++) {
             const key = localStorage.key(i);
+
+            if (['co2Reduction', 'score', 'totalWaste', 'count'].includes(key)) {
+                continue;
+            }
+
             const productInfo = JSON.parse(localStorage.getItem(key));
             products.push({ key, ...productInfo });
         }
@@ -999,6 +1009,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
         for (let i = 0; i < localStorage.length; i++) {
             const key = localStorage.key(i);
+
+            if (['co2Reduction', 'score', 'totalWaste'].includes(key)) {
+                continue;
+            }
+
             const productInfo = JSON.parse(localStorage.getItem(key));
             products.push({ key, ...productInfo });
         }
@@ -1226,8 +1241,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
         for (let i = 0; i < localStorage.length; i++) {
             const key = localStorage.key(i);
+
+            if (['co2Reduction', 'score', 'totalWaste', 'count'].includes(key)) {
+                continue;
+            }
+
             const productInfo = JSON.parse(localStorage.getItem(key));
-            // console.log("Product Info:", productInfo);  // Debug statement
             if (productInfo.category === category || category === null) {
                 products.push({ key, ...productInfo });
             }

@@ -1,6 +1,12 @@
 let score = 0;
 let totalWaste = 0;
 let co2Reduction = 0;
+let count = 0;
+let percent = 0;
+
+if (localStorage.getItem('count')) {
+    count = parseInt(localStorage.getItem('count'));
+}
 
 if (localStorage.getItem('score')) {
     score = parseInt(localStorage.getItem('score'));
@@ -22,7 +28,7 @@ function isFoodEdible(answer) {
     if (answer === 'yes') {
         document.getElementById('planToConsume').classList.remove('hidden');
     } else {
-        document.getElementById('compostCheck').classList.remove('hidden');
+        document.getElementById('feedAnimalsCheck').classList.remove('hidden');
     }
 }
 
@@ -30,29 +36,59 @@ function consumeOrDonate(decision) {
     document.getElementById('planToConsume').classList.add('hidden');
 
     if (decision === 'consume') {
-        score += 3;
+        score += 5;
+        count += 1;
         showFeedback(decision, "Great! Plan to eat it within your next meal(s) or use it in a recipe.");
     } else {
-        score += 2;
+        score += 4;
+        count += 1;
         showFeedback(decision, "Donate the food to a local food bank or community kitchen.");
     }
     navigateToRelatedPage(decision);
+    localStorage.setItem('count', count);
     localStorage.setItem('score', score);
 }
 
-function compostOrLandfill(decision) {
+function compostOrBiofuel(decision) {
     document.getElementById('compostCheck').classList.add('hidden');
 
     if (decision === 'compost') {
         score += 1;
+        count += 1
         showFeedback(decision, "Compost it at home or through community composting.");
     } else {
-        score += 0;
-        showFeedback(decision, "Dispose of it properly and work on reducing waste in the future.");
+        document.getElementById('biofuelCheck').classList.remove('hidden');
     }
     navigateToRelatedPage(decision);
+    localStorage.setItem('count', count);
     localStorage.setItem('score', score);
 }
+
+function isFoodForAnimals(answer) {
+    document.getElementById('feedAnimalsCheck').classList.add('hidden');
+
+    if (answer === 'yes') {
+        score += 2;
+        count += 1;
+        showFeedback('Feed Animals', "Repurpose the food scraps for animal feed.");
+    } else {
+        document.getElementById('compostCheck').classList.remove('hidden');
+    }
+}
+
+function canUseForBiofuel(answer) {
+    document.getElementById('biofuelCheck').classList.add('hidden');
+
+    if (answer === 'yes') {
+        score += 1;
+        count += 1;
+        showFeedback('Anaerobic Digestion', "Participate in a local food waste-to-energy program (Anaerobic Digestion).");
+    } else {
+        count += 1;
+        showFeedback('Landfill', "Dispose of it properly and work on reducing waste in the future.");
+    }
+}
+
 
 function showFeedback(decision, message) {
     document.getElementById('finalDecision').classList.remove('hidden');
@@ -81,14 +117,14 @@ function navigateToRelatedPage(decision) {
         navigatingText.textContent = "Click the button below to find local food banks!";
         navigateButton.textContent = "Go to Donation Resources";
         navigateButton.onclick = () => {
-            window.open('donate.html', '_blank');
+            window.open('local-resources.html', '_blank');
         };
     }
     else if (decision === 'compost') {
         navigatingText.textContent = "Click the button below to explore composting resources!";
         navigateButton.textContent = "Go to Composting Resources";
         navigateButton.onclick = () => {
-            window.open('compost.html', '_blank');
+            window.open('local-resources.html', '_blank');
         };
     } else {
         navigatingDiv.classList.add('hidden');
@@ -157,6 +193,8 @@ function restartTool() {
     document.getElementById('wasteAmount').value = '';
     document.getElementById('navigating').classList.add('hidden');
     document.getElementById('navigateButton').classList.add('hidden');
+    document.getElementById('feedAnimalsCheck').classList.add('hidden');
+    document.getElementById('biofuelCheck').classList.add('hidden');
 
     updateDashboard();
 }
@@ -165,14 +203,37 @@ function updateDashboard() {
     const storedTotalWaste = localStorage.getItem('totalWaste') || 0;
     const storedCo2Reduction = localStorage.getItem('co2Reduction') || 0;
     const storedScore = localStorage.getItem('score') || 0;
+    const storedCount = localStorage.getItem('count') || 0;
 
     document.getElementById('totalWaste').textContent = storedTotalWaste;
     document.getElementById('co2Reduction').textContent = storedCo2Reduction;
     document.getElementById('score').textContent = storedScore;
+    document.getElementById('count').textContent = storedCount;
+
+    if (count > 0) {
+        percent = (score / (count * 5)) * 100;
+    } else {
+        percent = 0;
+    }
+
+    renderGauge(percent);
 }
 
-// TODO: Render the local resources based on the user's location
-function findResources() {
-    document.getElementById('localResources').classList.remove('hidden');
-    document.getElementById('resourceResult').textContent = "Mock: Compost centers and food banks in your area.";
+function renderGauge(percentage) {
+    console.log("Rendering gauge with percentage:", percentage);
+    const progressPath = document.getElementById("gauge-progress");
+    const gaugeText = document.getElementById("gauge-text");
+
+    const validPercentage = Math.min(Math.max(percentage, 0), 100);
+    console.log("Valid percentage:", validPercentage);
+
+    const arcLength = 41;
+
+    const dashArrayValue = (validPercentage / 100) * arcLength;
+    progressPath.setAttribute(
+        "stroke-dasharray",
+        `${dashArrayValue} ${arcLength}`
+    );
+
+    gaugeText.textContent = validPercentage + "%";
 }

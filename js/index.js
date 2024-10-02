@@ -5,6 +5,17 @@ document.addEventListener('DOMContentLoaded', function () {
     const day15 = document.getElementById('day15message');
     const currentHour = new Date().getHours();
     const today = new Date();
+    let score = 0;
+    let count = 0;
+    let percent = 0;
+
+    if (localStorage.getItem("count")) {
+        count = parseInt(localStorage.getItem("count"));
+    }
+
+    if (localStorage.getItem("score")) {
+        score = parseInt(localStorage.getItem("score"));
+    }
 
     const featureData = {
         'expiry-tracker': {
@@ -33,7 +44,7 @@ document.addEventListener('DOMContentLoaded', function () {
         },
         'wastedFoodScale': {
             title: 'Wasted Food Scale',
-            description: ['Guided Decision Making Tool', 'Effort Tracker', 'Local Resources'],
+            description: ['Guided Decision Making Tool', 'Effort Tracker'],
             link: '../html/wasted-food-scale.html',
             screenshot: '../static/wastedFoodScale.png'
         }
@@ -43,6 +54,14 @@ document.addEventListener('DOMContentLoaded', function () {
     window.onload = function () {
         updateGreeting();
         displayExpiringItems();
+
+        if (count > 0) {
+            percent = (score / (count * 5)) * 100;
+        } else {
+            percent = 0;
+        }
+
+        renderGauge(percent);
     };
 
     function updateGreeting() {
@@ -153,5 +172,24 @@ document.addEventListener('DOMContentLoaded', function () {
         else {
             day15.textContent = `You have no items expiring in 15 days.`;
         }
+    }
+
+    function renderGauge(percentage) {
+        console.log("Rendering gauge with percentage:", percentage);
+        const progressPath = document.getElementById("gauge-progress");
+        const gaugeText = document.getElementById("gauge-text");
+
+        const validPercentage = Math.min(Math.max(percentage, 0), 100);
+        console.log("Valid percentage:", validPercentage);
+
+        const arcLength = 41;
+
+        const dashArrayValue = (validPercentage / 100) * arcLength;
+        progressPath.setAttribute(
+            "stroke-dasharray",
+            `${dashArrayValue} ${arcLength}`
+        );
+
+        gaugeText.textContent = validPercentage + "%";
     }
 });
