@@ -89,7 +89,6 @@ function canUseForBiofuel(answer) {
     }
 }
 
-
 function showFeedback(decision, message) {
     document.getElementById('finalDecision').classList.remove('hidden');
     document.getElementById('finalDecisionText').textContent = message;
