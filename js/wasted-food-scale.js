@@ -85,7 +85,7 @@ function canUseForBiofuel(answer) {
         showFeedback('Anaerobic Digestion', "Participate in a local food waste-to-energy program (Anaerobic Digestion).");
     } else {
         count += 1;
-        showFeedback('Landfill', "Dispose of it properly and work on reducing waste in the future.");
+        showFeedback('landfill', "Dispose of it properly and work on reducing waste in the future.");
     }
 }
 
@@ -120,13 +120,7 @@ function navigateToRelatedPage(decision) {
             window.open('local-resources.html', '_blank');
         };
     }
-    else if (decision === 'compost') {
-        navigatingText.textContent = "Click the button below to explore composting resources!";
-        navigateButton.textContent = "Go to Composting Resources";
-        navigateButton.onclick = () => {
-            window.open('local-resources.html', '_blank');
-        };
-    } else {
+    else {
         navigatingDiv.classList.add('hidden');
         navigatingText.classList.add('hidden');
         navigateButton.classList.add('hidden');

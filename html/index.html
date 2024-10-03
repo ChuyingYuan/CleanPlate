@@ -384,24 +384,28 @@
                     viewBox="0 0 36 36"
                     xmlns="http://www.w3.org/2000/svg"
                   >
-                    <!-- Background Arc (Full Gauge) -->
-                    <path
-                      d="M 5 18 a 13 13 0 0 1 26 0"
+                    <!-- Background Circle (Full Gauge) -->
+                    <circle
+                      cx="18"
+                      cy="18"
+                      r="13"
                       fill="none"
                       stroke="#e5e7eb"
                       stroke-width="2"
-                    ></path>
+                    ></circle>
 
-                    <!-- Gauge Progress Arc -->
-                    <path
+                    <!-- Gauge Progress Circle -->
+                    <circle
                       id="gauge-progress"
-                      d="M 5 18 a 13 13 0 0 1 26 0"
+                      cx="18"
+                      cy="18"
+                      r="13"
                       fill="none"
                       stroke="#119236"
                       stroke-width="2"
                       stroke-dasharray="0, 100"
                       stroke-linecap="round"
-                    ></path>
+                    ></circle>
                   </svg>
 
                   <!-- Value Text in the Center -->

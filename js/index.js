@@ -182,12 +182,15 @@ document.addEventListener('DOMContentLoaded', function () {
         const validPercentage = Math.min(Math.max(percentage, 0), 100);
         console.log("Valid percentage:", validPercentage);
 
-        const arcLength = 41;
+        const radius = 13;
+        const circumference = 2 * Math.PI * radius;
 
-        const dashArrayValue = (validPercentage / 100) * arcLength;
+        const dashArrayValue = (validPercentage / 100) * circumference;
+        const remainingLength = circumference;
+
         progressPath.setAttribute(
             "stroke-dasharray",
-            `${dashArrayValue} ${arcLength}`
+            `${dashArrayValue} ${remainingLength}`
         );
 
         gaugeText.textContent = validPercentage + "%";
