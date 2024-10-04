@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="../favicon/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="../favicon/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="../favicon/favicon-16x16.png"
+    />
+    <link rel="icon" type="image/x-icon" href="../favicon/favicon.ico" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Lexend"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.css"
+      rel="stylesheet"
+    />
+    <link href="../css/styles.css" rel="stylesheet" />
+    <title>Account - CleanPlate</title>
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login/Signup - Dynamic Page</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #f9f9f9;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 400px;
+        padding: 20px;
+        border-radius: 10px;
+        background-color: white;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+      }
+
+      .container h1 {
+        font-size: 24px;
+        margin-bottom: 20px;
+      }
+
+      .container button {
+        display: inline-block;
+        padding: 10px 20px;
+        margin: 10px;
+        font-size: 16px;
+        cursor: pointer;
+        border: none;
+        background-color: #90ee90; /* Light green */
+        color: white;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+      }
+
+      .container button:hover {
+        background-color: #66bb66; /* Darker green on hover */
+      }
+
+      .form-input {
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+      }
+
+      .error {
+        color: red;
+      }
+      .success {
+        color: green;
+      }
+
+      #forgot-password-section {
+        display: none;
+      }
+    </style>
+  </head>
+  <body class="pt-10 sm:pt-24">
+    <!-- Sticky Navigation Bar -->
+    <nav
+      class="bg-white fixed w-full z-20 top-0 start-0 border-b border-gray-200"
+    >
+      <div
+        class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4"
+      >
+        <a
+          href="../html/index.html"
+          class="flex items-center space-x-3 rtl:space-x-reverse"
+        >
+          <img src="../WEBSITE_LOGO.png" class="h-8" alt="Logo" />
+          <span class="self-center text-2xl font-semibold whitespace-nowrap"
+            >CleanPlate</span
+          >
+        </a>
+        <div class="flex md:order-2 space-x-3 rtl:space-x-reverse">
+          <button
+            data-collapse-toggle="navbar-sticky"
+            onclick="toggleMenu()"
+            type="button"
+            class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
+            aria-controls="navbar-sticky"
+            aria-expanded="false"
+          >
+            <span class="sr-only">Open main menu</span>
+            <svg
+              class="w-5 h-5"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 17 14"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M1 1h15M1 7h15M1 13h15"
+              />
+            </svg>
+          </button>
+        </div>
+        <div
+          class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1"
+          id="navbar-sticky"
+        >
+          <ul
+            class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white"
+          >
+            <li class="relative group">
+              <a
+                href="../html/index.html"
+                class="flex items-center space-x-2 py-2 px-3 md:p-0 nav-icon"
+              >
+                <img
+                  src="https://img.icons8.com/?size=100&id=73&format=png&color=000000"
+                  class="w-6 h-6"
+                  alt="Home"
+                />
+                <span class="block md:hidden text-center mt-2">Home</span>
+              </a>
+              <div
+                class="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 opacity-0 group-hover:opacity-100 transition-opacity bg-gray-800 text-white text-xs rounded-md py-1 px-2"
+              >
+                Home
+              </div>
+            </li>
+            <li class="relative group">
+              <a
+                href="../html/expiry-date-tracker.html"
+                class="flex items-center space-x-2 py-2 px-3 md:p-0 nav-icon"
+              >
+                <img
+                  src="https://img.icons8.com/?size=100&id=283&format=png&color=000000"
+                  class="w-6 h-6"
+                  alt="Expiry Tracker"
+                />
+                <span class="block md:hidden text-center mt-2"
+                  >Expiry Tracker</span
+                >
+              </a>
+              <div
+                class="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 opacity-0 group-hover:opacity-100 transition-opacity bg-gray-800 text-white text-xs rounded-md py-1 px-2"
+              >
+                Expiry Tracker
+              </div>
+            </li>
+            <li class="relative group">
+              <a
+                href="../html/recipe.html"
+                class="flex items-center space-x-2 py-2 px-3 md:p-0 nav-icon active"
+              >
+                <img
+                  src="https://img.icons8.com/?size=100&id=idEQE7TsG0NA&format=png&color=000000"
+                  class="w-6 h-6"
+                  alt="Recipe"
+                />
+                <span class="block md:hidden text-center mt-2">Recipe</span>
+              </a>
+              <div
+                class="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 opacity-0 group-hover:opacity-100 transition-opacity bg-gray-800 text-white text-xs rounded-md py-1 px-2"
+              >
+                Recipe Search
+              </div>
+            </li>
+            <li class="relative group">
+              <a
+                href="../html/notification.html"
+                class="flex items-center space-x-2 py-2 px-3 md:p-0 nav-icon"
+              >
+                <img
+                  src="https://img.icons8.com/?size=100&id=23&format=png&color=000000"
+                  class="w-6 h-6"
+                  alt="Notification"
+                />
+                <span class="block md:hidden text-center mt-2"
+                  >Notification</span
+                >
+              </a>
+              <div
+                class="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 opacity-0 group-hover:opacity-100 transition-opacity bg-gray-800 text-white text-xs rounded-md py-1 px-2"
+              >
+                Notification
+              </div>
+            </li>
+            <li class="relative group">
+              <a
+                href="../html/wasted-food-scale.html"
+                class="flex items-center space-x-2 py-2 px-3 md:p-0 nav-icon"
+              >
+                <img
+                  src="https://img.icons8.com/?size=100w&id=XxG3TLBUs4k5&format=png&color=000000"
+                  class="w-6 h-6"
+                  alt="Wasted Food Scale"
+                />
+                <span class="block md:hidden text-center mt-2"
+                  >Wasted Food Scale</span
+                >
+              </a>
+              <div
+                class="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 opacity-0 group-hover:opacity-100 transition-opacity bg-gray-800 text-white text-xs rounded-md py-1 px-2"
+              >
+                Wasted Food Scale
+              </div>
+            </li>
+            <li class="relative group">
+              <a
+                href="../html/dashboard.html"
+                class="flex items-center space-x-2 py-2 px-3 md:p-0 nav-icon"
+              >
+                <img
+                  src="https://img.icons8.com/?size=100&id=6rfR2m3WUfBr&format=png&color=000000"
+                  class="w-6 h-6"
+                  alt="Dashboard"
+                />
+                <span class="block md:hidden text-center mt-2">Dashboard</span>
+              </a>
+              <div
+                class="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 opacity-0 group-hover:opacity-100 transition-opacity bg-gray-800 text-white text-xs rounded-md py-1 px-2"
+              >
+                Dashboard
+              </div>
+            </li>
+            <li class="relative group">
+              <a
+                href="../html/account.html"
+                class="flex items-center space-x-2 py-2 px-3 md:p-0 nav-icon"
+              >
+                <img
+                  src="https://img.icons8.com/?size=100&id=23392&format=png&color=000000"
+                  class="w-6 h-6"
+                  alt="Dashboard"
+                />
+                <span class="block md:hidden text-center mt-2">Account</span>
+              </a>
+              <div
+                class="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 opacity-0 group-hover:opacity-100 transition-opacity bg-gray-800 text-white text-xs rounded-md py-1 px-2"
+              >
+                Account
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <main>
+      <div class="container">
+        <h1>Welcome to CleanPlate</h1>
+  
+        <div id="auth-section"></div>
+        <div id="user-greeting"></div>
+        <div id="message" class="error"></div>
+  
+        <div id="forgot-password-section">
+          <h2>Forgot Password</h2>
+          <input
+            type="text"
+            id="forgot-username"
+            class="form-input"
+            placeholder="Enter your username"
+          />
+          <button onclick="recoverPassword()">Recover Password</button>
+          <button onclick="hideForgotPassword()">Back to Login</button>
+        </div>
+      </div>
+  
+      <script>
+        const users = JSON.parse(localStorage.getItem("users")) || {};
+  
+        // Function to handle login
+        function login() {
+          const username = document.getElementById("username").value;
+          const password = document.getElementById("password").value;
+  
+          if (users[username] && users[username] === password) {
+            localStorage.setItem("currentUser", username);
+            document.getElementById("message").textContent = "";
+            alert("Login successful!");
+            updateAuthSection();
+          } else {
+            document.getElementById("message").textContent =
+              "Invalid username or password.";
+          }
+        }
+  
+        // Function to handle signup
+        function signup() {
+          const username = document.getElementById("username").value;
+          const password = document.getElementById("password").value;
+  
+          if (users[username]) {
+            document.getElementById("message").textContent =
+              "Username already exists.";
+          } else {
+            users[username] = password;
+            localStorage.setItem("users", JSON.stringify(users));
+            localStorage.setItem("currentUser", username);
+            document.getElementById("message").className = "success";
+            document.getElementById("message").textContent =
+              "Successfully registered and logged in.";
+            updateAuthSection();
+          }
+        }
+  
+        // Function to handle logout
+        function logout() {
+          localStorage.removeItem("currentUser");
+          alert("You have been logged out.");
+          updateAuthSection();
+        }
+  
+        // Function to show the Forgot Password section
+        function showForgotPassword() {
+          document.getElementById("auth-section").style.display = "none";
+          document.getElementById("forgot-password-section").style.display =
+            "block";
+          document.getElementById("message").textContent = "";
+        }
+  
+        // Function to hide the Forgot Password section and return to login
+        function hideForgotPassword() {
+          document.getElementById("auth-section").style.display = "block";
+          document.getElementById("forgot-password-section").style.display =
+            "none";
+          document.getElementById("message").textContent = "";
+        }
+  
+        // Function to recover password
+        function recoverPassword() {
+          const username = document.getElementById("forgot-username").value;
+          if (users[username]) {
+            alert(`Your password is: ${users[username]}`);
+            hideForgotPassword();
+          } else {
+            document.getElementById("message").textContent =
+              "Username not found.";
+          }
+        }
+  
+        // Function to update buttons based on login status
+        function updateAuthSection() {
+          const authSection = document.getElementById("auth-section");
+          const message = document.getElementById("message");
+          const currentUser = localStorage.getItem("currentUser");
+  
+          message.textContent = "";
+  
+          if (currentUser) {
+            authSection.innerHTML = `
+              <p>Hello, ${currentUser}!</p>
+              <button onclick="logout()">Logout</button>
+            `;
+          } else {
+            authSection.innerHTML = `
+              <h2>Login / Sign Up</h2>
+              <input type="text" id="username" class="form-input" placeholder="Username" />
+              <input type="password" id="password" class="form-input" placeholder="Password" />
+              <button onclick="login()">Login</button>
+              <button onclick="signup()">Sign Up</button>
+              <button onclick="showForgotPassword()">Forgot Password</button>
+            `;
+          }
+        }
+  
+        // Initialize the buttons when the page loads
+        document.addEventListener("DOMContentLoaded", updateAuthSection);
+      </script>
+    </main>
+
+    <footer
+      class="left-0 z-20 w-full p-4 bg-white border-t border-gray-200 shadow md:flex md:items-center md:justify-between"
+    >
+      <span class="text-sm text-gray-500 sm:text-center">
+        &copy; <span id="current-year"></span> CleanPlate All Rights Reserved.
+      </span>
+    </footer>
+  </body>
+</html>
