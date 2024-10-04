@@ -308,48 +308,58 @@
           </div>
         </div>
       </div>
+    </main>
 
-      <script>
-        // Function to show the Forgot Password section
-        function showForgotPassword() {
-          document.getElementById("auth-section").style.display = "none";
-          document.getElementById("forgotPassword").style.display = "block";
-          document.getElementById("confirmPassword").style.display = "none";
-          document.getElementById("message").textContent = "";
-        }
+    <footer
+      class="left-0 z-20 w-full p-4 bg-white border-t border-gray-200 shadow md:flex md:items-center md:justify-between"
+    >
+      <span class="text-sm text-gray-500 sm:text-center">
+        &copy; <span id="current-year"></span> CleanPlate All Rights Reserved.
+      </span>
+    </footer>
 
-        // Function to hide the Forgot Password section and return to login
-        function hideForgotPassword() {
-          document.getElementById("auth-section").style.display = "block";
-          document.getElementById("forgotPassword").style.display = "none";
-          document.getElementById("confirmPassword").style.display = "none";
-          document.getElementById("message").textContent = "";
-        }
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
+    <script>
+      // Function to show the Forgot Password section
+      function showForgotPassword() {
+        document.getElementById("auth-section").style.display = "none";
+        document.getElementById("forgotPassword").style.display = "block";
+        document.getElementById("confirmPassword").style.display = "none";
+        document.getElementById("message").textContent = "";
+      }
 
-        // Function to hide the confirm password section and show the forgot password section
-        function hideConfirmPassword() {
-          document.getElementById("auth-section").style.display = "block";
-          document.getElementById("confirmPassword").classList.add("hidden");
-          document.getElementById("forgotPassword").classList.remove("hidden");
-        }
+      // Function to hide the Forgot Password section and return to login
+      function hideForgotPassword() {
+        document.getElementById("auth-section").style.display = "block";
+        document.getElementById("forgotPassword").style.display = "none";
+        document.getElementById("confirmPassword").style.display = "none";
+        document.getElementById("message").textContent = "";
+      }
 
-        // Function to update buttons based on login status
-        function updateAuthSection() {
-          const authSection = document.getElementById("auth-section");
-          const message = document.getElementById("message");
-          const currentUser = localStorage.getItem("currentUser");
+      // Function to hide the confirm password section and show the forgot password section
+      function hideConfirmPassword() {
+        document.getElementById("auth-section").style.display = "block";
+        document.getElementById("confirmPassword").classList.add("hidden");
+        document.getElementById("forgotPassword").classList.remove("hidden");
+      }
 
-          message.textContent = "";
+      // Function to update buttons based on login status
+      function updateAuthSection() {
+        const authSection = document.getElementById("auth-section");
+        const message = document.getElementById("message");
+        const currentUser = localStorage.getItem("currentUser");
 
-          if (currentUser) {
-            authSection.innerHTML = `
+        message.textContent = "";
+
+        if (currentUser) {
+          authSection.innerHTML = `
               <div class="text-center flex flex-col justify-center space-y-4 mt-4">
                 <p>Hello, ${currentUser}!</p>
                 <button onclick="logout()" class="w-full lg:w-auto px-4 py-2 rounded-full border border-gray-300 text-sm font-medium button">Sign Out</button>
               </div>
             `;
-          } else {
-            authSection.innerHTML = `
+        } else {
+          authSection.innerHTML = `
             <div class="text-center">
               <p class="my-4">Sign In / Sign Up<p>
               <input type="text" id="username" class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 inline-flex w-1/2 p-2.5 mt-4" placeholder="Email" />
@@ -361,18 +371,14 @@
               </div>
             </div>
             `;
-          }
         }
-        document.addEventListener("DOMContentLoaded", updateAuthSection);
-      </script>
-    </main>
+      }
 
-    <footer
-      class="left-0 z-20 w-full p-4 bg-white border-t border-gray-200 shadow md:flex md:items-center md:justify-between"
-    >
-      <span class="text-sm text-gray-500 sm:text-center">
-        &copy; <span id="current-year"></span> CleanPlate All Rights Reserved.
-      </span>
-    </footer>
+      window.onload = function () {
+        updateAuthSection();
+        const currentYear = new Date().getFullYear();
+        document.getElementById("current-year").textContent = currentYear;
+      };
+    </script>
   </body>
 </html>

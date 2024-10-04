@@ -34,7 +34,20 @@ function signUp(username, password, email) {
     cognitoIdentityServiceProvider.signUp(params, function (err, data) {
         if (err) {
             console.log('Error signing up:', err);
-            document.getElementById("message").textContent = `${err.message}`;
+
+            let errorMessage = '';
+
+            if (err.message.includes("password failed to satisfy constraint")) {
+                errorMessage = "Password must include at least one uppercase letter, one lowercase letter and one number.";
+            } else if (err.message.includes("username failed to satisfy constraint")) {
+                errorMessage = "Email must contain at least one character and no special spaces.";
+            } else if (err.message.includes("Member must have length greater than or equal to 1")) {
+                errorMessage = "Email cannot be empty.";
+            } else {
+                errorMessage = "Invalid email or password. Please try again.";
+            }
+
+            document.getElementById("message").textContent = errorMessage;
         } else {
             console.log('Sign-up success:', data);
             document.getElementById("auth-section").style.display = "none";
@@ -96,7 +109,7 @@ function signIn(username, password) {
     cognitoIdentityServiceProvider.initiateAuth(params, function (err, data) {
         if (err) {
             console.log('Error signing in:', err);
-            document.getElementById("message").textContent = "Invalid email or password.";
+            document.getElementById("message").textContent = "Invalid email or password. Please try again.";
         } else {
             localStorage.setItem('currentUser', username);
             console.log('Sign-in success:', data);
