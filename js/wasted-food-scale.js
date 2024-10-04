@@ -4,6 +4,7 @@ let co2Reduction = 0;
 let count = 0;
 let percent = 0;
 
+// Retrieve stored values from local storage
 if (localStorage.getItem('count')) {
     count = parseInt(localStorage.getItem('count'));
 }
@@ -22,6 +23,7 @@ if (localStorage.getItem('co2Reduction')) {
 
 updateDashboard();
 
+// Function to handle the user's response to whether the food is edible
 function isFoodEdible(answer) {
     document.getElementById('isEdible').classList.add('hidden');
 
@@ -32,6 +34,7 @@ function isFoodEdible(answer) {
     }
 }
 
+// Function to handle the user's response to whether they plan to consume or donate the food
 function consumeOrDonate(decision) {
     document.getElementById('planToConsume').classList.add('hidden');
 
@@ -49,6 +52,7 @@ function consumeOrDonate(decision) {
     localStorage.setItem('score', score);
 }
 
+// Function to handle the user's response to whether they plan to compost or use for biofuel
 function compostOrBiofuel(decision) {
     document.getElementById('compostCheck').classList.add('hidden');
 
@@ -64,6 +68,7 @@ function compostOrBiofuel(decision) {
     localStorage.setItem('score', score);
 }
 
+// Function to handle the user's response to whether the food is suitable for animals
 function isFoodForAnimals(answer) {
     document.getElementById('feedAnimalsCheck').classList.add('hidden');
 
@@ -71,24 +76,35 @@ function isFoodForAnimals(answer) {
         score += 2;
         count += 1;
         showFeedback('Feed Animals', "Repurpose the food scraps for animal feed.");
+        navigateToRelatedPage('Feed Animals');
     } else {
         document.getElementById('compostCheck').classList.remove('hidden');
     }
+    localStorage.setItem('count', count);
+    localStorage.setItem('score', score);
 }
 
+// Function to handle the user's response to whether the food can be used for anaerobic digestion
 function canUseForBiofuel(answer) {
     document.getElementById('biofuelCheck').classList.add('hidden');
+    let decision = '';
 
     if (answer === 'yes') {
         score += 1;
         count += 1;
-        showFeedback('Anaerobic Digestion', "Participate in a local food waste-to-energy program (Anaerobic Digestion).");
+        decision = 'Anaerobic Digestion';
+        showFeedback(decision, "Participate in a local food waste-to-energy program (Anaerobic Digestion).");
     } else {
         count += 1;
-        showFeedback('landfill', "Dispose of it properly and work on reducing waste in the future.");
+        decision = 'landfill';
+        showFeedback(decision, "Dispose of it properly and work on reducing waste in the future.");
     }
+    navigateToRelatedPage(decision);
+    localStorage.setItem('count', count);
+    localStorage.setItem('score', score);
 }
 
+// Function to display the final decision and feedback to the user
 function showFeedback(decision, message) {
     document.getElementById('finalDecision').classList.remove('hidden');
     document.getElementById('finalDecisionText').textContent = message;
@@ -97,6 +113,7 @@ function showFeedback(decision, message) {
     }
 }
 
+// Function to navigate to related page based on user's decision
 function navigateToRelatedPage(decision) {
     const navigatingDiv = document.getElementById('navigating');
     const navigatingText = document.getElementById('navigatingText');
@@ -126,11 +143,14 @@ function navigateToRelatedPage(decision) {
     }
 }
 
+// Function to log the waste amount and calculate the CO2 emission
 async function logWaste() {
     const wasteAmount = parseFloat(document.getElementById('wasteAmount').value);
 
+    // Check if the input is a valid number
     if (!isNaN(wasteAmount) && wasteAmount > 0) {
         try {
+            // Call the Climatiq API to estimate the CO2 emission
             const response = await fetch('https://api.climatiq.io/data/v1/estimate', {
                 method: 'POST',
                 headers: {
@@ -149,6 +169,7 @@ async function logWaste() {
                 })
             });
 
+            // If the response is successful, update the dashboard and restart the tool
             if (response.ok) {
                 const data = await response.json();
                 const co2Emission = data.co2e;
@@ -176,6 +197,7 @@ async function logWaste() {
     }
 }
 
+// Function to restart the tool
 function restartTool() {
     document.getElementById('isEdible').classList.add('hidden');
     document.getElementById('planToConsume').classList.add('hidden');
@@ -192,6 +214,7 @@ function restartTool() {
     updateDashboard();
 }
 
+// Function to update the dashboard with the stored values
 function updateDashboard() {
     const storedTotalWaste = localStorage.getItem('totalWaste') || 0;
     const storedCo2Reduction = localStorage.getItem('co2Reduction') || 0;
@@ -212,6 +235,7 @@ function updateDashboard() {
     renderGauge(percent);
 }
 
+// Function to render the gauge with the given percentage
 function renderGauge(percentage) {
     console.log("Rendering gauge with percentage:", percentage);
     const progressPath = document.getElementById("gauge-progress");

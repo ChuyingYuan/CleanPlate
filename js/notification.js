@@ -68,6 +68,7 @@ document.addEventListener("DOMContentLoaded", function () {
         return /Mobi|Android|iPad|iPhone|Tablet/i.test(navigator.userAgent);
     }
 
+    // Function to search for specific item(s)
     window.performSearch = function performSearch(event) {
         event.preventDefault();
         console.log("Perform Search");
@@ -90,10 +91,15 @@ document.addEventListener("DOMContentLoaded", function () {
         searchHeading.style.display = "block";
         hideFromSearch.classList.add("hidden");
 
+        // Loop through all product items in the local storage
         for (let i = 0; i < localStorage.length; i++) {
             const key = localStorage.key(i);
+            if (['co2Reduction', 'score', 'totalWaste', 'count'].includes(key)) {
+                continue;
+            }
             const product = JSON.parse(localStorage.getItem(key));
 
+            // Check if the search query is found in the product name
             if (
                 product &&
                 product.productName &&
@@ -124,6 +130,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         }
 
+        // Display message if no results are found
         if (!resultsFound) {
             searchHeading.style.display = "none";
             const noResultsMessage = document.createElement("p");
@@ -133,6 +140,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     };
 
+    // Function to reset the search results
     function resetSearchResults() {
         searchHeading.style.display = "none";
         searchResults.innerHTML = "";
@@ -156,7 +164,7 @@ document.addEventListener("DOMContentLoaded", function () {
         renderCalendar(currentView);
     }
 
-    // Function to render the calendar based on the view
+    // Function to render the calendar based on the view (common layout for all views)
     function renderCalendar(view) {
         calendar.innerHTML = '';
 
@@ -233,6 +241,7 @@ document.addEventListener("DOMContentLoaded", function () {
         headerMiddle.appendChild(buttonsDiv);
         header.appendChild(headerMiddle);
 
+        // Dropdown button for view selection (mobile)
         const dropdownButton = document.createElement('button');
         dropdownButton.className = 'block lg:hidden px-4 py-2 rounded-full border border-gray-300 text-sm font-medium';
         dropdownButton.textContent = 'View';
@@ -295,6 +304,7 @@ document.addEventListener("DOMContentLoaded", function () {
             dropdownMenu.classList.toggle('hidden');
         });
 
+        // Legend for the calendar
         const legend = document.createElement('div');
         legend.className = 'flex items-center justify-center gap-5 mb-2';
 
@@ -315,6 +325,7 @@ document.addEventListener("DOMContentLoaded", function () {
         legend.appendChild(upcomingExpiring);
         calendar.appendChild(legend);
 
+        // Render the calendar based on the view
         if (view === 'monthly') {
             monthlyButton.classList.add('selected');
             renderMonthlyView();
@@ -378,6 +389,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 const badge = document.createElement('span');
                 badge.className = 'absolute bottom-0 right-0 bg-red-500 text-white rounded-full px-2 py-1 mb-2 mr-2 text-xs cursor-pointer badgeBtn';
 
+                // Display popup modal to show the expiring items
                 badge.onclick = () => {
                     expiringItemsPopup.classList.remove('hidden');
                     popupTitle.textContent = 'Expiring Items on ' + dayDate.toDateString().slice(4, 15);
@@ -402,13 +414,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 dayElement.appendChild(badge);
             }
 
+            // Highlight today's date
             if (day === today.getDate() && currentMonth === today.getMonth() && currentYear === today.getFullYear()) {
                 dayElement.classList.add('today');
             }
-
             daysGrid.appendChild(dayElement);
         }
-
         calendar.appendChild(daysGrid);
     }
 
@@ -417,6 +428,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const daysHeader = document.createElement('div');
         daysHeader.className = 'grid grid-cols-7 divide-gray-200 mb-3';
 
+        // Days of the Week
         ['Sun', 'Mon', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat'].forEach(day => {
             const dayElement = document.createElement('div');
             dayElement.className = 'text-center text-sm font-medium text-gray-900';
@@ -431,6 +443,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const daysGrid = document.createElement('div');
         daysGrid.className = 'grid grid-cols-7 divide-gray-200';
 
+        // Fill the days of the week
         for (let i = 0; i < 7; i++) {
             const dayElement = document.createElement('div');
             const dayDate = new Date(firstDayOfWeek.getTime() + i * 24 * 60 * 60 * 1000);
@@ -453,6 +466,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 // Badge element showing the number of expiring items
                 const badge = document.createElement('button');
                 badge.className = 'absolute bottom-0 right-0 bg-red-500 text-white rounded-full px-2 py-1 mb-2 mr-2 text-xs cursor-pointer badgeBtn';
+
+                // Display popup modal to show the expiring items
                 badge.onclick = () => {
                     expiringItemsPopup.classList.remove('hidden');
                     popupTitle.textContent = 'Expiring Items on ' + dayDate.toDateString().slice(4, 15);
@@ -482,7 +497,6 @@ document.addEventListener("DOMContentLoaded", function () {
             }
             daysGrid.appendChild(dayElement);
         }
-
         calendar.appendChild(daysGrid);
     }
 
@@ -561,18 +575,20 @@ document.addEventListener("DOMContentLoaded", function () {
         renderCalendar(currentView);
     }
 
-    // Helper functions for rendering the calendar 
+    // Function to get the month name
     function getMonthName(month) {
         const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
         return monthNames[month];
     }
 
+    // Function to get the week number
     function getWeekNumber(date) {
         const firstDayOfYear = new Date(date.getFullYear(), 0, 1);
         const pastDaysOfYear = (date - firstDayOfYear) / 86400000;
         return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
     }
 
+    // Function to get the first day of the week
     function getFirstDayOfWeek(weekNumber, year) {
         const janFirst = new Date(year, 0, 1);
         const daysOffset = (weekNumber - 1) * 7;
@@ -581,7 +597,7 @@ document.addEventListener("DOMContentLoaded", function () {
         return firstDayOfWeek;
     }
 
-    // Function to handle change view of List
+    // Function to handle change the day range of List view
     window.changeListView = function changeListView(range) {
         if (range === 0) {
             console.log("Today");

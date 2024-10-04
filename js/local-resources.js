@@ -29,6 +29,7 @@ function updateGreeting() {
     greetingElement.innerHTML = greeting;
 }
 
+// Function to fetch food donation data from the API
 async function fetchDataFromAPI() {
     const apiUrl = 'https://rvtkdasc90.execute-api.ap-southeast-2.amazonaws.com/prod/food-donation';
     try {
@@ -45,6 +46,7 @@ async function fetchDataFromAPI() {
     }
 }
 
+// Function to render the donation list
 async function populateList() {
     const locations = await fetchDataFromAPI();
     const listElement = document.getElementById("donate-list");
@@ -74,6 +76,7 @@ async function populateList() {
 
 let map;
 
+// Function to initialize the Google Map
 async function initMap() {
     const { Map } = await google.maps.importLibrary("maps");
     const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
@@ -98,6 +101,7 @@ async function initMap() {
     });
 }
 
+// Function to geocode the address and add a marker to the map
 function geocodeAddress(geocoder, map, location) {
     geocoder.geocode({ address: location.Address }, (results, status) => {
         if (status === "OK") {

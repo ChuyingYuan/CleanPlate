@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let count = 0;
     let percent = 0;
 
+    // Retrieve stored values from local storage
     if (localStorage.getItem("count")) {
         count = parseInt(localStorage.getItem("count"));
     }
@@ -64,6 +65,7 @@ document.addEventListener('DOMContentLoaded', function () {
         renderGauge(percent);
     };
 
+    // Function to update the greeting based on the current time
     function updateGreeting() {
         let greeting;
         if (currentHour < 12) {
@@ -92,12 +94,12 @@ document.addEventListener('DOMContentLoaded', function () {
             const featureKey = this.getAttribute('data-feature');
             const feature = featureData[featureKey];
 
+            // Remove selected class from all cards and add it to the clicked card
             document.querySelectorAll('.feature-card').forEach(c => c.classList.remove('selected'));
-
             this.classList.add('selected');
-
             document.getElementById('feature-title').innerText = feature.title;
 
+            // Display feature description
             const featureDescriptionElement = document.getElementById('feature-description');
             featureDescriptionElement.innerHTML = '';
             feature.description.forEach(item => {
@@ -106,19 +108,22 @@ document.addEventListener('DOMContentLoaded', function () {
                 featureDescriptionElement.appendChild(listItem);
             });
 
+            // Update feature link and screenshot
             document.getElementById('feature-link').setAttribute('href', feature.link);
             document.getElementById('feature-screenshot').setAttribute('src', feature.screenshot);
-
             document.getElementById('feature-info-box').classList.remove('hidden');
         });
     });
 
-    // Function to check for expiring items
+    // Function to check for expiring items within the given range
     function getExpiringItems(range) {
         const expiringItems = [];
 
         for (let i = 0; i < localStorage.length; i++) {
             const key = localStorage.key(i);
+            if (['co2Reduction', 'score', 'totalWaste', 'count'].includes(key)) {
+                continue;
+            }
             const product = JSON.parse(localStorage.getItem(key));
 
             if (product?.expirationDate) {
@@ -140,9 +145,9 @@ document.addEventListener('DOMContentLoaded', function () {
         return expiringItems;
     }
 
-    // Function to display expiring items
+    // Function to display expiring items in different time frames (3, 7, 15)
     function displayExpiringItems() {
-
+        // Display message for items expiring in 3 days
         const expiringItems3Days = getExpiringItems(3);
         const items3Days = expiringItems3Days.length;
 
@@ -153,6 +158,7 @@ document.addEventListener('DOMContentLoaded', function () {
             day3.textContent = `You have no items expiring in 3 days.`;
         }
 
+        // Display message for items expiring in 7 days
         const expiringItems7Days = getExpiringItems(7);
         const items7Days = expiringItems7Days.length;
 
@@ -163,6 +169,7 @@ document.addEventListener('DOMContentLoaded', function () {
             day7.textContent = `You have no items expiring in 7 days.`;
         }
 
+        // Display message for items expiring in 15 days
         const expiringItems15Days = getExpiringItems(15);
         const items15Days = expiringItems15Days.length;
 
@@ -174,6 +181,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    // Function to render the gauge with the given percentage
     function renderGauge(percentage) {
         console.log("Rendering gauge with percentage:", percentage);
         const progressPath = document.getElementById("gauge-progress");

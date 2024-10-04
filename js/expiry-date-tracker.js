@@ -75,6 +75,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let selectedIngredient = null;
     let tesseractWorker = null;
 
+    // Function to update the greeting based on the current time
     function updateGreeting() {
         let greeting;
         if (currentHour < 12) {
@@ -185,7 +186,7 @@ document.addEventListener("DOMContentLoaded", function () {
         checkExpirations();
     }
 
-    // Function to handle food recognition
+    // Function to handle food recognition (Produce Image Recognition Model)
     window.handleFoodRecognition = function handleFoodRecognition() {
         console.log("Food Recognition");
         reset();
@@ -201,6 +202,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (file) {
             foodImgInput.style.display = 'none';
 
+            // Display loading spinner
             resultElement.innerHTML = `
             <div class="text-center mt-4">
                 <output>
@@ -224,6 +226,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 </output>
             </div>`;
 
+            // Upload image to the food recognition model API and fetch the recognized food item
             try {
                 const base64Image = await getBase64(file);
                 const response = await fetch('https://rvtkdasc90.execute-api.ap-southeast-2.amazonaws.com/prod/food-recognition', {
@@ -241,6 +244,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 const result = await response.json();
                 // console.log('Response:', result);
+
+                // If the response is successful, fetch the products
                 if (result.body) {
                     const label = result.body.label;
                     console.log('Label:', label);
@@ -305,6 +310,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function detectText(finalText) {
         if (finalText.length > 0) {
             console.log("Detected finalText: ", finalText);
+            // Display loading spinner
             resultElement.innerHTML = `
                         <div class="text-center mt-4">
                             <output>
@@ -334,7 +340,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    // Function to fetch products from Receipt Expiration Lambda function
+    // Function to fetch products from Receipt Expiration API
     function fetchProducts(finalText) {
         const API = 'https://rvtkdasc90.execute-api.ap-southeast-2.amazonaws.com/prod/receipt-expiration';
         const data = { "finalText": finalText };
@@ -349,6 +355,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 for (const product of productData) {
                     try {
                         // console.log(product);
+
+                        // Extract product information
                         const productNameRaw = product.Name || "Not available";
                         const productName = productNameRaw.charAt(0).toUpperCase() + productNameRaw.slice(1);
                         const minShelfLife = product.DOP_Refrigerate_Min || "Not available";
@@ -359,29 +367,12 @@ document.addEventListener("DOMContentLoaded", function () {
                         const category = product.category || "others";
                         const recordDate = product.receipt_date || currentDate.toISOString().split('T')[0];
 
-                        let imgUrl;
-                        switch (category) {
-                            case "vegetables":
-                                imgUrl = "https://img.icons8.com/?size=100&id=64432&format=png&color=000000";
-                                break;
-                            case "fruit":
-                                imgUrl = "https://img.icons8.com/?size=100&id=hrmFKOhdqbOq&format=png&color=000000";
-                                break;
-                            case "meat":
-                                imgUrl = "https://img.icons8.com/?size=100&id=13306&format=png&color=000000";
-                                break;
-                            case "seafood":
-                                imgUrl = "https://img.icons8.com/?size=100&id=dcNXeTC0SjGX&format=png&color=000000";
-                                break;
-                            case "dairy":
-                                imgUrl = "https://img.icons8.com/?size=100&id=12874&format=png&color=000000";
-                                break;
-                            default:
-                                imgUrl = "https://img.icons8.com/?size=100&id=32236&format=png&color=000000";
-                        }
+                        // Set image URL based on the category
+                        const imgUrl = updateCategoryImage(category);
 
                         const uniqueKey = generateUniqueKey();
 
+                        // Store the product information in local storage
                         const productInfo = {
                             productName: productName,
                             category: category,
@@ -415,6 +406,7 @@ document.addEventListener("DOMContentLoaded", function () {
         resultElement.textContent = "Barcode Detector is not supported by this browser.";
     }
 
+    // Initialize the BarcodeDetector
     barcodeDetector = new BarcodeDetector({
         formats: ["code_39", "codabar", "ean_13"],
     });
@@ -459,6 +451,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     window.onload = function () {
+        // Helper function to create upload icon, scan icon and input field
         function createUploadIcon() {
             const uploadIcon = document.createElement("img");
             uploadIcon.src = "https://img.icons8.com/?size=100&id=84056&format=png&color=000000";
@@ -551,9 +544,11 @@ document.addEventListener("DOMContentLoaded", function () {
         return `${day}/${month}/${year}`;
     }
 
-    // Request camera access
+    // Function to start the camera
     async function startCamera() {
+        // Request camera permission
         try {
+            // Check if the browser supports media devices
             if (!navigator.mediaDevices?.getUserMedia) {
                 throw new Error('Media devices are not supported by this browser.');
             }
@@ -610,6 +605,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         const barcode = barcodes[0].rawValue;
                         console.log("Detected Barcode: ", barcode);
 
+                        // Display loading spinner
                         resultElement.innerHTML = `
                         <div class="text-center mt-4">
                             <output>
@@ -648,7 +644,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    // Function to fetch product information from Lambda function
+    // Function to fetch product information from Barcode Expiration API
     function fetchProductInfo(barcode) {
         fetch('https://rvtkdasc90.execute-api.ap-southeast-2.amazonaws.com/prod/barcode-expiration', {
             method: 'POST',
@@ -669,6 +665,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 try {
                     const productData = JSON.parse(data.body);
 
+                    // Extract product information
                     const productNameRaw = productData.product_name || "Not available";
                     const productName = productNameRaw.charAt(0).toUpperCase() + productNameRaw.slice(1);
                     const category = productData.category || "Not available";
@@ -679,29 +676,12 @@ document.addEventListener("DOMContentLoaded", function () {
                     const expirationDate = productData.expiration_date || "As Soon As Possible";
                     const recordDate = currentDate.toISOString().split('T')[0];
 
-                    let imgUrl;
-                    switch (category) {
-                        case "vegetables":
-                            imgUrl = "https://img.icons8.com/?size=100&id=64432&format=png&color=000000";
-                            break;
-                        case "fruit":
-                            imgUrl = "https://img.icons8.com/?size=100&id=hrmFKOhdqbOq&format=png&color=000000";
-                            break;
-                        case "meat":
-                            imgUrl = "https://img.icons8.com/?size=100&id=13306&format=png&color=000000";
-                            break;
-                        case "seafood":
-                            imgUrl = "https://img.icons8.com/?size=100&id=dcNXeTC0SjGX&format=png&color=000000";
-                            break;
-                        case "dairy":
-                            imgUrl = "https://img.icons8.com/?size=100&id=12874&format=png&color=000000";
-                            break;
-                        default:
-                            imgUrl = "https://img.icons8.com/?size=100&id=32236&format=png&color=000000";
-                    }
+                    // Set image URL based on the category
+                    const imgUrl = updateCategoryImage(category);
 
                     const uniqueKey = generateUniqueKey();
 
+                    // Store the product information in local storage
                     const productInfo = {
                         productName: productName,
                         category: category,
@@ -776,6 +756,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
+    // Function to get the storage information
     function getStorageInfo(productInfo) {
         if (productInfo.expirationDate === "As Soon As Possible") {
             return handleAsSoonAsPossible(productInfo);
@@ -789,6 +770,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
+    // Function to handle "Consume As Soon As Possible" storage method
     function handleAsSoonAsPossible(productInfo) {
         let storageInfo = "Consume As Soon As Possible";
         const newExpirationDate = new Date(currentDate);
@@ -800,6 +782,7 @@ document.addEventListener("DOMContentLoaded", function () {
         return storageInfo;
     }
 
+    // Function to handle "Not available" storage method
     function handleNotAvailable(productInfo) {
         const expirationDate = new Date(productInfo.expirationDate);
         if (expirationDate < currentDate) {
@@ -809,6 +792,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
+    // Function to handle storage method (Default)
     function handleDefault(productInfo) {
         let storageMethod = productInfo.method.toLowerCase();
 
@@ -1000,6 +984,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
+    // Function to sort the table by column
     window.sortTable = function sortTable(column) {
         const products = [];
 
@@ -1027,6 +1012,7 @@ document.addEventListener("DOMContentLoaded", function () {
         displayTable(products, 10, 1);
     }
 
+    // Function to delete multiple products
     window.bulkDelete = function bulkDelete() {
         const selectedCheckboxes = document.querySelectorAll('.product-checkbox:checked');
 
@@ -1040,6 +1026,7 @@ document.addEventListener("DOMContentLoaded", function () {
         modal.setAttribute('data-product-keys', JSON.stringify(Array.from(selectedCheckboxes).map(checkbox => checkbox.getAttribute('data-key'))));
     }
 
+    // Function to toggle select all checkboxes
     window.toggleSelectAll = function toggleSelectAll() {
         const productCheckboxes = document.querySelectorAll('.product-checkbox');
         productCheckboxes.forEach(checkbox => {
@@ -1047,6 +1034,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+    // Function to confirm bulk delete
     window.confirmBulkDelete = function confirmBulkDelete() {
         const modal = document.getElementById('popup-modal-bulk');
         const keys = JSON.parse(modal.getAttribute('data-product-keys'));
@@ -1161,6 +1149,7 @@ document.addEventListener("DOMContentLoaded", function () {
         modal.setAttribute('data-product-key', key);
     }
 
+    // Function to confirm delete
     window.confirmDelete = function confirmDelete() {
         const modal = document.getElementById('popup-modal');
         const key = modal.getAttribute('data-product-key');
@@ -1174,6 +1163,7 @@ document.addEventListener("DOMContentLoaded", function () {
         resetAll();
     }
 
+    // Function to cancel delete
     window.cancelDelete = function cancelDelete() {
         const modal = document.getElementById('popup-modal');
         const modalBulk = document.getElementById('popup-modal-bulk');
@@ -1207,6 +1197,7 @@ document.addEventListener("DOMContentLoaded", function () {
         filterAndDisplayProducts(selectedIngredient);
     }
 
+    // Function to handle ingredient click
     window.handleIngredientClick = function handleIngredientClick(category, buttonElement) {
         const img = buttonElement.querySelector('img');
         const ingredientCard = buttonElement.closest('.ingredient-card');
@@ -1279,7 +1270,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    // Search Functionality
+    // Function to perform search
     window.performSearch = function performSearch(event) {
         event.preventDefault();
         const hideFromSearch = document.getElementById("hideFromSearch");
@@ -1309,6 +1300,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
             const product = JSON.parse(localStorage.getItem(key));
 
+            // Check if the product name includes the search query
             if (
                 product &&
                 product.productName &&
@@ -1350,6 +1342,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     };
 
+    // Function to reset search results
     function resetSearchResults() {
         searchHeading.style.display = "none";
         searchResults.innerHTML = "";
@@ -1364,6 +1357,7 @@ document.addEventListener("DOMContentLoaded", function () {
         loadProductInfo(key);
     }
 
+    // Function to confirm modify
     window.confirmModify = function confirmModify() {
         console.log("Confirm Modify");
         const modal = document.getElementById('modify-popup-modal');
@@ -1389,11 +1383,13 @@ document.addEventListener("DOMContentLoaded", function () {
         resetAll();
     }
 
+    // Function to cancel modify
     window.closeModal = function closeModal() {
         const modal = document.getElementById('modify-popup-modal');
         modal.classList.add('hidden');
     }
 
+    // Function to load product information based on the key 
     function loadProductInfo(key) {
         const productInfo = JSON.parse(localStorage.getItem(key)) || {};
         document.getElementById('productName').value = productInfo.productName || '';
@@ -1401,6 +1397,7 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById('productExpirationDate').value = productInfo.expirationDate || '';
     }
 
+    // Function to update category image
     function updateCategoryImage(category) {
         let imgUrl;
         switch (category) {
