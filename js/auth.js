@@ -16,7 +16,7 @@ function updateAuthButton() {
         if (isAuthenticated) {
             authButton.innerText = "Sign Out";
             authButton.removeEventListener("click", function () {
-                window.location.href = "../html/account.html"; // This will be handled in the account.js
+                window.location.href = "../html/account.html";
             });
             authButton.addEventListener("click", logout);
         } else {
@@ -36,6 +36,7 @@ window.logout = function logout() {
 
     isAuthenticated = false;
     updateAuthButton();
+    window.location.href = "../html/index.html";
 }
 
 document.addEventListener("DOMContentLoaded", function () {
