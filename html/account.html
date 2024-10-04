@@ -30,78 +30,10 @@
       rel="stylesheet"
     />
     <link href="../css/styles.css" rel="stylesheet" />
-    <title>Account - CleanPlate</title>
-
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login/Signup - Dynamic Page</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.css"
-      rel="stylesheet"
-    />
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        background-color: #f9f9f9;
-      }
-
-      .container {
-        width: 100%;
-        max-width: 400px;
-        padding: 20px;
-        border-radius: 10px;
-        background-color: white;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        text-align: center;
-      }
-
-      .container h1 {
-        font-size: 24px;
-        margin-bottom: 20px;
-      }
-
-      .container button {
-        display: inline-block;
-        padding: 10px 20px;
-        margin: 10px;
-        font-size: 16px;
-        cursor: pointer;
-        border: none;
-        background-color: #90ee90; /* Light green */
-        color: white;
-        border-radius: 5px;
-        transition: background-color 0.3s ease;
-      }
-
-      .container button:hover {
-        background-color: #66bb66; /* Darker green on hover */
-      }
-
-      .form-input {
-        width: 100%;
-        padding: 10px;
-        margin: 10px 0;
-        border-radius: 5px;
-        border: 1px solid #ccc;
-      }
-
-      .error {
-        color: red;
-      }
-      .success {
-        color: green;
-      }
-
-      #forgot-password-section {
-        display: none;
-      }
-    </style>
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1259.0.min.js"></script>
+    <script type="module" src="../js/auth.js"></script>
+    <script type="module" src="../js/account.js"></script>
+    <title>Sign In / Sign Up - CleanPlate</title>
   </head>
   <body class="pt-10 sm:pt-24">
     <!-- Sticky Navigation Bar -->
@@ -145,6 +77,12 @@
                 d="M1 1h15M1 7h15M1 13h15"
               />
             </svg>
+          </button>
+          <button
+            id="auth-button"
+            class="inline-flex items-center w-full lg:w-auto px-4 py-2 rounded-full border border-gray-300 text-sm font-medium button"
+          >
+            Sign In
           </button>
         </div>
         <div
@@ -195,7 +133,7 @@
             <li class="relative group">
               <a
                 href="../html/recipe.html"
-                class="flex items-center space-x-2 py-2 px-3 md:p-0 nav-icon active"
+                class="flex items-center space-x-2 py-2 px-3 md:p-0 nav-icon"
               >
                 <img
                   src="https://img.icons8.com/?size=100&id=idEQE7TsG0NA&format=png&color=000000"
@@ -268,149 +206,163 @@
                 Dashboard
               </div>
             </li>
-            <li class="relative group">
-              <a
-                href="../html/account.html"
-                class="flex items-center space-x-2 py-2 px-3 md:p-0 nav-icon"
-              >
-                <img
-                  src="https://img.icons8.com/?size=100&id=23392&format=png&color=000000"
-                  class="w-6 h-6"
-                  alt="Dashboard"
-                />
-                <span class="block md:hidden text-center mt-2">Account</span>
-              </a>
-              <div
-                class="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 opacity-0 group-hover:opacity-100 transition-opacity bg-gray-800 text-white text-xs rounded-md py-1 px-2"
-              >
-                Account
-              </div>
-            </li>
           </ul>
         </div>
       </div>
     </nav>
 
-    <main>
-      <div class="container">
-        <h1>Welcome to CleanPlate</h1>
-  
-        <div id="auth-section"></div>
-        <div id="user-greeting"></div>
-        <div id="message" class="error"></div>
-  
-        <div id="forgot-password-section">
-          <h2>Forgot Password</h2>
-          <input
-            type="text"
-            id="forgot-username"
-            class="form-input"
-            placeholder="Enter your username"
-          />
-          <button onclick="recoverPassword()">Recover Password</button>
-          <button onclick="hideForgotPassword()">Back to Login</button>
+    <main
+      class="container flex justify-center items-center mx-auto mt-2 px-4 sm:px-8"
+    >
+      <div
+        class="auth-container w-full sm:w-1/2 mx-auto mt-10 sm:mt-16 sm:px-8"
+      >
+        <div class="p-5">
+          <p class="text-xl text-center font-bold">Welcome to CleanPlate</p>
+
+          <div id="auth-section"></div>
+          <div id="user-greeting"></div>
+
+          <!-- Confirmation Code Form -->
+          <div id="confirmation" class="hidden">
+            <input
+              type="text"
+              id="confirmationUsername"
+              class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 inline-flex w-1/2 p-2.5 mt-4"
+              placeholder="Email"
+            />
+            <input
+              type="text"
+              id="confirmationCode"
+              class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 inline-flex w-1/2 p-2.5 mt-4"
+              placeholder="Confirmation code"
+            />
+            <div class="flex flex-col space-y-4 mt-6 justify-center">
+              <button
+                onclick="confirmUser()"
+                class="w-full lg:w-auto px-4 py-2 rounded-full border border-gray-300 text-sm font-medium button"
+              >
+                Confirm Registration
+              </button>
+            </div>
+          </div>
+
+          <div id="message" class="my-4 text-center"></div>
+
+          <div id="forgotPassword" class="hidden text-center">
+            <p class="my-4">Forget Password</p>
+            <p>
+              <input
+                type="text"
+                id="forgot-username"
+                class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 inline-flex w-1/2 p-2.5 mt-4"
+                placeholder="Email"
+              />
+            </p>
+
+            <div class="flex flex-col space-y-4 mt-6 justify-center">
+              <button
+                onclick="recoverPassword()"
+                class="w-full lg:w-auto px-4 py-2 rounded-full border border-gray-300 text-sm font-medium button"
+              >
+                Recover Password
+              </button>
+              <button
+                onclick="hideForgotPassword()"
+                class="w-full lg:w-auto px-4 py-2 rounded-full border border-gray-300 text-sm font-medium button"
+              >
+                Back to Login
+              </button>
+            </div>
+          </div>
+
+          <!-- Confirm Password Form -->
+          <div id="confirmPassword" class="hidden text-center">
+            <p class="my-4">Confirm New Password</p>
+            <input
+              type="text"
+              id="forgetPasswordConfirmationCode"
+              class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 inline-flex w-1/2 p-2.5 mt-4"
+              placeholder="Confirmation code"
+            />
+            <input
+              type="password"
+              id="newPassword"
+              class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 inline-flex w-1/2 p-2.5 mt-4"
+              placeholder="New password"
+            />
+            <div class="flex flex-col space-y-4 mt-6 justify-center">
+              <button
+                onclick="confirmNewPassword()"
+                class="w-full lg:w-auto px-4 py-2 rounded-full border border-gray-300 text-sm font-medium button"
+              >
+                Confirm New Password
+              </button>
+              <button
+                onclick="hideConfirmPassword()"
+                class="w-full lg:w-auto px-4 py-2 rounded-full border border-gray-300 text-sm font-medium button"
+              >
+                Back
+              </button>
+            </div>
+          </div>
         </div>
       </div>
-  
+
       <script>
-        const users = JSON.parse(localStorage.getItem("users")) || {};
-  
-        // Function to handle login
-        function login() {
-          const username = document.getElementById("username").value;
-          const password = document.getElementById("password").value;
-  
-          if (users[username] && users[username] === password) {
-            localStorage.setItem("currentUser", username);
-            document.getElementById("message").textContent = "";
-            alert("Login successful!");
-            updateAuthSection();
-          } else {
-            document.getElementById("message").textContent =
-              "Invalid username or password.";
-          }
-        }
-  
-        // Function to handle signup
-        function signup() {
-          const username = document.getElementById("username").value;
-          const password = document.getElementById("password").value;
-  
-          if (users[username]) {
-            document.getElementById("message").textContent =
-              "Username already exists.";
-          } else {
-            users[username] = password;
-            localStorage.setItem("users", JSON.stringify(users));
-            localStorage.setItem("currentUser", username);
-            document.getElementById("message").className = "success";
-            document.getElementById("message").textContent =
-              "Successfully registered and logged in.";
-            updateAuthSection();
-          }
-        }
-  
-        // Function to handle logout
-        function logout() {
-          localStorage.removeItem("currentUser");
-          alert("You have been logged out.");
-          updateAuthSection();
-        }
-  
         // Function to show the Forgot Password section
         function showForgotPassword() {
           document.getElementById("auth-section").style.display = "none";
-          document.getElementById("forgot-password-section").style.display =
-            "block";
+          document.getElementById("forgotPassword").style.display = "block";
+          document.getElementById("confirmPassword").style.display = "none";
           document.getElementById("message").textContent = "";
         }
-  
+
         // Function to hide the Forgot Password section and return to login
         function hideForgotPassword() {
           document.getElementById("auth-section").style.display = "block";
-          document.getElementById("forgot-password-section").style.display =
-            "none";
+          document.getElementById("forgotPassword").style.display = "none";
+          document.getElementById("confirmPassword").style.display = "none";
           document.getElementById("message").textContent = "";
         }
-  
-        // Function to recover password
-        function recoverPassword() {
-          const username = document.getElementById("forgot-username").value;
-          if (users[username]) {
-            alert(`Your password is: ${users[username]}`);
-            hideForgotPassword();
-          } else {
-            document.getElementById("message").textContent =
-              "Username not found.";
-          }
+
+        // Function to hide the confirm password section and show the forgot password section
+        function hideConfirmPassword() {
+          document.getElementById("auth-section").style.display = "block";
+          document.getElementById("confirmPassword").classList.add("hidden");
+          document.getElementById("forgotPassword").classList.remove("hidden");
         }
-  
+
         // Function to update buttons based on login status
         function updateAuthSection() {
           const authSection = document.getElementById("auth-section");
           const message = document.getElementById("message");
           const currentUser = localStorage.getItem("currentUser");
-  
+
           message.textContent = "";
-  
+
           if (currentUser) {
             authSection.innerHTML = `
-              <p>Hello, ${currentUser}!</p>
-              <button onclick="logout()">Logout</button>
+              <div class="text-center flex flex-col justify-center space-y-4 mt-4">
+                <p>Hello, ${currentUser}!</p>
+                <button onclick="logout()" class="w-full lg:w-auto px-4 py-2 rounded-full border border-gray-300 text-sm font-medium button">Sign Out</button>
+              </div>
             `;
           } else {
             authSection.innerHTML = `
-              <h2>Login / Sign Up</h2>
-              <input type="text" id="username" class="form-input" placeholder="Username" />
-              <input type="password" id="password" class="form-input" placeholder="Password" />
-              <button onclick="login()">Login</button>
-              <button onclick="signup()">Sign Up</button>
-              <button onclick="showForgotPassword()">Forgot Password</button>
+            <div class="text-center">
+              <p class="my-4">Sign In / Sign Up<p>
+              <input type="text" id="username" class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 inline-flex w-1/2 p-2.5 mt-4" placeholder="Email" />
+              <input type="password" id="password" class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 inline-flex w-1/2 p-2.5 mt-4" placeholder="Password" />
+              <div class="flex flex-col space-y-4 mt-6 justify-center">
+                <button onclick="login()" class="w-full lg:w-auto px-4 py-2 rounded-full border border-gray-300 text-sm font-medium button">Sign In</button>
+                <button onclick="register()"  class="w-full lg:w-auto px-4 py-2 rounded-full border border-gray-300 text-sm font-medium button">Sign Up</button>
+                <button onclick="showForgotPassword()" class="w-full lg:w-auto px-4 py-2 rounded-full border border-gray-300 text-sm font-medium button">Forgot Password</button>
+              </div>
+            </div>
             `;
           }
         }
-  
-        // Initialize the buttons when the page loads
         document.addEventListener("DOMContentLoaded", updateAuthSection);
       </script>
     </main>

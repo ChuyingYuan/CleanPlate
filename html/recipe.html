@@ -30,6 +30,8 @@
       rel="stylesheet"
     />
     <link href="../css/styles.css" rel="stylesheet" />
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1259.0.min.js"></script>
+    <script type="module" src="../js/auth.js"></script>
     <title>Recipe Search - CleanPlate</title>
   </head>
   <body class="pt-10 sm:pt-24">
@@ -74,6 +76,12 @@
                 d="M1 1h15M1 7h15M1 13h15"
               />
             </svg>
+          </button>
+          <button
+            id="auth-button"
+            class="inline-flex items-center w-full lg:w-auto px-4 py-2 rounded-full border border-gray-300 text-sm font-medium button"
+          >
+            Sign In
           </button>
         </div>
         <div
