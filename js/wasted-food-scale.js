@@ -4,6 +4,7 @@ let co2Reduction = 0;
 let count = 0;
 let percent = 0;
 let isAuthenticated = false;
+let existingProducts = [];
 
 // Retrieve stored values from local storage
 if (localStorage.getItem('count')) {
@@ -21,6 +22,21 @@ if (localStorage.getItem('totalWaste')) {
 if (localStorage.getItem('co2Reduction')) {
     co2Reduction = parseFloat(localStorage.getItem('co2Reduction'));
 }
+
+// Retrieve all products from local storage
+function getAllProductsFromLocalStorage() {
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (['co2Reduction', 'score', 'totalWaste', 'count', 'userID', 'currentUser'].includes(key)) {
+            continue;
+        }
+        const productInfo = JSON.parse(localStorage.getItem(key));
+        existingProducts.push({ 'productKey': key, ...productInfo });
+    }
+}
+
+getAllProductsFromLocalStorage();
+console.log('Number of Existing Products: ', existingProducts.length);
 
 updateDashboard();
 
@@ -148,7 +164,7 @@ function canUseForBiofuel(answer) {
 // Function to display the final decision and feedback to the user
 function showFeedback(decision, message) {
     if (isAuthenticated) {
-        storeData(localStorage.getItem('userID'), [], score, totalWaste.toFixed(2), co2Reduction.toFixed(2), count);
+        storeData(localStorage.getItem('userID'), existingProducts, score, totalWaste.toFixed(2), co2Reduction.toFixed(2), count);
     }
     document.getElementById('finalDecision').classList.remove('hidden');
     document.getElementById('finalDecisionText').textContent = message;
@@ -227,7 +243,7 @@ async function logWaste() {
                 localStorage.setItem('score', score);
 
                 if (isAuthenticated) {
-                    storeData(localStorage.getItem('userID'), [], score, totalWaste.toFixed(2), co2Reduction.toFixed(2), count);
+                    storeData(localStorage.getItem('userID'), existingProducts, score, totalWaste.toFixed(2), co2Reduction.toFixed(2), count);
                 }
                 updateDashboard();
                 restartTool();
