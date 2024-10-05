@@ -3,6 +3,7 @@ let totalWaste = 0;
 let co2Reduction = 0;
 let count = 0;
 let percent = 0;
+let isAuthenticated = false;
 
 // Retrieve stored values from local storage
 if (localStorage.getItem('count')) {
@@ -22,6 +23,42 @@ if (localStorage.getItem('co2Reduction')) {
 }
 
 updateDashboard();
+
+if (localStorage.getItem('userID')) {
+    isAuthenticated = true;
+}
+
+// Function to store the user's data in the DynamoDB table
+async function storeData(userID, products, score, totalWaste, co2Reduction, count) {
+    const url = "https://rvtkdasc90.execute-api.ap-southeast-2.amazonaws.com/prod/user-data";
+
+    const data = {
+        userID: userID,
+        products: products,
+        score: score,
+        totalWaste: totalWaste,
+        co2Reduction: co2Reduction,
+        count: count
+    };
+
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ body: JSON.stringify(data) })
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        console.log('Data stored successfully:');
+    } catch (error) {
+        console.error('Error storing data:', error);
+    }
+}
 
 // Function to handle the user's response to whether the food is edible
 function isFoodEdible(answer) {
@@ -50,6 +87,7 @@ function consumeOrDonate(decision) {
     navigateToRelatedPage(decision);
     localStorage.setItem('count', count);
     localStorage.setItem('score', score);
+    updateDashboard();
 }
 
 // Function to handle the user's response to whether they plan to compost or use for biofuel
@@ -66,6 +104,7 @@ function compostOrBiofuel(decision) {
     navigateToRelatedPage(decision);
     localStorage.setItem('count', count);
     localStorage.setItem('score', score);
+    updateDashboard();
 }
 
 // Function to handle the user's response to whether the food is suitable for animals
@@ -82,6 +121,7 @@ function isFoodForAnimals(answer) {
     }
     localStorage.setItem('count', count);
     localStorage.setItem('score', score);
+    updateDashboard();
 }
 
 // Function to handle the user's response to whether the food can be used for anaerobic digestion
@@ -102,10 +142,14 @@ function canUseForBiofuel(answer) {
     navigateToRelatedPage(decision);
     localStorage.setItem('count', count);
     localStorage.setItem('score', score);
+    updateDashboard();
 }
 
 // Function to display the final decision and feedback to the user
 function showFeedback(decision, message) {
+    if (isAuthenticated) {
+        storeData(localStorage.getItem('userID'), [], score, totalWaste.toFixed(2), co2Reduction.toFixed(2), count);
+    }
     document.getElementById('finalDecision').classList.remove('hidden');
     document.getElementById('finalDecisionText').textContent = message;
     if (decision != 'landfill') {
@@ -182,6 +226,9 @@ async function logWaste() {
                 localStorage.setItem('co2Reduction', co2Reduction.toFixed(2));
                 localStorage.setItem('score', score);
 
+                if (isAuthenticated) {
+                    storeData(localStorage.getItem('userID'), [], score, totalWaste.toFixed(2), co2Reduction.toFixed(2), count);
+                }
                 updateDashboard();
                 restartTool();
             } else {
@@ -237,12 +284,12 @@ function updateDashboard() {
 
 // Function to render the gauge with the given percentage
 function renderGauge(percentage) {
-    console.log("Rendering gauge with percentage:", percentage);
+    // console.log("Rendering gauge with percentage:", percentage);
     const progressPath = document.getElementById("gauge-progress");
     const gaugeText = document.getElementById("gauge-text");
 
     const validPercentage = Math.min(Math.max(percentage, 0), 100);
-    console.log("Valid percentage:", validPercentage);
+    // console.log("Valid percentage:", validPercentage);
 
     const arcLength = 41;
 
@@ -252,5 +299,5 @@ function renderGauge(percentage) {
         `${dashArrayValue} ${arcLength}`
     );
 
-    gaugeText.textContent = validPercentage + "%";
+    gaugeText.textContent = validPercentage.toFixed(0) + "%";
 }

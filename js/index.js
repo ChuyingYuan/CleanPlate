@@ -183,12 +183,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Function to render the gauge with the given percentage
     function renderGauge(percentage) {
-        console.log("Rendering gauge with percentage:", percentage);
+        // console.log("Rendering gauge with percentage:", percentage);
         const progressPath = document.getElementById("gauge-progress");
         const gaugeText = document.getElementById("gauge-text");
 
         const validPercentage = Math.min(Math.max(percentage, 0), 100);
-        console.log("Valid percentage:", validPercentage);
+        // console.log("Valid percentage:", validPercentage);
 
         const radius = 13;
         const circumference = 2 * Math.PI * radius;
@@ -201,6 +201,6 @@ document.addEventListener('DOMContentLoaded', function () {
             `${dashArrayValue} ${remainingLength}`
         );
 
-        gaugeText.textContent = validPercentage + "%";
+        gaugeText.textContent = validPercentage.toFixed(0) + "%";
     }
 });

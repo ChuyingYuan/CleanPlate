@@ -111,18 +111,17 @@ function signIn(username, password) {
             console.log('Error signing in:', err);
             document.getElementById("message").textContent = "Invalid email or password. Please try again.";
         } else {
-            localStorage.setItem('currentUser', username);
-            console.log('Sign-in success:', data);
+            localStorage.clear(); // Clear existing data
+            localStorage.setItem('currentUser', username); // Save currentUser
+            console.log('Sign-in success:');
             const accessToken = data.AuthenticationResult.AccessToken;
-            fetchUserData(accessToken);
-            // Redirect to the previous page after successful sign-in
-            window.history.back();
+            fetchUserID(accessToken);
         }
     });
 }
 
-// Function to fetch the user data using the provided access token from AWS Cognito
-function fetchUserData(accessToken) {
+// Function to fetch the user ID using the provided access token from AWS Cognito
+function fetchUserID(accessToken) {
     const params = {
         AccessToken: accessToken,
     };
@@ -131,13 +130,104 @@ function fetchUserData(accessToken) {
         if (err) {
             console.log('Error fetching user data:', err);
         } else {
-            const username = data.Username;
-            localStorage.setItem('userID', username);
-            console.log('UserID:', username);
+            const userID = data.Username;  // Extract User ID
+            localStorage.setItem('userID', userID);
+            console.log('userID:', userID);
             updateAuthSection();
+            retrieveUserData(userID);
+
+            // Redirect to the home page after successful login and data retrieval
+            setTimeout(() => {
+                window.history.back()
+            }, 1000);
         }
     });
 }
+
+async function retrieveUserData(userID) {
+    console.log('Retrieving user data for:', userID);
+    const url = "https://rvtkdasc90.execute-api.ap-southeast-2.amazonaws.com/prod/user-data/retrieve";
+
+    const data = {
+        body: JSON.stringify({ userID: userID })
+    };
+
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response.json();
+
+        const responseBody = JSON.parse(result.body);
+        const userData = responseBody.data;
+
+        // Check if userData exists
+        if (!userData) {
+            console.log('No data found for the given user ID. Setting default values.');
+            localStorage.setItem('count', 0);
+            localStorage.setItem('totalWaste', 0);
+            localStorage.setItem('score', 0);
+            localStorage.setItem('co2Reduction', 0);
+            return;
+        }
+
+        // Retrieve values with fallback to defaults
+        const count = userData.count ?? 0;
+        const totalWaste = parseFloat(userData.totalWaste) || 0; // Convert totalWaste to float
+        const score = parseInt(userData.score) || 0; // Parse score to integer
+        const co2Reduction = parseFloat(userData.co2Reduction) || 0; // Convert co2Reduction to float
+        const products = userData.products ?? []; // Use the array directly
+
+        // Store main user data in local storage
+        localStorage.setItem('count', count);
+        localStorage.setItem('totalWaste', totalWaste);
+        localStorage.setItem('score', score);
+        localStorage.setItem('co2Reduction', co2Reduction);
+
+        console.log('Count:', count);
+        console.log('Total Waste:', totalWaste);
+        console.log('Score:', score);
+        console.log('CO2 Reduction:', co2Reduction);
+
+        // Check for existing products
+        if (products.length === 0) {
+            console.log('No products found for the user.');
+            return;
+        }
+
+        // Process each product
+        products.forEach((product) => {
+            const productInfo = {
+                productName: product.productName,
+                category: product.category,
+                minShelfLife: parseFloat(product.minShelfLife) || 0, // Convert minShelfLife to float
+                maxShelfLife: parseFloat(product.maxShelfLife) || 0, // Convert maxShelfLife to float
+                metrics: product.metrics,
+                method: product.method,
+                expirationDate: product.expirationDate,
+                imageUrl: product.imageUrl,
+                recordDate: product.recordDate,
+            };
+
+            const productKey = product.productKey; // Get product key
+            localStorage.setItem(productKey, JSON.stringify(productInfo)); // Store product info
+
+            console.log(`Stored product ${product.productName} in local storage with key: ${productKey}`);
+        });
+    } catch (error) {
+        console.error('Error retrieving user data:', error);
+    }
+}
+
 
 // Function to initiate the password recovery process
 window.recoverPassword = function recoverPassword() {

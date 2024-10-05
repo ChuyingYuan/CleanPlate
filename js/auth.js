@@ -30,8 +30,7 @@ function updateAuthButton() {
 }
 
 window.logout = function logout() {
-    localStorage.removeItem("currentUser");
-    localStorage.removeItem("userID");
+    localStorage.clear();
     console.log("Logged out successfully");
 
     isAuthenticated = false;
@@ -45,5 +44,5 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     updateAuthButton();
-    console.log(isAuthenticated);
+    console.log("Signed In: " + isAuthenticated);
 });

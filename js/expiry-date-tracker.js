@@ -75,6 +75,81 @@ document.addEventListener("DOMContentLoaded", function () {
     let selectedIngredient = null;
     let tesseractWorker = null;
 
+    let score = 0;
+    let totalWaste = 0;
+    let co2Reduction = 0;
+    let count = 0;
+    let isAuthenticated = false;
+    let existingProducts = [];
+
+    // Retrieve stored values from local storage
+    if (localStorage.getItem('count')) {
+        count = parseInt(localStorage.getItem('count'));
+    }
+
+    if (localStorage.getItem('score')) {
+        score = parseInt(localStorage.getItem('score'));
+    }
+
+    if (localStorage.getItem('totalWaste')) {
+        totalWaste = parseFloat(localStorage.getItem('totalWaste'));
+    }
+
+    if (localStorage.getItem('co2Reduction')) {
+        co2Reduction = parseFloat(localStorage.getItem('co2Reduction'));
+    }
+
+    if (localStorage.getItem('userID')) {
+        isAuthenticated = true;
+    }
+
+    // Retrieve all products from local storage
+    function getAllProductsFromLocalStorage() {
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (['co2Reduction', 'score', 'totalWaste', 'count', 'userID', 'currentUser'].includes(key)) {
+                continue;
+            }
+            const productInfo = JSON.parse(localStorage.getItem(key));
+            existingProducts.push({ 'productKey': key, ...productInfo });
+        }
+    }
+
+    getAllProductsFromLocalStorage();
+    console.log('Number of Existing Products: ', existingProducts.length);
+
+    // Function to store the user's data in the DynamoDB table
+    async function storeData(userID, products, score, totalWaste, co2Reduction, count) {
+        const url = "https://rvtkdasc90.execute-api.ap-southeast-2.amazonaws.com/prod/user-data";
+
+        const data = {
+            userID: userID,
+            products: products,
+            score: score,
+            totalWaste: totalWaste,
+            co2Reduction: co2Reduction,
+            count: count
+        };
+
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ body: JSON.stringify(data) })
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            console.log('Data stored successfully:');
+        } catch (error) {
+            console.error('Error storing data:', error);
+        }
+    }
+
     // Function to update the greeting based on the current time
     function updateGreeting() {
         let greeting;
@@ -350,7 +425,7 @@ document.addEventListener("DOMContentLoaded", function () {
         })
             .then((res) => res.json())
             .then((json) => {
-                console.log(json.body);
+                // console.log(json.body);
                 const productData = JSON.parse(json.body);
                 for (const product of productData) {
                     try {
@@ -388,6 +463,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         const foodExpirationDate = new Date(productInfo.expirationDate);
                         if (foodExpirationDate > currentDate) {
                             localStorage.setItem(uniqueKey, JSON.stringify(productInfo));
+                            existingProducts.push({ 'productKey': uniqueKey, ...productInfo });
                             // console.log(`Stored in local storage: ${uniqueKey}`, productInfo);
                         }
 
@@ -397,6 +473,9 @@ document.addEventListener("DOMContentLoaded", function () {
                         console.log('Error parsing product data:', error);
                         resultElement.innerHTML = "No food item is recognized from the receipt.";
                     }
+                }
+                if (isAuthenticated) {
+                    storeData(localStorage.getItem('userID'), existingProducts, score, totalWaste.toFixed(2), co2Reduction.toFixed(2), count);
                 }
             })
     }
@@ -697,6 +776,10 @@ document.addEventListener("DOMContentLoaded", function () {
                     const foodExpirationDate = new Date(productInfo.expirationDate);
                     if (foodExpirationDate > currentDate) {
                         localStorage.setItem(uniqueKey, JSON.stringify(productInfo));
+                        existingProducts.push({ 'productKey': uniqueKey, ...productInfo });
+                        if (isAuthenticated) {
+                            storeData(localStorage.getItem('userID'), existingProducts, score, totalWaste.toFixed(2), co2Reduction.toFixed(2), count);
+                        }
                         console.log(`Stored in local storage: ${uniqueKey}`, productInfo);
                     }
                     displayIdentifiedFoodItem(productInfo);
@@ -778,6 +861,10 @@ document.addEventListener("DOMContentLoaded", function () {
         productInfo.expirationDate = newExpirationDate.toISOString().split('T')[0];
         const uniqueKey = generateUniqueKey();
         localStorage.setItem(uniqueKey, JSON.stringify(productInfo));
+        existingProducts.push({ 'productKey': uniqueKey, ...productInfo });
+        if (isAuthenticated) {
+            storeData(localStorage.getItem('userID'), existingProducts, score, totalWaste.toFixed(2), co2Reduction.toFixed(2), count);
+        }
         // console.log(`Stored in local storage: ${uniqueKey}`, productInfo);
         return storageInfo;
     }
@@ -1042,7 +1129,13 @@ document.addEventListener("DOMContentLoaded", function () {
         keys.forEach(key => {
             console.log("Delete Product:", key);
             localStorage.removeItem(key);
+
+            existingProducts = existingProducts.filter(product => product.productKey !== key);
         });
+
+        if (isAuthenticated) {
+            storeData(localStorage.getItem('userID'), existingProducts, score, totalWaste.toFixed(2), co2Reduction.toFixed(2), count);
+        }
         modal.classList.add('hidden');
 
         listAllStoredProductsByType('table');
@@ -1053,6 +1146,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
         for (let i = 0; i < localStorage.length; i++) {
             const key = localStorage.key(i);
+            if (['co2Reduction', 'score', 'totalWaste', 'count', 'userID', 'currentUser'].includes(key)) {
+                continue;
+            }
             const productInfo = JSON.parse(localStorage.getItem(key));
             products.push({ key, ...productInfo });
         }
@@ -1156,6 +1252,12 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log("Delete Product:", key);
 
         localStorage.removeItem(key);
+
+        existingProducts = existingProducts.filter(product => product.productKey !== key);
+        if (isAuthenticated) {
+            storeData(localStorage.getItem('userID'), existingProducts, score, totalWaste.toFixed(2), co2Reduction.toFixed(2), count);
+        }
+
         modal.classList.add('hidden');
 
         listAllStoredProducts();
@@ -1376,6 +1478,17 @@ document.addEventListener("DOMContentLoaded", function () {
         };
 
         localStorage.setItem(key, JSON.stringify(updatedInfo));
+
+        existingProducts = existingProducts.map(product => {
+            if (product.productKey === key) {
+                return { 'productKey': key, ...updatedInfo };
+            }
+            return product;
+        });
+
+        if (isAuthenticated) {
+            storeData(localStorage.getItem('userID'), existingProducts, score, totalWaste.toFixed(2), co2Reduction.toFixed(2), count);
+        }
 
         closeModal();
         listAllStoredProducts();
