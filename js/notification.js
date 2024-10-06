@@ -43,6 +43,7 @@ document.addEventListener("DOMContentLoaded", function () {
         renderCalendar(currentView);
     }
 
+    // Function to update the greeting based on the time of the day
     function updateGreeting() {
         let greeting;
         if (currentHour < 12) {
@@ -64,6 +65,7 @@ document.addEventListener("DOMContentLoaded", function () {
         greetingElement.innerHTML = greeting;
     }
 
+    // Function to check if the device is a mobile device
     function isMobileDevice() {
         return /Mobi|Android|iPad|iPhone|Tablet/i.test(navigator.userAgent);
     }

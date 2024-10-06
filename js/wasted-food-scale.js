@@ -163,6 +163,7 @@ function canUseForBiofuel(answer) {
 
 // Function to display the final decision and feedback to the user
 function showFeedback(decision, message) {
+    // Store the data in DynamoDB if the user is signed in
     if (isAuthenticated) {
         storeData(localStorage.getItem('userID'), existingProducts, score, totalWaste.toFixed(2), co2Reduction.toFixed(2), count);
     }
@@ -190,7 +191,7 @@ function navigateToRelatedPage(decision) {
         };
     }
     else if (decision === 'donate') {
-        navigatingText.textContent = "Click the button below to find local food banks!";
+        navigatingText.textContent = "Click the button below to find food donation locations!";
         navigateButton.textContent = "Go to Donation Resources";
         navigateButton.onclick = () => {
             window.open('local-resources.html', '_blank');
@@ -242,6 +243,7 @@ async function logWaste() {
                 localStorage.setItem('co2Reduction', co2Reduction.toFixed(2));
                 localStorage.setItem('score', score);
 
+                // Store the data in DynamoDB if the user is signed in
                 if (isAuthenticated) {
                     storeData(localStorage.getItem('userID'), existingProducts, score, totalWaste.toFixed(2), co2Reduction.toFixed(2), count);
                 }
@@ -260,6 +262,7 @@ async function logWaste() {
     }
 }
 
+/* Functions to update / render the UI */
 // Function to restart the tool
 function restartTool() {
     document.getElementById('isEdible').classList.add('hidden');

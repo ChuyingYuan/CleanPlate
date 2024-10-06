@@ -1,3 +1,4 @@
+// Configuration for AWS SDK
 const cognitoIdentityServiceProvider = new AWS.CognitoIdentityServiceProvider();
 
 const poolData = {
@@ -5,6 +6,7 @@ const poolData = {
     ClientId: '4th0mhua9kfs5emq5r87q5716p',
 };
 
+/* Functions for Sign Up */
 // Function to register the user
 window.register = function register() {
     const username = document.getElementById("username").value;
@@ -35,9 +37,12 @@ function signUp(username, password, email) {
         if (err) {
             console.log('Error signing up:', err);
 
+            // Display error message based on the error type
             let errorMessage = '';
 
-            if (err.message.includes("password failed to satisfy constraint")) {
+            if (err.message.includes("User already exists")) {
+                errorMessage = "User already exists. Please sign in.";
+            } else if (err.message.includes("password failed to satisfy constraint")) {
                 errorMessage = "Password must include at least one uppercase letter, one lowercase letter and one number.";
             } else if (err.message.includes("username failed to satisfy constraint")) {
                 errorMessage = "Email must contain at least one character and no special spaces.";
@@ -87,6 +92,7 @@ function confirmSignUp(username, confirmationCode) {
     });
 }
 
+/* Functions for Sign In */
 // Function to call the sign-in API
 window.login = function login() {
     const username = document.getElementById("username").value;
@@ -112,7 +118,7 @@ function signIn(username, password) {
             document.getElementById("message").textContent = "Invalid email or password. Please try again.";
         } else {
             localStorage.clear(); // Clear existing data
-            localStorage.setItem('currentUser', username); // Save currentUser
+            localStorage.setItem('currentUser', username); // Save currentUser email
             console.log('Sign-in success:');
             const accessToken = data.AuthenticationResult.AccessToken;
             fetchUserID(accessToken);
@@ -138,12 +144,13 @@ function fetchUserID(accessToken) {
 
             // Redirect to the home page after successful login and data retrieval
             setTimeout(() => {
-                window.history.back()
+                window.location.href = "index.html";
             }, 1000);
         }
     });
 }
 
+// Function to retrieve user data from DynamoDB and store it in local storage
 async function retrieveUserData(userID) {
     console.log('Retrieving user data for:', userID);
     const url = "https://rvtkdasc90.execute-api.ap-southeast-2.amazonaws.com/prod/user-data/retrieve";
@@ -166,7 +173,6 @@ async function retrieveUserData(userID) {
         }
 
         const result = await response.json();
-
         const responseBody = JSON.parse(result.body);
         const userData = responseBody.data;
 
@@ -182,12 +188,12 @@ async function retrieveUserData(userID) {
 
         // Retrieve values with fallback to defaults
         const count = userData.count ?? 0;
-        const totalWaste = parseFloat(userData.totalWaste) || 0; // Convert totalWaste to float
-        const score = parseInt(userData.score) || 0; // Parse score to integer
-        const co2Reduction = parseFloat(userData.co2Reduction) || 0; // Convert co2Reduction to float
-        const products = userData.products ?? []; // Use the array directly
+        const totalWaste = parseFloat(userData.totalWaste) || 0;
+        const score = parseInt(userData.score) || 0;
+        const co2Reduction = parseFloat(userData.co2Reduction) || 0;
+        const products = userData.products ?? [];
 
-        // Store main user data in local storage
+        // Store user data in local storage
         localStorage.setItem('count', count);
         localStorage.setItem('totalWaste', totalWaste);
         localStorage.setItem('score', score);
@@ -204,13 +210,13 @@ async function retrieveUserData(userID) {
             return;
         }
 
-        // Process each product
+        // Process each product and store it in local storage
         products.forEach((product) => {
             const productInfo = {
                 productName: product.productName,
                 category: product.category,
-                minShelfLife: parseFloat(product.minShelfLife) || 0, // Convert minShelfLife to float
-                maxShelfLife: parseFloat(product.maxShelfLife) || 0, // Convert maxShelfLife to float
+                minShelfLife: parseFloat(product.minShelfLife) || 0,
+                maxShelfLife: parseFloat(product.maxShelfLife) || 0,
                 metrics: product.metrics,
                 method: product.method,
                 expirationDate: product.expirationDate,
@@ -218,8 +224,8 @@ async function retrieveUserData(userID) {
                 recordDate: product.recordDate,
             };
 
-            const productKey = product.productKey; // Get product key
-            localStorage.setItem(productKey, JSON.stringify(productInfo)); // Store product info
+            const productKey = product.productKey;
+            localStorage.setItem(productKey, JSON.stringify(productInfo));
 
             console.log(`Stored product ${product.productName} in local storage with key: ${productKey}`);
         });
@@ -228,7 +234,7 @@ async function retrieveUserData(userID) {
     }
 }
 
-
+/* Functions to reset password */
 // Function to initiate the password recovery process
 window.recoverPassword = function recoverPassword() {
     document.getElementById("auth-section").style.display = "none";

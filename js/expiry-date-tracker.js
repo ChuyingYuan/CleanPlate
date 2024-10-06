@@ -1,4 +1,9 @@
 document.addEventListener("DOMContentLoaded", function () {
+    // Date and Time Constants
+    const currentHour = new Date().getHours();
+    const currentDate = new Date();
+
+    // DOM Elements Constants (HTML Elements)
     const video = document.getElementById('video');
     const canvas = document.getElementById('canvas');
     const context = canvas.getContext('2d');
@@ -22,9 +27,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const tableViewBtn = document.getElementById('tableViewBtn');
     const bulkDeleteBtn = document.getElementById('bulkDeleteBtn');
     const selectAllCheckbox = document.getElementById('selectAll');
-    const currentHour = new Date().getHours();
-    const currentDate = new Date();
 
+    // Ingredient Data List
     const ingredients = [
         {
             name: 'Vegetable',
@@ -70,16 +74,18 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     ];
 
+    // Barcode and Image Processing Variables
     let barcodeDetector;
     let mediaStream = null;
-    let selectedIngredient = null;
     let tesseractWorker = null;
 
+    // User Data Variables
     let score = 0;
     let totalWaste = 0;
     let co2Reduction = 0;
     let count = 0;
     let isAuthenticated = false;
+    let selectedIngredient = null;
     let existingProducts = [];
 
     // Retrieve stored values from local storage
@@ -338,6 +344,132 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
+    // Reset all UI elements
+    window.resetAll = function resetAll() {
+        hideFromSearch.classList.remove('hidden');
+        displayIdentifiedFoodItem();
+        selectedIngredient = null;
+        renderIngredientList();
+        checkExpirations();
+        reset();
+        updateGreeting();
+    }
+
+    // Reset elements 
+    function reset() {
+        stopCamera();
+        canvas.style.display = 'none';
+        video.style.display = 'none';
+        takePhotoBtn.style.display = 'none';
+        fileInput.style.display = 'none';
+        receiptInput.style.display = 'none';
+        foodImgInput.style.display = 'none';
+        resultElement.innerHTML = '';
+        foodRecognitionBtn.classList.remove('selected');
+        uploadBarcodeBtn.classList.remove('selected');
+        scanBarcodeBtn.classList.remove('selected');
+        uploadReceiptBtn.classList.remove('selected');
+    }
+
+    // Function to check the device type
+    function isMobileDevice() {
+        return /Mobi|Android|iPad|iPhone|Tablet/i.test(navigator.userAgent);
+    }
+
+    // Function to check if the device is an Android device
+    function isAndroidDevice() {
+        return /Android/i.test(navigator.userAgent);
+    }
+
+    // Function to check if the device is not an Apple device
+    function isNotAppleDevice() {
+        return !/iPhone|iPad|iPod|Mac/i.test(navigator.userAgent);
+    }
+
+    window.onload = function () {
+        // Functions to create upload icon, scan icon and input field
+        function createUploadIcon() {
+            const uploadIcon = document.createElement("img");
+            uploadIcon.src = "https://img.icons8.com/?size=100&id=84056&format=png&color=000000";
+            uploadIcon.alt = "Upload";
+            uploadIcon.className = "w-4 h-4 me-1 inline-block";
+            return uploadIcon;
+        }
+
+        function createScanIcon() {
+            const scanIcon = document.createElement("img");
+            scanIcon.src = "https://img.icons8.com/?size=100&id=nFrSaSmj6cIG&format=png&color=000000";
+            scanIcon.alt = "Scan";
+            scanIcon.className = "w-4 h-4 me-1 inline-block";
+            return scanIcon;
+        }
+
+        function createInputField() {
+            const inputField = document.createElement("input");
+            inputField.type = "file";
+            inputField.accept = "image/*";
+            inputField.capture = "environment";
+            inputField.style.display = "none";
+            return inputField;
+        }
+
+        // Render the buttons based on the device type
+        if (isMobileDevice() && !isNotAppleDevice()) {
+            // Apple Mobile Devices
+            scanBarcodeBtn.style.display = 'none';
+
+            uploadBarcodeBtn.innerHTML = '';
+            uploadBarcodeBtn.appendChild(createUploadIcon());
+            uploadBarcodeBtn.appendChild(document.createTextNode(" Upload/ Scan Barcode "));
+            uploadBarcodeBtn.appendChild(createScanIcon());
+
+            uploadReceiptBtn.innerHTML = '';
+            uploadReceiptBtn.appendChild(createUploadIcon());
+            uploadReceiptBtn.appendChild(document.createTextNode(" Upload/ Scan Receipt "));
+            uploadReceiptBtn.appendChild(createScanIcon());
+
+            foodRecognitionBtn.innerHTML = '';
+            foodRecognitionBtn.appendChild(createUploadIcon());
+            foodRecognitionBtn.appendChild(document.createTextNode(" Upload/ Take Produce Image "));
+            foodRecognitionBtn.appendChild(createScanIcon());
+
+            document.getElementById("uploadText").innerHTML = '<span class="font-semibold">Click to Upload/ Capture</span>';
+            document.getElementById("uploadText1").innerHTML = '<span class="font-semibold">Click to Upload/ Capture</span>';
+            document.getElementById("uploadText2").innerHTML = '<span class="font-semibold">Click to Upload/ Capture</span>';
+        } else if (isMobileDevice() && isAndroidDevice()) {
+            // Android Mobile Devices
+            scanBarcodeBtn.style.display = 'none';
+
+            uploadBarcodeBtn.innerHTML = '';
+            uploadBarcodeBtn.appendChild(createUploadIcon());
+            uploadBarcodeBtn.appendChild(document.createTextNode(" Upload/ Scan Barcode "));
+            uploadBarcodeBtn.appendChild(createScanIcon());
+            uploadBarcodeBtn.appendChild(createInputField());
+
+            uploadReceiptBtn.innerHTML = '';
+            uploadReceiptBtn.appendChild(createUploadIcon());
+            uploadReceiptBtn.appendChild(document.createTextNode(" Upload/ Scan Receipt "));
+            uploadReceiptBtn.appendChild(createScanIcon());
+            uploadReceiptBtn.appendChild(createInputField());
+
+            foodRecognitionBtn.innerHTML = '';
+            foodRecognitionBtn.appendChild(createUploadIcon());
+            foodRecognitionBtn.appendChild(document.createTextNode(" Upload/ Capture Produce "));
+            foodRecognitionBtn.appendChild(createScanIcon());
+            foodRecognitionBtn.appendChild(createInputField());
+
+            document.getElementById("uploadText").innerHTML = '<span class="font-semibold">Click to Upload/ Capture</span>';
+            document.getElementById("uploadText1").innerHTML = '<span class="font-semibold">Click to Upload/ Capture</span>';
+            document.getElementById("uploadText2").innerHTML = '<span class="font-semibold">Click to Upload/ Capture</span>';
+        } else {
+            // Desktop Devices
+            scanBarcodeBtn.style.display = 'inline-flex';
+        }
+        listAllStoredProducts();
+        resetAll();
+    };
+
+    /* Functions for Receipt Expiration Date */
     // Convert image file to base64 string
     function getBase64(file) {
         return new Promise((resolve, reject) => {
@@ -432,7 +564,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         // console.log(product);
 
                         // Extract product information
-                        const productNameRaw = product.Name || "Not available";
+                        const productNameRaw = product.extractedName || "Not available";
                         const productName = productNameRaw.charAt(0).toUpperCase() + productNameRaw.slice(1);
                         const minShelfLife = product.DOP_Refrigerate_Min || "Not available";
                         const maxShelfLife = product.DOP_Refrigerate_Max || "Not available";
@@ -480,6 +612,7 @@ document.addEventListener("DOMContentLoaded", function () {
             })
     }
 
+    /* Functions for Barcode Expiration Date */
     // Check BarcodeDetector support
     if (!("BarcodeDetector" in globalThis)) {
         resultElement.textContent = "Barcode Detector is not supported by this browser.";
@@ -489,139 +622,6 @@ document.addEventListener("DOMContentLoaded", function () {
     barcodeDetector = new BarcodeDetector({
         formats: ["code_39", "codabar", "ean_13"],
     });
-
-    // Reset all UI elements
-    window.resetAll = function resetAll() {
-        hideFromSearch.classList.remove('hidden');
-        displayIdentifiedFoodItem();
-        selectedIngredient = null;
-        renderIngredientList();
-        checkExpirations();
-        reset();
-        updateGreeting();
-    }
-
-    // Reset elements 
-    function reset() {
-        stopCamera();
-        canvas.style.display = 'none';
-        video.style.display = 'none';
-        takePhotoBtn.style.display = 'none';
-        fileInput.style.display = 'none';
-        receiptInput.style.display = 'none';
-        foodImgInput.style.display = 'none';
-        resultElement.innerHTML = '';
-        foodRecognitionBtn.classList.remove('selected');
-        uploadBarcodeBtn.classList.remove('selected');
-        scanBarcodeBtn.classList.remove('selected');
-        uploadReceiptBtn.classList.remove('selected');
-    }
-
-    function isMobileDevice() {
-        return /Mobi|Android|iPad|iPhone|Tablet/i.test(navigator.userAgent);
-    }
-
-    function isAndroidDevice() {
-        return /Android/i.test(navigator.userAgent);
-    }
-
-    function isNotAppleDevice() {
-        return !/iPhone|iPad|iPod|Mac/i.test(navigator.userAgent);
-    }
-
-    window.onload = function () {
-        // Helper function to create upload icon, scan icon and input field
-        function createUploadIcon() {
-            const uploadIcon = document.createElement("img");
-            uploadIcon.src = "https://img.icons8.com/?size=100&id=84056&format=png&color=000000";
-            uploadIcon.alt = "Upload";
-            uploadIcon.className = "w-4 h-4 me-1 inline-block";
-            return uploadIcon;
-        }
-
-        function createScanIcon() {
-            const scanIcon = document.createElement("img");
-            scanIcon.src = "https://img.icons8.com/?size=100&id=nFrSaSmj6cIG&format=png&color=000000";
-            scanIcon.alt = "Scan";
-            scanIcon.className = "w-4 h-4 me-1 inline-block";
-            return scanIcon;
-        }
-
-        function createInputField() {
-            const inputField = document.createElement("input");
-            inputField.type = "file";
-            inputField.accept = "image/*";
-            inputField.capture = "environment";
-            inputField.style.display = "none";
-            return inputField;
-        }
-
-        if (isMobileDevice() && !isNotAppleDevice()) {
-            // Apple Mobile Devices
-            scanBarcodeBtn.style.display = 'none';
-
-            uploadBarcodeBtn.innerHTML = '';
-            uploadBarcodeBtn.appendChild(createUploadIcon());
-            uploadBarcodeBtn.appendChild(document.createTextNode(" Upload/ Scan Barcode "));
-            uploadBarcodeBtn.appendChild(createScanIcon());
-
-            uploadReceiptBtn.innerHTML = '';
-            uploadReceiptBtn.appendChild(createUploadIcon());
-            uploadReceiptBtn.appendChild(document.createTextNode(" Upload/ Scan Receipt "));
-            uploadReceiptBtn.appendChild(createScanIcon());
-
-            foodRecognitionBtn.innerHTML = '';
-            foodRecognitionBtn.appendChild(createUploadIcon());
-            foodRecognitionBtn.appendChild(document.createTextNode(" Upload/ Take Produce Image "));
-            foodRecognitionBtn.appendChild(createScanIcon());
-
-            document.getElementById("uploadText").innerHTML = '<span class="font-semibold">Click to Upload/ Capture</span>';
-            document.getElementById("uploadText1").innerHTML = '<span class="font-semibold">Click to Upload/ Capture</span>';
-            document.getElementById("uploadText2").innerHTML = '<span class="font-semibold">Click to Upload/ Capture</span>';
-        } else if (isMobileDevice() && isAndroidDevice()) {
-            // Android Mobile Devices
-            scanBarcodeBtn.style.display = 'none';
-
-            uploadBarcodeBtn.innerHTML = '';
-            uploadBarcodeBtn.appendChild(createUploadIcon());
-            uploadBarcodeBtn.appendChild(document.createTextNode(" Upload/ Scan Barcode "));
-            uploadBarcodeBtn.appendChild(createScanIcon());
-            uploadBarcodeBtn.appendChild(createInputField());
-
-            uploadReceiptBtn.innerHTML = '';
-            uploadReceiptBtn.appendChild(createUploadIcon());
-            uploadReceiptBtn.appendChild(document.createTextNode(" Upload/ Scan Receipt "));
-            uploadReceiptBtn.appendChild(createScanIcon());
-            uploadReceiptBtn.appendChild(createInputField());
-
-            foodRecognitionBtn.innerHTML = '';
-            foodRecognitionBtn.appendChild(createUploadIcon());
-            foodRecognitionBtn.appendChild(document.createTextNode(" Upload/ Capture Produce "));
-            foodRecognitionBtn.appendChild(createScanIcon());
-            foodRecognitionBtn.appendChild(createInputField());
-
-            document.getElementById("uploadText").innerHTML = '<span class="font-semibold">Click to Upload/ Capture</span>';
-            document.getElementById("uploadText1").innerHTML = '<span class="font-semibold">Click to Upload/ Capture</span>';
-            document.getElementById("uploadText2").innerHTML = '<span class="font-semibold">Click to Upload/ Capture</span>';
-        } else {
-            // Desktop Devices
-            scanBarcodeBtn.style.display = 'inline-flex';
-        }
-        listAllStoredProducts();
-        resetAll();
-    };
-
-    // Function to format the date in Australian format for display
-    function formatDateToAustralian(dateStr) {
-        const date = new Date(dateStr);
-        if (isNaN(date)) return dateStr;
-
-        const day = date.getDate().toString().padStart(2, '0');
-        const month = (date.getMonth() + 1).toString().padStart(2, '0');
-        const year = date.getFullYear();
-
-        return `${day}/${month}/${year}`;
-    }
 
     // Function to start the camera
     async function startCamera() {
@@ -795,6 +795,7 @@ document.addEventListener("DOMContentLoaded", function () {
             });
     }
 
+    /* Functions helping operations */
     // Function to generate a unique key
     function generateUniqueKey() {
         const timestamp = Date.now().toString();
@@ -802,41 +803,16 @@ document.addEventListener("DOMContentLoaded", function () {
         return `${timestamp}-${randomString}`;
     }
 
-    // Function to display the identified food item
-    function displayIdentifiedFoodItem(productInfo) {
-        checkExpirations();
-        resetSearchResults();
+    // Function to format the date in Australian format for display
+    function formatDateToAustralian(dateStr) {
+        const date = new Date(dateStr);
+        if (isNaN(date)) return dateStr;
 
-        if (productInfo) {
-            resultElement.innerHTML = ``;
+        const day = date.getDate().toString().padStart(2, '0');
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const year = date.getFullYear();
 
-            let storageInfo = getStorageInfo(productInfo);
-
-            identifiedFood.innerHTML = `
-            <div class="p-5 flex flex-col items-center">
-                <h2 class="text text-sm text-center mb-4">
-                  The following is identified based on the uploaded image.
-                </h2>
-                <div class="identified-box flex items-center justify-center mb-4">
-                  <img src="${productInfo.imageUrl}" alt="${productInfo.productName}" class="w-16 h-16 rounded-full max-h-40" />
-                </div>
-                <p class="text-sm text-center text mb-4">
-                  ${storageInfo}
-                </p>
-                <p class="shelf-label text-sm text-center">
-                  Expires On: ${formatDateToAustralian(productInfo.expirationDate)}
-                </p>
-            </div>
-        `;
-        } else {
-            identifiedFood.innerHTML = `
-            <div class="p-5 flex flex-col items-center">
-                <p class="text-sm text-center text">
-                  No item is being identified.
-                </p>
-            </div>
-        `;
-        }
+        return `${day}/${month}/${year}`;
     }
 
     // Function to get the storage information
@@ -903,6 +879,69 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
+    // Function to update category image
+    function updateCategoryImage(category) {
+        let imgUrl;
+        switch (category) {
+            case "vegetables":
+                imgUrl = "https://img.icons8.com/?size=100&id=64432&format=png&color=000000";
+                break;
+            case "fruit":
+                imgUrl = "https://img.icons8.com/?size=100&id=hrmFKOhdqbOq&format=png&color=000000";
+                break;
+            case "meat":
+                imgUrl = "https://img.icons8.com/?size=100&id=13306&format=png&color=000000";
+                break;
+            case "seafood":
+                imgUrl = "https://img.icons8.com/?size=100&id=dcNXeTC0SjGX&format=png&color=000000";
+                break;
+            case "dairy":
+                imgUrl = "https://img.icons8.com/?size=100&id=12874&format=png&color=000000";
+                break;
+            default:
+                imgUrl = "https://img.icons8.com/?size=100&id=32236&format=png&color=000000";
+        }
+        return imgUrl;
+    }
+
+    /* Functions to render items in the page */
+    // Function to display the identified food item
+    function displayIdentifiedFoodItem(productInfo) {
+        checkExpirations();
+        resetSearchResults();
+
+        if (productInfo) {
+            resultElement.innerHTML = ``;
+
+            let storageInfo = getStorageInfo(productInfo);
+
+            identifiedFood.innerHTML = `
+            <div class="p-5 flex flex-col items-center">
+                <h2 class="text text-sm text-center mb-4">
+                  The following is identified based on the uploaded image.
+                </h2>
+                <div class="identified-box flex items-center justify-center mb-4">
+                  <img src="${productInfo.imageUrl}" alt="${productInfo.productName}" class="w-16 h-16 rounded-full max-h-40" />
+                </div>
+                <p class="text-sm text-center text mb-4">
+                  ${storageInfo}
+                </p>
+                <p class="shelf-label text-sm text-center">
+                  Expires On: ${formatDateToAustralian(productInfo.expirationDate)}
+                </p>
+            </div>
+        `;
+        } else {
+            identifiedFood.innerHTML = `
+            <div class="p-5 flex flex-col items-center">
+                <p class="text-sm text-center text">
+                  No item is being identified.
+                </p>
+            </div>
+        `;
+        }
+    }
+
     // Function to list all stored products in "My Food List" (card view)
     function listAllStoredProducts() {
         checkExpirations();
@@ -954,6 +993,7 @@ document.addEventListener("DOMContentLoaded", function () {
         dataTableView.style.display = 'none';
     }
 
+    // Function to list all stored products in "My Food List" (card/table view)
     window.listAllStoredProductsByType = function listAllStoredProductsByType(viewType) {
         checkExpirations();
         const products = [];
@@ -1099,180 +1139,6 @@ document.addEventListener("DOMContentLoaded", function () {
         displayTable(products, 10, 1);
     }
 
-    // Function to delete multiple products
-    window.bulkDelete = function bulkDelete() {
-        const selectedCheckboxes = document.querySelectorAll('.product-checkbox:checked');
-
-        if (selectedCheckboxes.length === 0) {
-            alert('Please select at least one product to delete.');
-            return;
-        }
-
-        const modal = document.getElementById('popup-modal-bulk');
-        modal.classList.remove('hidden');
-        modal.setAttribute('data-product-keys', JSON.stringify(Array.from(selectedCheckboxes).map(checkbox => checkbox.getAttribute('data-key'))));
-    }
-
-    // Function to toggle select all checkboxes
-    window.toggleSelectAll = function toggleSelectAll() {
-        const productCheckboxes = document.querySelectorAll('.product-checkbox');
-        productCheckboxes.forEach(checkbox => {
-            checkbox.checked = selectAllCheckbox.checked;
-        });
-    }
-
-    // Function to confirm bulk delete
-    window.confirmBulkDelete = function confirmBulkDelete() {
-        const modal = document.getElementById('popup-modal-bulk');
-        const keys = JSON.parse(modal.getAttribute('data-product-keys'));
-
-        keys.forEach(key => {
-            console.log("Delete Product:", key);
-            localStorage.removeItem(key);
-
-            existingProducts = existingProducts.filter(product => product.productKey !== key);
-        });
-
-        if (isAuthenticated) {
-            storeData(localStorage.getItem('userID'), existingProducts, score, totalWaste.toFixed(2), co2Reduction.toFixed(2), count);
-        }
-        modal.classList.add('hidden');
-
-        listAllStoredProductsByType('table');
-
-        const currentPage = 1;
-        const productsPerPage = 10;
-        const products = [];
-
-        for (let i = 0; i < localStorage.length; i++) {
-            const key = localStorage.key(i);
-            if (['co2Reduction', 'score', 'totalWaste', 'count', 'userID', 'currentUser'].includes(key)) {
-                continue;
-            }
-            const productInfo = JSON.parse(localStorage.getItem(key));
-            products.push({ key, ...productInfo });
-        }
-
-        displayTable(products, productsPerPage, currentPage);
-        resetSearchResults();
-        resetAll();
-        selectAllCheckbox.checked = false;
-    };
-
-    // Function to check expirations (expiring within 7 days)
-    function checkExpirations() {
-        const today = new Date();
-        const alerts = [];
-
-        for (let i = 0; i < localStorage.length; i++) {
-            const key = localStorage.key(i);
-            if (['co2Reduction', 'score', 'totalWaste', 'count', 'userID', 'currentUser'].includes(key)) {
-                continue;
-            }
-            const product = JSON.parse(localStorage.getItem(key));
-
-            if (product?.expirationDate) {
-                const expirationDate = new Date(product.expirationDate);
-                const daysUntilExpiry = Math.ceil((expirationDate - today) / (1000 * 60 * 60 * 24));
-
-                if (daysUntilExpiry <= 7 && daysUntilExpiry >= 0) {
-                    alerts.push({
-                        key: key,
-                        productName: product.productName,
-                        category: product.category,
-                        expirationDate: product.expirationDate,
-                        imageUrl: product.imageUrl,
-                        daysUntilExpiry: daysUntilExpiry
-                    });
-                }
-            }
-        }
-        displayAlerts(alerts);
-        showNotification(alerts.length);
-    }
-
-    // Function to display food items that are about to expire in "Critical Food"
-    function displayAlerts(alerts) {
-        alerts.sort((a, b) => new Date(a.expirationDate) - new Date(b.expirationDate));
-
-        criticalFood.innerHTML = '';
-
-        if (alerts.length > 0) {
-            const limitedAlerts = alerts.slice(0, 3);
-
-            limitedAlerts.forEach(alert => {
-                const card = document.createElement('div');
-                card.className = 'card';
-
-                const cardContent = `
-            <div class="p-3">
-                <span class="reminder text-xs font-bold">Expiring Soon !</span>
-                <div class="image-container">
-                    <img src="${alert.imageUrl}" alt="${alert.productName}" class="my-4 rounded-lg" />
-                </div>
-                <p class="mt-2 text">${alert.productName}</p>
-                <p class="mt-2 sub-text">Expires On: ${formatDateToAustralian(alert.expirationDate)}</p>
-                <p class="mt-2 text-xs text-red-500 font-semibold">Expires in ${alert.daysUntilExpiry} day(s)</p>
-                <button class="mt-2 text-xs text-white bg-red-500 px-2 py-1 rounded-full" onclick="deleteProduct('${alert.key}')">Delete</button>
-            </div>
-            `;
-
-                card.innerHTML = cardContent;
-                criticalFood.appendChild(card);
-            });
-        } else {
-            criticalFood.innerHTML = '<p class="text-center text-gray-500">No expiring foods at the moment.</p>';
-        }
-    }
-
-    // Function to show notification
-    function showNotification(expiringCount) {
-        const toast = document.getElementById('notification');
-
-        if (expiringCount > 0) {
-            const message = `You have ${expiringCount} item(s) about to expire within 7 days!`;
-            toast.querySelector('.text-sm.font-normal').textContent = message;
-            toast.classList.remove('hidden');
-        } else {
-            toast.classList.add('hidden');
-        }
-    }
-
-    // Function to delete a product from local storage
-    window.deleteProduct = function deleteProduct(key) {
-        const modal = document.getElementById('popup-modal');
-        modal.classList.remove('hidden');
-        modal.setAttribute('data-product-key', key);
-    }
-
-    // Function to confirm delete
-    window.confirmDelete = function confirmDelete() {
-        const modal = document.getElementById('popup-modal');
-        const key = modal.getAttribute('data-product-key');
-        console.log("Delete Product:", key);
-
-        localStorage.removeItem(key);
-
-        existingProducts = existingProducts.filter(product => product.productKey !== key);
-        if (isAuthenticated) {
-            storeData(localStorage.getItem('userID'), existingProducts, score, totalWaste.toFixed(2), co2Reduction.toFixed(2), count);
-        }
-
-        modal.classList.add('hidden');
-
-        listAllStoredProducts();
-        resetSearchResults();
-        resetAll();
-    }
-
-    // Function to cancel delete
-    window.cancelDelete = function cancelDelete() {
-        const modal = document.getElementById('popup-modal');
-        const modalBulk = document.getElementById('popup-modal-bulk');
-        modal.classList.add('hidden');
-        modalBulk.classList.add('hidden');
-    }
-
     // Ingredients Filtering (Category)
     function renderIngredientList() {
         ingredientList.innerHTML = '';
@@ -1372,6 +1238,183 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
+    /* Functions to delete items */
+    // Function to delete a product from local storage
+    window.deleteProduct = function deleteProduct(key) {
+        const modal = document.getElementById('popup-modal');
+        modal.classList.remove('hidden');
+        modal.setAttribute('data-product-key', key);
+    }
+
+    // Function to confirm delete
+    window.confirmDelete = function confirmDelete() {
+        const modal = document.getElementById('popup-modal');
+        const key = modal.getAttribute('data-product-key');
+        console.log("Delete Product:", key);
+
+        localStorage.removeItem(key);
+
+        existingProducts = existingProducts.filter(product => product.productKey !== key);
+        if (isAuthenticated) {
+            storeData(localStorage.getItem('userID'), existingProducts, score, totalWaste.toFixed(2), co2Reduction.toFixed(2), count);
+        }
+
+        modal.classList.add('hidden');
+
+        listAllStoredProducts();
+        resetSearchResults();
+        resetAll();
+    }
+
+    // Function to delete multiple products
+    window.bulkDelete = function bulkDelete() {
+        const selectedCheckboxes = document.querySelectorAll('.product-checkbox:checked');
+
+        if (selectedCheckboxes.length === 0) {
+            alert('Please select at least one product to delete.');
+            return;
+        }
+
+        const modal = document.getElementById('popup-modal-bulk');
+        modal.classList.remove('hidden');
+        modal.setAttribute('data-product-keys', JSON.stringify(Array.from(selectedCheckboxes).map(checkbox => checkbox.getAttribute('data-key'))));
+    }
+
+    // Function to toggle select all checkboxes
+    window.toggleSelectAll = function toggleSelectAll() {
+        const productCheckboxes = document.querySelectorAll('.product-checkbox');
+        productCheckboxes.forEach(checkbox => {
+            checkbox.checked = selectAllCheckbox.checked;
+        });
+    }
+
+    // Function to confirm bulk delete
+    window.confirmBulkDelete = function confirmBulkDelete() {
+        const modal = document.getElementById('popup-modal-bulk');
+        const keys = JSON.parse(modal.getAttribute('data-product-keys'));
+
+        keys.forEach(key => {
+            console.log("Delete Product:", key);
+            localStorage.removeItem(key);
+
+            existingProducts = existingProducts.filter(product => product.productKey !== key);
+        });
+
+        if (isAuthenticated) {
+            storeData(localStorage.getItem('userID'), existingProducts, score, totalWaste.toFixed(2), co2Reduction.toFixed(2), count);
+        }
+        modal.classList.add('hidden');
+
+        listAllStoredProductsByType('table');
+
+        const currentPage = 1;
+        const productsPerPage = 10;
+        const products = [];
+
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (['co2Reduction', 'score', 'totalWaste', 'count', 'userID', 'currentUser'].includes(key)) {
+                continue;
+            }
+            const productInfo = JSON.parse(localStorage.getItem(key));
+            products.push({ key, ...productInfo });
+        }
+
+        displayTable(products, productsPerPage, currentPage);
+        resetSearchResults();
+        resetAll();
+        selectAllCheckbox.checked = false;
+    };
+
+    // Function to cancel delete
+    window.cancelDelete = function cancelDelete() {
+        const modal = document.getElementById('popup-modal');
+        const modalBulk = document.getElementById('popup-modal-bulk');
+        modal.classList.add('hidden');
+        modalBulk.classList.add('hidden');
+    }
+
+    /* Functions for expiring items */
+    // Function to check expirations (expiring within 7 days)
+    function checkExpirations() {
+        const today = new Date();
+        const alerts = [];
+
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (['co2Reduction', 'score', 'totalWaste', 'count', 'userID', 'currentUser'].includes(key)) {
+                continue;
+            }
+            const product = JSON.parse(localStorage.getItem(key));
+
+            if (product?.expirationDate) {
+                const expirationDate = new Date(product.expirationDate);
+                const daysUntilExpiry = Math.ceil((expirationDate - today) / (1000 * 60 * 60 * 24));
+
+                if (daysUntilExpiry <= 7 && daysUntilExpiry >= 0) {
+                    alerts.push({
+                        key: key,
+                        productName: product.productName,
+                        category: product.category,
+                        expirationDate: product.expirationDate,
+                        imageUrl: product.imageUrl,
+                        daysUntilExpiry: daysUntilExpiry
+                    });
+                }
+            }
+        }
+        displayAlerts(alerts);
+        showNotification(alerts.length);
+    }
+
+    // Function to display food items that are about to expire in "Critical Food"
+    function displayAlerts(alerts) {
+        alerts.sort((a, b) => new Date(a.expirationDate) - new Date(b.expirationDate));
+
+        criticalFood.innerHTML = '';
+
+        if (alerts.length > 0) {
+            const limitedAlerts = alerts.slice(0, 3);
+
+            limitedAlerts.forEach(alert => {
+                const card = document.createElement('div');
+                card.className = 'card';
+
+                const cardContent = `
+            <div class="p-3">
+                <span class="reminder text-xs font-bold">Expiring Soon !</span>
+                <div class="image-container">
+                    <img src="${alert.imageUrl}" alt="${alert.productName}" class="my-4 rounded-lg" />
+                </div>
+                <p class="mt-2 text">${alert.productName}</p>
+                <p class="mt-2 sub-text">Expires On: ${formatDateToAustralian(alert.expirationDate)}</p>
+                <p class="mt-2 text-xs text-red-500 font-semibold">Expires in ${alert.daysUntilExpiry} day(s)</p>
+                <button class="mt-2 text-xs text-white bg-red-500 px-2 py-1 rounded-full" onclick="deleteProduct('${alert.key}')">Delete</button>
+            </div>
+            `;
+
+                card.innerHTML = cardContent;
+                criticalFood.appendChild(card);
+            });
+        } else {
+            criticalFood.innerHTML = '<p class="text-center text-gray-500">No expiring foods at the moment.</p>';
+        }
+    }
+
+    // Function to show notification
+    function showNotification(expiringCount) {
+        const toast = document.getElementById('notification');
+
+        if (expiringCount > 0) {
+            const message = `You have ${expiringCount} item(s) about to expire within 7 days!`;
+            toast.querySelector('.text-sm.font-normal').textContent = message;
+            toast.classList.remove('hidden');
+        } else {
+            toast.classList.add('hidden');
+        }
+    }
+
+    /* Functions for Searching for item(s) */
     // Function to perform search
     window.performSearch = function performSearch(event) {
         event.preventDefault();
@@ -1450,6 +1493,7 @@ document.addEventListener("DOMContentLoaded", function () {
         searchResults.innerHTML = "";
     }
 
+    /* Functions to modify an item */
     // Functions to modify a product from local storage
     window.modify = function modify(key) {
         const modal = document.getElementById('modify-popup-modal');
@@ -1508,30 +1552,5 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById('productName').value = productInfo.productName || '';
         document.getElementById('productCategory').value = productInfo.category || '';
         document.getElementById('productExpirationDate').value = productInfo.expirationDate || '';
-    }
-
-    // Function to update category image
-    function updateCategoryImage(category) {
-        let imgUrl;
-        switch (category) {
-            case "vegetables":
-                imgUrl = "https://img.icons8.com/?size=100&id=64432&format=png&color=000000";
-                break;
-            case "fruit":
-                imgUrl = "https://img.icons8.com/?size=100&id=hrmFKOhdqbOq&format=png&color=000000";
-                break;
-            case "meat":
-                imgUrl = "https://img.icons8.com/?size=100&id=13306&format=png&color=000000";
-                break;
-            case "seafood":
-                imgUrl = "https://img.icons8.com/?size=100&id=dcNXeTC0SjGX&format=png&color=000000";
-                break;
-            case "dairy":
-                imgUrl = "https://img.icons8.com/?size=100&id=12874&format=png&color=000000";
-                break;
-            default:
-                imgUrl = "https://img.icons8.com/?size=100&id=32236&format=png&color=000000";
-        }
-        return imgUrl;
     }
 });

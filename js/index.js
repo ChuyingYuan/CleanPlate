@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', function () {
         score = parseInt(localStorage.getItem("score"));
     }
 
+    // List of features with their corresponding data
     const featureData = {
         'expiry-tracker': {
             title: 'Expiry Tracker',

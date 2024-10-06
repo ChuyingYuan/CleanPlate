@@ -9,6 +9,7 @@ const poolData = {
 
 let isAuthenticated = false;
 
+// Function to update the Sign In / Sign Out button
 function updateAuthButton() {
     const authButton = document.getElementById("auth-button");
 
@@ -29,6 +30,7 @@ function updateAuthButton() {
     }
 }
 
+// Function to sign out the user
 window.logout = function logout() {
     localStorage.clear();
     console.log("Logged out successfully");
@@ -38,6 +40,7 @@ window.logout = function logout() {
     window.location.href = "../html/index.html";
 }
 
+// Check if the user is signed in and update the Sign In / Sign Out button
 document.addEventListener("DOMContentLoaded", function () {
     if (localStorage.getItem("currentUser")) {
         isAuthenticated = true;
