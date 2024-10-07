@@ -114,7 +114,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function getAllProductsFromLocalStorage() {
         for (let i = 0; i < localStorage.length; i++) {
             const key = localStorage.key(i);
-            if (['co2Reduction', 'score', 'totalWaste', 'count', 'userID', 'currentUser'].includes(key)) {
+            if (['co2Reduction', 'score', 'totalWaste', 'count', 'userID', 'currentUser', 'groceries'].includes(key)) {
                 continue;
             }
             const productInfo = JSON.parse(localStorage.getItem(key));
@@ -955,7 +955,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         for (let i = 0; i < localStorage.length; i++) {
             const key = localStorage.key(i);
-            if (['co2Reduction', 'score', 'totalWaste', 'count', 'userID', 'currentUser'].includes(key)) {
+            if (['co2Reduction', 'score', 'totalWaste', 'count', 'userID', 'currentUser', 'groceries'].includes(key)) {
                 continue;
             }
             const productInfo = JSON.parse(localStorage.getItem(key));
@@ -1004,7 +1004,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         for (let i = 0; i < localStorage.length; i++) {
             const key = localStorage.key(i);
-            if (['co2Reduction', 'score', 'totalWaste', 'count', 'userID', 'currentUser'].includes(key)) {
+            if (['co2Reduction', 'score', 'totalWaste', 'count', 'userID', 'currentUser', 'groceries'].includes(key)) {
                 continue;
             }
             const productInfo = JSON.parse(localStorage.getItem(key));
@@ -1119,7 +1119,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         for (let i = 0; i < localStorage.length; i++) {
             const key = localStorage.key(i);
-            if (['co2Reduction', 'score', 'totalWaste', 'count', 'userID', 'currentUser'].includes(key)) {
+            if (['co2Reduction', 'score', 'totalWaste', 'count', 'userID', 'currentUser', 'groceries'].includes(key)) {
                 continue;
             }
             const productInfo = JSON.parse(localStorage.getItem(key));
@@ -1199,7 +1199,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         for (let i = 0; i < localStorage.length; i++) {
             const key = localStorage.key(i);
-            if (['co2Reduction', 'score', 'totalWaste', 'count', 'userID', 'currentUser'].includes(key)) {
+            if (['co2Reduction', 'score', 'totalWaste', 'count', 'userID', 'currentUser', 'groceries'].includes(key)) {
                 continue;
             }
             const productInfo = JSON.parse(localStorage.getItem(key));
@@ -1315,7 +1315,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         for (let i = 0; i < localStorage.length; i++) {
             const key = localStorage.key(i);
-            if (['co2Reduction', 'score', 'totalWaste', 'count', 'userID', 'currentUser'].includes(key)) {
+            if (['co2Reduction', 'score', 'totalWaste', 'count', 'userID', 'currentUser', 'groceries'].includes(key)) {
                 continue;
             }
             const productInfo = JSON.parse(localStorage.getItem(key));
@@ -1344,7 +1344,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         for (let i = 0; i < localStorage.length; i++) {
             const key = localStorage.key(i);
-            if (['co2Reduction', 'score', 'totalWaste', 'count', 'userID', 'currentUser'].includes(key)) {
+            if (['co2Reduction', 'score', 'totalWaste', 'count', 'userID', 'currentUser', 'groceries'].includes(key)) {
                 continue;
             }
             const product = JSON.parse(localStorage.getItem(key));
@@ -1442,7 +1442,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         for (let i = 0; i < localStorage.length; i++) {
             const key = localStorage.key(i);
-            if (['co2Reduction', 'score', 'totalWaste', 'count', 'userID', 'currentUser'].includes(key)) {
+            if (['co2Reduction', 'score', 'totalWaste', 'count', 'userID', 'currentUser', 'groceries'].includes(key)) {
                 continue;
             }
             const product = JSON.parse(localStorage.getItem(key));
