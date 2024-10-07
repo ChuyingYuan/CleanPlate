@@ -145,7 +145,7 @@ function fetchUserID(accessToken) {
             // Redirect to the home page after successful login and data retrieval
             setTimeout(() => {
                 window.location.href = "index.html";
-            }, 1000);
+            }, 2000);
         }
     });
 }
@@ -225,27 +225,11 @@ async function retrieveUserData(userID) {
                 const productKey = product.productKey;
                 localStorage.setItem(productKey, JSON.stringify(productInfo));
                 console.log(`Stored product ${product.productName} in local storage with key: ${productKey}`);
-                console.log(`Stored product ${product.productName} in local storage with key: ${productKey}`);
-                console.log(`Stored product ${product.productName} in local storage with key: ${productKey}`);
             });
         }
 
         // Process groceries
-        if (groceries.length === 0) {
-            localStorage.setItem('groceries', '[]');
-            console.log('No groceries found for the user.');
-        } else {
-            groceries.forEach((grocery, index) => {
-                const groceryInfo = {
-                    groceryName: grocery.groceryName,
-                    quantity: parseFloat(grocery.quantity) || 0
-                };
-
-                const groceryKey = `grocery-${index}`;
-                localStorage.setItem(groceryKey, JSON.stringify(groceryInfo));
-                console.log(`Stored grocery ${grocery.groceryName} in local storage with key: ${groceryKey}`);
-            });
-        }
+        localStorage.setItem('groceries', JSON.stringify(groceries));
     } catch (error) {
         console.error(`Error retrieving data for userID ${userID}:`, error);
     }

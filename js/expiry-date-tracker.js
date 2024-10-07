@@ -122,8 +122,15 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
+    function getGroceriesFromLocalStorage() {
+        const groceries = JSON.parse(localStorage.getItem('groceries')) || [];
+        existingGroceries = groceries;
+    }
+
     getAllProductsFromLocalStorage();
     console.log('Number of Existing Products: ', existingProducts.length);
+    getGroceriesFromLocalStorage();
+    console.log('Number of Existing Groceries: ', existingGroceries.length);
 
     // Function to store user data from the database
     async function storeData(userID, products, groceries, score, totalWaste, co2Reduction, count) {

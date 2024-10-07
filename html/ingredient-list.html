@@ -4,13 +4,76 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="../favicon/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="../favicon/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="../favicon/favicon-16x16.png"
+    />
+    <link rel="icon" type="image/x-icon" href="../favicon/favicon.ico" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Lexend"
+      rel="stylesheet"
+    />
+    <link
       href="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.css"
       rel="stylesheet"
     />
     <link href="../css/styles.css" rel="stylesheet" />
-    <title>Ingredient List - CleanPlate</title>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB9lRTjct3qFR5TDDhTIauwc_9ERadI9Ls"></script>
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1259.0.min.js"></script>
+    <script type="module" src="../js/auth.js"></script>
+    <script>
+      ((g) => {
+        var h,
+          a,
+          k,
+          p = "The Google Maps JavaScript API",
+          c = "google",
+          l = "importLibrary",
+          q = "__ib__",
+          m = document,
+          b = window;
+        b = b[c] || (b[c] = {});
+        var d = b.maps || (b.maps = {}),
+          r = new Set(),
+          e = new URLSearchParams(),
+          u = () =>
+            h ||
+            (h = new Promise(async (f, n) => {
+              await (a = m.createElement("script"));
+              e.set("libraries", [...r] + "");
+              for (k in g)
+                e.set(
+                  k.replace(/[A-Z]/g, (t) => "_" + t[0].toLowerCase()),
+                  g[k]
+                );
+              e.set("callback", c + ".maps." + q);
+              a.src = `https://maps.${c}apis.com/maps/api/js?` + e;
+              d[q] = f;
+              a.onerror = () => (h = n(Error(p + " could not load.")));
+              a.nonce = m.querySelector("script[nonce]")?.nonce || "";
+              m.head.append(a);
+            }));
+        d[l]
+          ? console.warn(p + " only loads once. Ignoring:", g)
+          : (d[l] = (f, ...n) => r.add(f) && u().then(() => d[l](f, ...n)));
+      })({
+        key: "AIzaSyB9lRTjct3qFR5TDDhTIauwc_9ERadI9Ls",
+        v: "weekly",
+      });
+    </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <title>Grocery Planner - CleanPlate</title>
     <!-- CSV parser -->
   </head>
   <body class="pt-10 sm:pt-24">
@@ -30,6 +93,39 @@
             >CleanPlate</span
           >
         </a>
+        <div class="flex md:order-2 space-x-3 rtl:space-x-reverse">
+          <button
+            data-collapse-toggle="navbar-sticky"
+            onclick="toggleMenu()"
+            type="button"
+            class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
+            aria-controls="navbar-sticky"
+            aria-expanded="false"
+          >
+            <span class="sr-only">Open main menu</span>
+            <svg
+              class="w-5 h-5"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 17 14"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M1 1h15M1 7h15M1 13h15"
+              />
+            </svg>
+          </button>
+          <button
+            id="auth-button"
+            class="inline-flex items-center w-full lg:w-auto px-4 py-2 rounded-full border border-gray-300 text-sm font-medium button"
+          >
+            Sign In
+          </button>
+        </div>
         <div
           class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1"
           id="navbar-sticky"
@@ -37,31 +133,176 @@
           <ul
             class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white"
           >
-            <li><a href="../html/index.html">Home</a></li>
-            <li>
-              <a href="../html/expiry-date-tracker.html">Expiry Tracker</a>
+            <li class="relative group">
+              <a
+                href="../html/index.html"
+                class="flex items-center space-x-2 py-2 px-3 md:p-0 nav-icon"
+              >
+                <img
+                  src="https://img.icons8.com/?size=100&id=73&format=png&color=000000"
+                  class="w-6 h-6"
+                  alt="Home"
+                />
+                <span class="block md:hidden text-center mt-2">Home</span>
+              </a>
+              <div
+                class="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 opacity-0 group-hover:opacity-100 transition-opacity bg-gray-800 text-white text-xs rounded-md py-1 px-2"
+              >
+                Home
+              </div>
             </li>
-            <li><a href="../html/recipe.html">Recipe</a></li>
-            <li><a href="../html/notification.html">Notification</a></li>
-            <li>
-              <a href="../html/wasted-food-scale.html">Wasted Food Scale</a>
+            <li class="relative group">
+              <a
+                href="../html/expiry-date-tracker.html"
+                class="flex items-center space-x-2 py-2 px-3 md:p-0 nav-icon"
+              >
+                <img
+                  src="https://img.icons8.com/?size=100&id=283&format=png&color=000000"
+                  class="w-6 h-6"
+                  alt="Expiry Tracker"
+                />
+                <span class="block md:hidden text-center mt-2"
+                  >Expiry Tracker</span
+                >
+              </a>
+              <div
+                class="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 opacity-0 group-hover:opacity-100 transition-opacity bg-gray-800 text-white text-xs rounded-md py-1 px-2"
+              >
+                Expiry Tracker
+              </div>
             </li>
-            <li><a href="../html/dashboard.html">Dashboard</a></li>
+            <li class="relative group">
+              <a
+                href="../html/notification.html"
+                class="flex items-center space-x-2 py-2 px-3 md:p-0 nav-icon"
+              >
+                <img
+                  src="https://img.icons8.com/?size=100&id=23&format=png&color=000000"
+                  class="w-6 h-6"
+                  alt="Notification"
+                />
+                <span class="block md:hidden text-center mt-2"
+                  >Notification</span
+                >
+              </a>
+              <div
+                class="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 opacity-0 group-hover:opacity-100 transition-opacity bg-gray-800 text-white text-xs rounded-md py-1 px-2"
+              >
+                Notification
+              </div>
+            </li>
+            <li class="relative group">
+              <a
+                href="../html/recipe.html"
+                class="flex items-center space-x-2 py-2 px-3 md:p-0 nav-icon"
+              >
+                <img
+                  src="https://img.icons8.com/?size=100&id=idEQE7TsG0NA&format=png&color=000000"
+                  class="w-6 h-6"
+                  alt="Recipe"
+                />
+                <span class="block md:hidden text-center mt-2">Recipe</span>
+              </a>
+              <div
+                class="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 opacity-0 group-hover:opacity-100 transition-opacity bg-gray-800 text-white text-xs rounded-md py-1 px-2"
+              >
+                Recipe Search
+              </div>
+            </li>
+            <li class="relative group">
+              <a
+                href="../html/ingredient-list.html"
+                class="flex items-center space-x-2 py-2 px-3 md:p-0 nav-icon active"
+              >
+                <img
+                  src="https://img.icons8.com/?size=100&id=KGdZLSPhxQFl&format=png&color=000000"
+                  class="w-6 h-6"
+                  alt="Grocery List"
+                />
+                <span class="block md:hidden text-center mt-2"
+                  >Notification</span
+                >
+              </a>
+              <div
+                class="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 opacity-0 group-hover:opacity-100 transition-opacity bg-gray-800 text-white text-xs rounded-md py-1 px-2"
+              >
+                Grocery Planner
+              </div>
+            </li>
+            <li class="relative group">
+              <a
+                href="../html/wasted-food-scale.html"
+                class="flex items-center space-x-2 py-2 px-3 md:p-0 nav-icon"
+              >
+                <img
+                  src="https://img.icons8.com/?size=100w&id=XxG3TLBUs4k5&format=png&color=000000"
+                  class="w-6 h-6"
+                  alt="Wasted Food Scale"
+                />
+                <span class="block md:hidden text-center mt-2"
+                  >Wasted Food Scale</span
+                >
+              </a>
+              <div
+                class="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 opacity-0 group-hover:opacity-100 transition-opacity bg-gray-800 text-white text-xs rounded-md py-1 px-2"
+              >
+                Wasted Food Scale
+              </div>
+            </li>
+            <li class="relative group">
+              <a
+                href="../html/dashboard.html"
+                class="flex items-center space-x-2 py-2 px-3 md:p-0 nav-icon"
+              >
+                <img
+                  src="https://img.icons8.com/?size=100&id=6rfR2m3WUfBr&format=png&color=000000"
+                  class="w-6 h-6"
+                  alt="Dashboard"
+                />
+                <span class="block md:hidden text-center mt-2">Dashboard</span>
+              </a>
+              <div
+                class="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 opacity-0 group-hover:opacity-100 transition-opacity bg-gray-800 text-white text-xs rounded-md py-1 px-2"
+              >
+                Dashboard
+              </div>
+            </li>
           </ul>
         </div>
       </div>
     </nav>
 
-    <!-- Main Content -->
     <main class="container mx-auto mt-2 px-4 sm:px-8 flex-grow">
+      <!-- Greeting -->
       <div class="mx-auto mt-10 sm:mt-16 sm:px-8">
-        <h1 class="text-2xl font-bold">Your Ingredients List</h1>
-        <div id="ingredients-list-container" class="mt-4"></div>
-      </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 items-center">
+          <div id="greeting-container" class="flex items-center space-x-2">
+            <div id="greeting" class="page-label text-xl font-bold">
+              Good Morning
+            </div>
+          </div>
+        </div>
 
-      <!-- Store Locations -->
-      <h1>Store Locations</h1>
-      <div id="map" style="height: 500px; width: 100%"></div>
+        <div
+          class="grid grid-cols-1 gap-4 md:grid-cols-2 mt-4 mb-4"
+          id="donate"
+        >
+          <div class="col-span-1">
+            <div class="wfs-container" id="grocery-list">
+              <h1 class="px-5 font-bold">Grocery List</h1>
+              <div id="ingredients-list-container" class="mt-4"></div>
+            </div>
+          </div>
+          <div class="col-span-1">
+            <div class="wfs-container">
+              <h1 class="px-5 font-bold">Store Locations</h1>
+              <div class="map-view">
+                <div id="map"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </main>
 
     <footer
@@ -73,116 +314,6 @@
       >
     </footer>
 
-    <script>
-      window.onload = function () {
-        // Display recipes and their ingredients
-        const recipesList =
-          JSON.parse(localStorage.getItem("recipesList")) || [];
-        const ingredientsListContainer = document.getElementById(
-          "ingredients-list-container"
-        );
-
-        recipesList.forEach((recipe) => {
-          const recipeContainer = document.createElement("div");
-          recipeContainer.className = "mb-4";
-
-          const recipeName = document.createElement("h3");
-          recipeName.className = "text-xl font-bold";
-          recipeName.textContent = recipe.name;
-
-          const ingredientList = document.createElement("ul");
-          ingredientList.className = "list-disc mt-2 px-8";
-
-          recipe.ingredients.forEach((ingredient) => {
-            const li = document.createElement("li");
-            li.textContent = ingredient;
-            ingredientList.appendChild(li);
-          });
-
-          recipeContainer.appendChild(recipeName);
-          recipeContainer.appendChild(ingredientList);
-          ingredientsListContainer.appendChild(recipeContainer);
-        });
-
-        // Set the current year in the footer
-        const currentYear = new Date().getFullYear();
-        document.getElementById("current-year").textContent = currentYear;
-      };
-
-      // Initialize Google Maps and plot store locations
-      function initMap() {
-        const map = new google.maps.Map(document.getElementById("map"), {
-          zoom: 12,
-          center: { lat: -37.8136, lng: 144.9631 }, // Melbourne CBD
-        });
-
-        // Fetch and parse the CSV file
-        fetch("grocery_store_locations.csv") // Adjust the path to the CSV file
-          .then((response) => response.text())
-          .then((csvData) => {
-            Papa.parse(csvData, {
-              header: true,
-              complete: function (results) {
-                const data = results.data;
-                console.log("Parsed CSV Data:", data); // Check CSV data
-
-                // If no data, log an error
-                if (!data || data.length === 0) {
-                  console.error("No data found in the CSV");
-                  return;
-                }
-
-                data.forEach((store) => {
-                  // Parse latitude and longitude
-                  let lat = parseFloat(store.latitude);
-                  let lng = parseFloat(store.longitude);
-
-                  // Ensure lat and lng are valid numbers
-                  if (isNaN(lat) || isNaN(lng)) {
-                    console.error("Invalid coordinates for store:", store);
-                    return;
-                  }
-
-                  // Use the correct column name for the type of store
-                  let type = store["Industry (ANZSIC4) description"];
-                  let markerColor;
-
-                  // Determine marker color based on store type
-                  if (type === "Supermarket and Grocery Stores") {
-                    markerColor =
-                      "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
-                  } else if (type === "Fruit and Vegetable Retailing") {
-                    markerColor =
-                      "http://maps.google.com/mapfiles/ms/icons/blue-dot.png";
-                  } else if (
-                    type === "Fresh Meat, Fish and Poultry Retailing"
-                  ) {
-                    markerColor =
-                      "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
-                  } else {
-                    console.warn("Unknown store type:", type); // Warn if store type is not recognized
-                  }
-
-                  // Place marker if the type is recognized and coordinates are valid
-                  if (markerColor) {
-                    new google.maps.Marker({
-                      position: { lat: lat, lng: lng },
-                      map: map,
-                      icon: markerColor,
-                      title: store.name || "Unknown Store",
-                    });
-                  }
-                });
-              },
-            });
-          })
-          .catch((error) => {
-            console.error("Error fetching or parsing CSV:", error);
-          });
-      }
-
-      // Initialize the map when the page loads
-      window.addEventListener("load", initMap);
-    </script>
+    <script src="../js/ingredient-list.js"></script>
   </body>
 </html>

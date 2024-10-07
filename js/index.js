@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function () {
         },
         'recipe-search': {
             title: 'Recipe Search',
-            description: ['Search by Ingredients', 'Search by Recipe Name', 'Calories'],
+            description: ['Search by Ingredients', 'Search by Recipe Name', 'Add to Grocery Planner'],
             link: '../html/recipe.html',
             screenshot: '../static/recipe.png'
         },
@@ -49,8 +49,14 @@ document.addEventListener('DOMContentLoaded', function () {
             description: ['Guided Decision Making Tool', 'Effort Tracker'],
             link: '../html/wasted-food-scale.html',
             screenshot: '../static/wastedFoodScale.png'
-        }
+        },
 
+        'grocery-planner': {
+            title: 'Grocery Planner',
+            description: ['View Grocery List', 'View Store Locations'],
+            link: '../html/ingredient-list.html',
+            screenshot: '../static/grocery-planner.png'
+        }
     };
 
     window.onload = function () {

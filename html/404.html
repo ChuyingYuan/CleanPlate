@@ -41,10 +41,10 @@
         class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4"
       >
         <a
-          href="/html/index.html"
+          href="../html/index.html"
           class="flex items-center space-x-3 rtl:space-x-reverse"
         >
-          <img src="/WEBSITE_LOGO.png" class="h-8" alt="Logo" />
+          <img src="../WEBSITE_LOGO.png" class="h-8" alt="Logo" />
           <span class="self-center text-2xl font-semibold whitespace-nowrap"
             >CleanPlate</span
           >
@@ -75,6 +75,12 @@
               />
             </svg>
           </button>
+          <button
+            id="auth-button"
+            class="inline-flex items-center w-full lg:w-auto px-4 py-2 rounded-full border border-gray-300 text-sm font-medium button"
+          >
+            Sign In
+          </button>
         </div>
         <div
           class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1"
@@ -85,7 +91,7 @@
           >
             <li class="relative group">
               <a
-                href="/html/index.html"
+                href="../html/index.html"
                 class="flex items-center space-x-2 py-2 px-3 md:p-0 nav-icon"
               >
                 <img
@@ -103,7 +109,7 @@
             </li>
             <li class="relative group">
               <a
-                href="/html/expiry-date-tracker.html"
+                href="../html/expiry-date-tracker.html"
                 class="flex items-center space-x-2 py-2 px-3 md:p-0 nav-icon"
               >
                 <img
@@ -123,7 +129,27 @@
             </li>
             <li class="relative group">
               <a
-                href="/html/recipe.html"
+                href="../html/notification.html"
+                class="flex items-center space-x-2 py-2 px-3 md:p-0 nav-icon"
+              >
+                <img
+                  src="https://img.icons8.com/?size=100&id=23&format=png&color=000000"
+                  class="w-6 h-6"
+                  alt="Notification"
+                />
+                <span class="block md:hidden text-center mt-2"
+                  >Notification</span
+                >
+              </a>
+              <div
+                class="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 opacity-0 group-hover:opacity-100 transition-opacity bg-gray-800 text-white text-xs rounded-md py-1 px-2"
+              >
+                Notification
+              </div>
+            </li>
+            <li class="relative group">
+              <a
+                href="../html/recipe.html"
                 class="flex items-center space-x-2 py-2 px-3 md:p-0 nav-icon"
               >
                 <img
@@ -141,13 +167,13 @@
             </li>
             <li class="relative group">
               <a
-                href="/html/notification.html"
+                href="../html/ingredient-list.html"
                 class="flex items-center space-x-2 py-2 px-3 md:p-0 nav-icon"
               >
                 <img
-                  src="https://img.icons8.com/?size=100&id=23&format=png&color=000000"
+                  src="https://img.icons8.com/?size=100&id=KGdZLSPhxQFl&format=png&color=000000"
                   class="w-6 h-6"
-                  alt="Notification"
+                  alt="Grocery List"
                 />
                 <span class="block md:hidden text-center mt-2"
                   >Notification</span
@@ -156,7 +182,7 @@
               <div
                 class="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 opacity-0 group-hover:opacity-100 transition-opacity bg-gray-800 text-white text-xs rounded-md py-1 px-2"
               >
-                Notification
+                Grocery Planner
               </div>
             </li>
             <li class="relative group">
@@ -181,7 +207,7 @@
             </li>
             <li class="relative group">
               <a
-                href="/html/dashboard.html"
+                href="../html/dashboard.html"
                 class="flex items-center space-x-2 py-2 px-3 md:p-0 nav-icon"
               >
                 <img
@@ -238,19 +264,6 @@
 
           <div class="flex items-center mb-4">
             <a
-              href="/html/recipe.html"
-              class="text-gray-900 bg-white border border-gray-300 focus:outline-none focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 button404"
-            >
-              Recipe Planning
-            </a>
-            <p class="text-gray-600 text-sm">
-              Discover new recipes and plan your meals based on the ingredients
-              you have.
-            </p>
-          </div>
-
-          <div class="flex items-center mb-4">
-            <a
               href="/html/notification.html"
               class="text-gray-900 bg-white border border-gray-300 focus:outline-none focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 button404"
             >
@@ -258,6 +271,31 @@
             </a>
             <p class="text-gray-600 text-sm">
               View the count and list for upcoming expirations.
+            </p>
+          </div>
+
+          <div class="flex items-center mb-4">
+            <a
+              href="/html/recipe.html"
+              class="text-gray-900 bg-white border border-gray-300 focus:outline-none focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 button404"
+            >
+              Recipe Planning
+            </a>
+            <p class="text-gray-600 text-sm">
+              Discover new recipes and save the ones you love to the grocery
+              planner.
+            </p>
+          </div>
+
+          <div class="flex items-center mb-4">
+            <a
+              href="/html/ingredient-list.html"
+              class="text-gray-900 bg-white border border-gray-300 focus:outline-none focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 button404"
+            >
+              Grocery Planner
+            </a>
+            <p class="text-gray-600 text-sm">
+              View your grocery list and find store locations.
             </p>
           </div>
 

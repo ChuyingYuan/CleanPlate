@@ -131,6 +131,26 @@
             </li>
             <li class="relative group">
               <a
+                href="../html/notification.html"
+                class="flex items-center space-x-2 py-2 px-3 md:p-0 nav-icon"
+              >
+                <img
+                  src="https://img.icons8.com/?size=100&id=23&format=png&color=000000"
+                  class="w-6 h-6"
+                  alt="Notification"
+                />
+                <span class="block md:hidden text-center mt-2"
+                  >Notification</span
+                >
+              </a>
+              <div
+                class="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 opacity-0 group-hover:opacity-100 transition-opacity bg-gray-800 text-white text-xs rounded-md py-1 px-2"
+              >
+                Notification
+              </div>
+            </li>
+            <li class="relative group">
+              <a
                 href="../html/recipe.html"
                 class="flex items-center space-x-2 py-2 px-3 md:p-0 nav-icon active"
               >
@@ -149,13 +169,13 @@
             </li>
             <li class="relative group">
               <a
-                href="../html/notification.html"
+                href="../html/ingredient-list.html"
                 class="flex items-center space-x-2 py-2 px-3 md:p-0 nav-icon"
               >
                 <img
-                  src="https://img.icons8.com/?size=100&id=23&format=png&color=000000"
+                  src="https://img.icons8.com/?size=100&id=KGdZLSPhxQFl&format=png&color=000000"
                   class="w-6 h-6"
-                  alt="Notification"
+                  alt="Grocery List"
                 />
                 <span class="block md:hidden text-center mt-2"
                   >Notification</span
@@ -164,7 +184,7 @@
               <div
                 class="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 opacity-0 group-hover:opacity-100 transition-opacity bg-gray-800 text-white text-xs rounded-md py-1 px-2"
               >
-                Notification
+                Grocery Planner
               </div>
             </li>
             <li class="relative group">
@@ -291,71 +311,132 @@
     <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
 
     <script>
-  window.onload = function () {
-    updateGreeting();
-    const currentYear = new Date().getFullYear();
-    document.getElementById("current-year").textContent = currentYear;
+      let score = 0;
+      let totalWaste = 0;
+      let co2Reduction = 0;
+      let count = 0;
+      let isAuthenticated = false;
+      let existingProducts = [];
+      let existingGroceries = [];
 
-    // Set the default search term to 'salad'
-    document.getElementById("simple-search").value = "salad";
-
-    // Perform the search for 'salad' by default when the page loads
-    performSearch(new Event("submit"));
-  };
-
-  async function performSearch(event) {
-    event.preventDefault();
-
-    const query = document.getElementById("simple-search").value;
-
-    if (!query) {
-      alert("Please enter a search term");
-      return;
-    }
-
-    const appId = "8b041dc0";
-    const appKey = "cca93dc7d6629315197f5225454fe7bf";
-    const apiUrl = `https://api.edamam.com/search?q=${encodeURIComponent(
-      query
-    )}&app_id=${appId}&app_key=${appKey}&to=10`;
-
-    try {
-      const response = await fetch(apiUrl);
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
+      // Retrieve stored values from local storage
+      if (localStorage.getItem("count")) {
+        count = parseInt(localStorage.getItem("count"));
       }
 
-      const data = await response.json();
-      displayResults(data.hits);
-    } catch (error) {
-      console.error("Error fetching the data: ", error);
-    }
-  }
+      if (localStorage.getItem("score")) {
+        score = parseInt(localStorage.getItem("score"));
+      }
 
-  function displayResults(recipes) {
-    const resultsContainer = document.createElement("div");
-    resultsContainer.id = "recipe-results";
-    resultsContainer.className =
-      "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 my-4";
+      if (localStorage.getItem("totalWaste")) {
+        totalWaste = parseFloat(localStorage.getItem("totalWaste"));
+      }
 
-    recipes.forEach((recipeData) => {
-      const recipe = recipeData.recipe;
+      if (localStorage.getItem("co2Reduction")) {
+        co2Reduction = parseFloat(localStorage.getItem("co2Reduction"));
+      }
 
-      // Get the top 3 ingredients (or less if there are fewer than 3)
-      const topIngredients = recipe.ingredientLines.slice(0, 3).join(", ");
+      if (localStorage.getItem("userID")) {
+        isAuthenticated = true;
+      }
 
-      // Get calories from the API response
-      const calories = Math.round(recipe.calories); // Rounding calories to a whole number
+      // Retrieve all products from local storage
+      function getAllProductsFromLocalStorage() {
+        for (let i = 0; i < localStorage.length; i++) {
+          const key = localStorage.key(i);
+          if (
+            [
+              "co2Reduction",
+              "score",
+              "totalWaste",
+              "count",
+              "userID",
+              "currentUser",
+              "groceries",
+            ].includes(key)
+          ) {
+            continue;
+          }
+          const productInfo = JSON.parse(localStorage.getItem(key));
+          existingProducts.push({ productKey: key, ...productInfo });
+        }
+      }
 
-      // Store full ingredient list
-      const ingredients = recipe.ingredientLines;
-      const recipeName = recipe.label;
+      function getGroceriesFromLocalStorage() {
+        const groceries = JSON.parse(localStorage.getItem("groceries")) || [];
+        existingGroceries = groceries;
+      }
 
-      const recipeCard = document.createElement("div");
-      recipeCard.className =
-        "bg-white shadow-md rounded-lg overflow-hidden";
+      getAllProductsFromLocalStorage();
+      console.log("Number of Existing Products: ", existingProducts.length);
+      getGroceriesFromLocalStorage();
+      console.log("Number of Existing Groceries: ", existingGroceries.length);
 
-      recipeCard.innerHTML = `
+      window.onload = function () {
+        updateGreeting();
+        const currentYear = new Date().getFullYear();
+        document.getElementById("current-year").textContent = currentYear;
+
+        // Set the default search term to 'salad'
+        document.getElementById("simple-search").value = "salad";
+
+        // Perform the search for 'salad' by default when the page loads
+        performSearch(new Event("submit"));
+      };
+
+      async function performSearch(event) {
+        event.preventDefault();
+
+        const query = document.getElementById("simple-search").value;
+
+        if (!query) {
+          alert("Please enter a search term");
+          return;
+        }
+
+        const appId = "8b041dc0";
+        const appKey = "cca93dc7d6629315197f5225454fe7bf";
+        const apiUrl = `https://api.edamam.com/search?q=${encodeURIComponent(
+          query
+        )}&app_id=${appId}&app_key=${appKey}&to=10`;
+
+        try {
+          const response = await fetch(apiUrl);
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+
+          const data = await response.json();
+          displayResults(data.hits);
+        } catch (error) {
+          console.error("Error fetching the data: ", error);
+        }
+      }
+
+      function displayResults(recipes) {
+        const resultsContainer = document.createElement("div");
+        resultsContainer.id = "recipe-results";
+        resultsContainer.className =
+          "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 my-4";
+
+        recipes.forEach((recipeData) => {
+          const recipe = recipeData.recipe;
+
+          // Get the top 3 ingredients (or less if there are fewer than 3)
+          const topIngredients = recipe.ingredientLines.slice(0, 3).join(", ");
+
+          // Get calories from the API response
+          const calories = Math.round(recipe.calories); // Rounding calories to a whole number
+
+          // Store full ingredient list
+          const ingredients = recipe.ingredientLines;
+          const recipeName = recipe.label;
+
+          const recipeCard = document.createElement("div");
+          recipeCard.className =
+            "bg-white shadow-md rounded-lg overflow-hidden";
+
+          recipeCard.innerHTML = `
       <img src="${recipe.image}" alt="${recipe.label}" class="w-full h-48 object-cover">
       <div class="p-4">
         <h3 class="text-xl font-bold">${recipe.label}</h3> <!-- Display the recipe name -->
@@ -368,116 +449,187 @@
       </div>
     `;
 
-      // Add event listener for "Add to List" button
-      const addButton = recipeCard.querySelector(".add-to-list-btn");
+          // Add event listener for "Add to List" button
+          const addButton = recipeCard.querySelector(".add-to-list-btn");
 
-      // Check if the recipe is already in the list
-      const savedRecipes =
-        JSON.parse(localStorage.getItem("recipesList")) || [];
-      const recipeAlreadyAdded = savedRecipes.some(
-        (savedRecipe) => savedRecipe.name === recipeName
-      );
+          // Check if the recipe is already in the list
+          const savedRecipes =
+            JSON.parse(localStorage.getItem("groceries")) || [];
+          const recipeAlreadyAdded = savedRecipes.some(
+            (savedRecipe) => savedRecipe.name === recipeName
+          );
 
-      if (recipeAlreadyAdded) {
-        // Change button to "Remove from List" and make it red if already added
-        addButton.textContent = "Remove from List";
-        addButton.classList.add("bg-red-500", "text-white"); // Apply red styling
-        addButton.addEventListener("click", function () {
-          removeFromList(recipeName);
-          addButton.textContent = "Add to List";
-          addButton.classList.remove("bg-red-500", "text-white"); // Remove red styling
+          if (recipeAlreadyAdded) {
+            // Change button to "Remove from List" and make it red if already added
+            addButton.textContent = "Remove from List";
+            addButton.classList.add("bg-red-500", "text-white"); // Apply red styling
+            addButton.addEventListener("click", function () {
+              removeFromList(recipeName);
+              addButton.textContent = "Add to List";
+              addButton.classList.remove("bg-red-500", "text-white"); // Remove red styling
+            });
+          } else {
+            addButton.addEventListener("click", function () {
+              addToList(recipeName, ingredients);
+              addButton.textContent = "Remove from List"; // Change button text after adding
+              addButton.classList.add("bg-red-500", "text-white"); // Apply red styling
+              addButton.addEventListener("click", function () {
+                removeFromList(recipeName);
+                addButton.textContent = "Add to List";
+                addButton.classList.remove("bg-red-500", "text-white"); // Remove red styling
+              });
+            });
+          }
+
+          resultsContainer.appendChild(recipeCard);
         });
-      } else {
-        addButton.addEventListener("click", function () {
-          addToList(recipeName, ingredients);
-          addButton.textContent = "Remove from List"; // Change button text after adding
-          addButton.classList.add("bg-red-500", "text-white"); // Apply red styling
-          addButton.addEventListener("click", function () {
-            removeFromList(recipeName);
-            addButton.textContent = "Add to List";
-            addButton.classList.remove("bg-red-500", "text-white"); // Remove red styling
-          });
-        });
+
+        const mainContainer = document.querySelector("main");
+        const existingResults = document.getElementById("recipe-results");
+
+        if (existingResults) {
+          existingResults.remove();
+        }
+
+        mainContainer.appendChild(resultsContainer);
       }
 
-      resultsContainer.appendChild(recipeCard);
-    });
+      function addToList(recipeName, ingredients) {
+        // Get the existing list of recipes and ingredients from local storage, or initialize as empty
+        const savedRecipes =
+          JSON.parse(localStorage.getItem("groceries")) || [];
 
-    const mainContainer = document.querySelector("main");
-    const existingResults = document.getElementById("recipe-results");
+        // Check if the recipe already exists
+        const recipeExists = savedRecipes.some(
+          (recipe) => recipe.name === recipeName
+        );
 
-    if (existingResults) {
-      existingResults.remove();
-    }
+        if (!recipeExists) {
+          // Create a new recipe object with the name and ingredients
+          const newRecipe = {
+            name: recipeName,
+            ingredients: ingredients,
+          };
 
-    mainContainer.appendChild(resultsContainer);
-  }
+          // Add the new recipe to the saved recipes array
+          const updatedRecipes = [...savedRecipes, newRecipe];
 
-  function addToList(recipeName, ingredients) {
-    // Get the existing list of recipes and ingredients from local storage, or initialize as empty
-    const savedRecipes =
-      JSON.parse(localStorage.getItem("recipesList")) || [];
+          // Save the updated list to local storage
+          localStorage.setItem("groceries", JSON.stringify(updatedRecipes));
+          getGroceriesFromLocalStorage();
 
-    // Check if the recipe already exists
-    const recipeExists = savedRecipes.some(
-      (recipe) => recipe.name === recipeName
-    );
+          if (isAuthenticated) {
+            storeData(
+              localStorage.getItem("userID"),
+              existingProducts,
+              existingGroceries,
+              score,
+              totalWaste,
+              co2Reduction,
+              count
+            );
+          }
 
-    if (!recipeExists) {
-      // Create a new recipe object with the name and ingredients
-      const newRecipe = {
-        name: recipeName,
-        ingredients: ingredients,
-      };
+          // Redirect to the new page to display the list
+          setTimeout(() => {
+            window.location.href = "../html/ingredient-list.html";
+          }, 1000);
+        }
+      }
 
-      // Add the new recipe to the saved recipes array
-      const updatedRecipes = [...savedRecipes, newRecipe];
+      function removeFromList(recipeName) {
+        // Get the saved recipes from local storage
+        let savedRecipes = JSON.parse(localStorage.getItem("groceries")) || [];
 
-      // Save the updated list to local storage
-      localStorage.setItem("recipesList", JSON.stringify(updatedRecipes));
+        // Remove the recipe by filtering it out of the array
+        savedRecipes = savedRecipes.filter(
+          (recipe) => recipe.name !== recipeName
+        );
 
-      // Redirect to the new page to display the list
-      window.location.href = "../html/ingredient-list.html";
-    }
-  }
+        // Update local storage with the new list
+        localStorage.setItem("groceries", JSON.stringify(savedRecipes));
+        getGroceriesFromLocalStorage();
 
-  function removeFromList(recipeName) {
-    // Get the saved recipes from local storage
-    let savedRecipes = JSON.parse(localStorage.getItem("recipesList")) || [];
+        if (isAuthenticated) {
+          storeData(
+            localStorage.getItem("userID"),
+            existingProducts,
+            existingGroceries,
+            score,
+            totalWaste,
+            co2Reduction,
+            count
+          );
+        }
 
-    // Remove the recipe by filtering it out of the array
-    savedRecipes = savedRecipes.filter((recipe) => recipe.name !== recipeName);
+        // Optionally, you could refresh the page or update the UI to reflect the removal
+        console.log(`${recipeName} removed from list.`);
+      }
 
-    // Update local storage with the new list
-    localStorage.setItem("recipesList", JSON.stringify(savedRecipes));
+      // Function to store user data from the database
+      async function storeData(
+        userID,
+        products,
+        groceries,
+        score,
+        totalWaste,
+        co2Reduction,
+        count
+      ) {
+        const url =
+          "https://rvtkdasc90.execute-api.ap-southeast-2.amazonaws.com/prod/user-data";
 
-    // Optionally, you could refresh the page or update the UI to reflect the removal
-    console.log(`${recipeName} removed from list.`);
-  }
+        const data = {
+          userID: userID,
+          products: products,
+          groceries: groceries,
+          score: score,
+          totalWaste: totalWaste,
+          co2Reduction: co2Reduction,
+          count: count,
+        };
 
-  function updateGreeting() {
-    const currentHour = new Date().getHours();
-    const greetingElement = document.getElementById("greeting");
-    let greeting;
-    if (currentHour < 12) {
-      greeting = `
+        try {
+          const response = await fetch(url, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ body: JSON.stringify(data) }),
+          });
+
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+
+          console.log("Data stored successfully:");
+        } catch (error) {
+          console.error("Error storing data:", error);
+        }
+      }
+
+      function updateGreeting() {
+        const currentHour = new Date().getHours();
+        const greetingElement = document.getElementById("greeting");
+        let greeting;
+        if (currentHour < 12) {
+          greeting = `
         <h1 class="page-label text-xl font-bold">
             Good Morning <img src="https://img.icons8.com/?size=100&id=648&format=png&color=000000" class="w-6 h-6 ml-2 inline-block"/>
         </h1>`;
-    } else if (currentHour < 18) {
-      greeting = `
+        } else if (currentHour < 18) {
+          greeting = `
         <h1 class="page-label text-xl font-bold">
             Good Afternoon <img src="https://img.icons8.com/?size=100&id=648&format=png&color=000000" class="w-6 h-6 ml-2 inline-block"/>
         </h1>`;
-    } else {
-      greeting = `
+        } else {
+          greeting = `
         <h1 class="page-label text-xl font-bold">
             Good Evening <img src="https://img.icons8.com/?size=100&id=25031&format=png&color=000000" class="w-6 h-6 ml-2 inline-block"/>
         </h1>`;
-    }
-    greetingElement.innerHTML = greeting;
-  }
-</script>
-
+        }
+        greetingElement.innerHTML = greeting;
+      }
+    </script>
   </body>
 </html>

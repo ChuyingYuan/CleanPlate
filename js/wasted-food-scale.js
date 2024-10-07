@@ -36,8 +36,15 @@ function getAllProductsFromLocalStorage() {
     }
 }
 
+function getGroceriesFromLocalStorage() {
+    const groceries = JSON.parse(localStorage.getItem('groceries')) || [];
+    existingGroceries = groceries;
+}
+
 getAllProductsFromLocalStorage();
 console.log('Number of Existing Products: ', existingProducts.length);
+getGroceriesFromLocalStorage();
+console.log('Number of Existing Groceries: ', existingGroceries.length);
 
 updateDashboard();
 

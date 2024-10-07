@@ -538,3 +538,10 @@ footer {
 #confirmPassword {
   display: none;
 }
+
+#grocery-list {
+  padding: 20px;
+  box-sizing: border-box;
+  height: 73vh;
+  overflow: auto;
+}
