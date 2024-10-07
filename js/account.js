@@ -150,7 +150,6 @@ function fetchUserID(accessToken) {
     });
 }
 
-// Function to retrieve user data from DynamoDB and store it in local storage
 async function retrieveUserData(userID) {
     console.log('Retrieving user data for:', userID);
     const url = "https://rvtkdasc90.execute-api.ap-southeast-2.amazonaws.com/prod/user-data/retrieve";
@@ -191,7 +190,8 @@ async function retrieveUserData(userID) {
         const totalWaste = parseFloat(userData.totalWaste) || 0;
         const score = parseInt(userData.score) || 0;
         const co2Reduction = parseFloat(userData.co2Reduction) || 0;
-        const products = userData.products ?? [];
+        const products = JSON.parse(userData.products) ?? [];
+        const groceries = JSON.parse(userData.groceries) ?? [];
 
         // Store user data in local storage
         localStorage.setItem('count', count);
@@ -204,33 +204,49 @@ async function retrieveUserData(userID) {
         console.log('Score:', score);
         console.log('CO2 Reduction:', co2Reduction);
 
-        // Check for existing products
+        // Process products
         if (products.length === 0) {
             console.log('No products found for the user.');
-            return;
+        } else {
+            products.forEach((product) => {
+                const productInfo = {
+                    productName: product.productName,
+                    category: product.category,
+                    minShelfLife: parseFloat(product.minShelfLife) || 0,
+                    maxShelfLife: parseFloat(product.maxShelfLife) || 0,
+                    metrics: product.metrics,
+                    method: product.method,
+                    expirationDate: product.expirationDate,
+                    imageUrl: product.imageUrl,
+                    recordDate: product.recordDate,
+                };
+
+                const productKey = product.productKey;
+                localStorage.setItem(productKey, JSON.stringify(productInfo));
+            console.log(`Stored product ${product.productName} in local storage with key: ${productKey}`);
+            console.log(`Stored product ${product.productName} in local storage with key: ${productKey}`);
+                console.log(`Stored product ${product.productName} in local storage with key: ${productKey}`);
+            });
         }
 
-        // Process each product and store it in local storage
-        products.forEach((product) => {
-            const productInfo = {
-                productName: product.productName,
-                category: product.category,
-                minShelfLife: parseFloat(product.minShelfLife) || 0,
-                maxShelfLife: parseFloat(product.maxShelfLife) || 0,
-                metrics: product.metrics,
-                method: product.method,
-                expirationDate: product.expirationDate,
-                imageUrl: product.imageUrl,
-                recordDate: product.recordDate,
-            };
+        // Process groceries
+        if (groceries.length === 0) {
+            localStorage.setItem('groceries', '[]');
+            console.log('No groceries found for the user.');
+        } else {
+            groceries.forEach((grocery, index) => {
+                const groceryInfo = {
+                    groceryName: grocery.groceryName,
+                    quantity: parseFloat(grocery.quantity) || 0
+                };
 
-            const productKey = product.productKey;
-            localStorage.setItem(productKey, JSON.stringify(productInfo));
-
-            console.log(`Stored product ${product.productName} in local storage with key: ${productKey}`);
-        });
+                const groceryKey = `grocery-${index}`;
+                localStorage.setItem(groceryKey, JSON.stringify(groceryInfo));
+                console.log(`Stored grocery ${grocery.groceryName} in local storage with key: ${groceryKey}`);
+            });
+        }
     } catch (error) {
-        console.error('Error retrieving user data:', error);
+        console.error(`Error retrieving data for userID ${userID}:`, error);
     }
 }
 

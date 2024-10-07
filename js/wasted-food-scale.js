@@ -5,6 +5,7 @@ let count = 0;
 let percent = 0;
 let isAuthenticated = false;
 let existingProducts = [];
+let existingGroceries = [];
 
 // Retrieve stored values from local storage
 if (localStorage.getItem('count')) {
@@ -45,12 +46,13 @@ if (localStorage.getItem('userID')) {
 }
 
 // Function to store the user's data in the DynamoDB table
-async function storeData(userID, products, score, totalWaste, co2Reduction, count) {
+async function storeData(userID, products, groceries, score, totalWaste, co2Reduction, count) {
     const url = "https://rvtkdasc90.execute-api.ap-southeast-2.amazonaws.com/prod/user-data";
 
     const data = {
         userID: userID,
         products: products,
+        groceries: groceries,
         score: score,
         totalWaste: totalWaste,
         co2Reduction: co2Reduction,
@@ -165,7 +167,7 @@ function canUseForBiofuel(answer) {
 function showFeedback(decision, message) {
     // Store the data in DynamoDB if the user is signed in
     if (isAuthenticated) {
-        storeData(localStorage.getItem('userID'), existingProducts, score, totalWaste.toFixed(2), co2Reduction.toFixed(2), count);
+        storeData(localStorage.getItem('userID'), existingProducts, existingGroceries, score, totalWaste.toFixed(2), co2Reduction.toFixed(2), count);
     }
     document.getElementById('finalDecision').classList.remove('hidden');
     document.getElementById('finalDecisionText').textContent = message;
@@ -245,7 +247,7 @@ async function logWaste() {
 
                 // Store the data in DynamoDB if the user is signed in
                 if (isAuthenticated) {
-                    storeData(localStorage.getItem('userID'), existingProducts, score, totalWaste.toFixed(2), co2Reduction.toFixed(2), count);
+                    storeData(localStorage.getItem('userID'), existingProducts, existingGroceries, score, totalWaste.toFixed(2), co2Reduction.toFixed(2), count);
                 }
                 updateDashboard();
                 restartTool();
