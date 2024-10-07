@@ -542,6 +542,22 @@ footer {
 #grocery-list {
   padding: 20px;
   box-sizing: border-box;
-  height: 73vh;
+  height: 79vh;
   overflow: auto;
+}
+
+.supermarket {
+  background: rgba(253, 118, 103, 0.5);
+}
+
+.meat-fish {
+  background: rgba(3, 227, 76, 0.5);
+}
+
+.fruit-veg {
+  background: rgba(105, 145, 248, 0.5);
+}
+
+.others {
+  background: rgba(252, 245, 105, 0.5);
 }
