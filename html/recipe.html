@@ -291,61 +291,71 @@
     <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
 
     <script>
-      window.onload = function () {
-        updateGreeting();
-        const currentYear = new Date().getFullYear();
-        document.getElementById("current-year").textContent = currentYear;
-      };
+  window.onload = function () {
+    updateGreeting();
+    const currentYear = new Date().getFullYear();
+    document.getElementById("current-year").textContent = currentYear;
 
-      async function performSearch(event) {
-        event.preventDefault();
+    // Set the default search term to 'salad'
+    document.getElementById("simple-search").value = "salad";
 
-        const query = document.getElementById("simple-search").value;
+    // Perform the search for 'salad' by default when the page loads
+    performSearch(new Event("submit"));
+  };
 
-        if (!query) {
-          alert("Please enter a search term");
-          return;
-        }
+  async function performSearch(event) {
+    event.preventDefault();
 
-        const appId = "8b041dc0";
-        const appKey = "cca93dc7d6629315197f5225454fe7bf";
-        const apiUrl = `https://api.edamam.com/search?q=${encodeURIComponent(
-          query
-        )}&app_id=${appId}&app_key=${appKey}&to=10`;
+    const query = document.getElementById("simple-search").value;
 
-        try {
-          const response = await fetch(apiUrl);
-          if (!response.ok) {
-            throw new Error("Network response was not ok");
-          }
+    if (!query) {
+      alert("Please enter a search term");
+      return;
+    }
 
-          const data = await response.json();
-          displayResults(data.hits);
-        } catch (error) {
-          console.error("Error fetching the data: ", error);
-        }
+    const appId = "8b041dc0";
+    const appKey = "cca93dc7d6629315197f5225454fe7bf";
+    const apiUrl = `https://api.edamam.com/search?q=${encodeURIComponent(
+      query
+    )}&app_id=${appId}&app_key=${appKey}&to=10`;
+
+    try {
+      const response = await fetch(apiUrl);
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
       }
 
-      function displayResults(recipes) {
-        const resultsContainer = document.createElement("div");
-        resultsContainer.id = "recipe-results";
-        resultsContainer.className =
-          "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 my-4";
+      const data = await response.json();
+      displayResults(data.hits);
+    } catch (error) {
+      console.error("Error fetching the data: ", error);
+    }
+  }
 
-        recipes.forEach((recipeData) => {
-          const recipe = recipeData.recipe;
+  function displayResults(recipes) {
+    const resultsContainer = document.createElement("div");
+    resultsContainer.id = "recipe-results";
+    resultsContainer.className =
+      "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 my-4";
 
-          // Get the top 3 ingredients (or less if there are fewer than 3)
-          const topIngredients = recipe.ingredientLines.slice(0, 3).join(", ");
+    recipes.forEach((recipeData) => {
+      const recipe = recipeData.recipe;
 
-          // Get calories from the API response
-          const calories = Math.round(recipe.calories); // Rounding calories to a whole number
+      // Get the top 3 ingredients (or less if there are fewer than 3)
+      const topIngredients = recipe.ingredientLines.slice(0, 3).join(", ");
 
-          const recipeCard = document.createElement("div");
-          recipeCard.className =
-            "bg-white shadow-md rounded-lg overflow-hidden";
+      // Get calories from the API response
+      const calories = Math.round(recipe.calories); // Rounding calories to a whole number
 
-          recipeCard.innerHTML = `
+      // Store full ingredient list
+      const ingredients = recipe.ingredientLines;
+      const recipeName = recipe.label;
+
+      const recipeCard = document.createElement("div");
+      recipeCard.className =
+        "bg-white shadow-md rounded-lg overflow-hidden";
+
+      recipeCard.innerHTML = `
       <img src="${recipe.image}" alt="${recipe.label}" class="w-full h-48 object-cover">
       <div class="p-4">
         <h3 class="text-xl font-bold">${recipe.label}</h3> <!-- Display the recipe name -->
@@ -353,45 +363,121 @@
         <p><strong>Calories:</strong> ${calories} kcal</p> <!-- Display the calories from the API response -->
         <div class="mt-4">
           <a href="${recipe.url}" target="_blank" class="button w-full lg:w-auto px-4 py-2 rounded-full border border-gray-300 text-sm font-medium">View Recipe</a>
+          <button class="add-to-list-btn w-full lg:w-auto px-4 py-2 mt-2 rounded-full border border-gray-300 text-sm font-medium">Add to List</button>
         </div>
       </div>
     `;
 
-          resultsContainer.appendChild(recipeCard);
+      // Add event listener for "Add to List" button
+      const addButton = recipeCard.querySelector(".add-to-list-btn");
+
+      // Check if the recipe is already in the list
+      const savedRecipes =
+        JSON.parse(localStorage.getItem("recipesList")) || [];
+      const recipeAlreadyAdded = savedRecipes.some(
+        (savedRecipe) => savedRecipe.name === recipeName
+      );
+
+      if (recipeAlreadyAdded) {
+        // Change button to "Remove from List" and make it red if already added
+        addButton.textContent = "Remove from List";
+        addButton.classList.add("bg-red-500", "text-white"); // Apply red styling
+        addButton.addEventListener("click", function () {
+          removeFromList(recipeName);
+          addButton.textContent = "Add to List";
+          addButton.classList.remove("bg-red-500", "text-white"); // Remove red styling
         });
-
-        const mainContainer = document.querySelector("main");
-        const existingResults = document.getElementById("recipe-results");
-
-        if (existingResults) {
-          existingResults.remove();
-        }
-
-        mainContainer.appendChild(resultsContainer);
+      } else {
+        addButton.addEventListener("click", function () {
+          addToList(recipeName, ingredients);
+          addButton.textContent = "Remove from List"; // Change button text after adding
+          addButton.classList.add("bg-red-500", "text-white"); // Apply red styling
+          addButton.addEventListener("click", function () {
+            removeFromList(recipeName);
+            addButton.textContent = "Add to List";
+            addButton.classList.remove("bg-red-500", "text-white"); // Remove red styling
+          });
+        });
       }
 
-      function updateGreeting() {
-        const currentHour = new Date().getHours();
-        const greetingElement = document.getElementById("greeting");
-        let greeting;
-        if (currentHour < 12) {
-          greeting = `
-            <h1 class="page-label text-xl font-bold">
-                Good Morning <img src="https://img.icons8.com/?size=100&id=648&format=png&color=000000" class="w-6 h-6 ml-2 inline-block"/>
-            </h1>`;
-        } else if (currentHour < 18) {
-          greeting = `
-            <h1 class="page-label text-xl font-bold">
-                Good Afternoon <img src="https://img.icons8.com/?size=100&id=648&format=png&color=000000" class="w-6 h-6 ml-2 inline-block"/>
-            </h1>`;
-        } else {
-          greeting = `
-            <h1 class="page-label text-xl font-bold">
-                Good Evening <img src="https://img.icons8.com/?size=100&id=25031&format=png&color=000000" class="w-6 h-6 ml-2 inline-block"/>
-            </h1>`;
-        }
-        greetingElement.innerHTML = greeting;
-      }
-    </script>
+      resultsContainer.appendChild(recipeCard);
+    });
+
+    const mainContainer = document.querySelector("main");
+    const existingResults = document.getElementById("recipe-results");
+
+    if (existingResults) {
+      existingResults.remove();
+    }
+
+    mainContainer.appendChild(resultsContainer);
+  }
+
+  function addToList(recipeName, ingredients) {
+    // Get the existing list of recipes and ingredients from local storage, or initialize as empty
+    const savedRecipes =
+      JSON.parse(localStorage.getItem("recipesList")) || [];
+
+    // Check if the recipe already exists
+    const recipeExists = savedRecipes.some(
+      (recipe) => recipe.name === recipeName
+    );
+
+    if (!recipeExists) {
+      // Create a new recipe object with the name and ingredients
+      const newRecipe = {
+        name: recipeName,
+        ingredients: ingredients,
+      };
+
+      // Add the new recipe to the saved recipes array
+      const updatedRecipes = [...savedRecipes, newRecipe];
+
+      // Save the updated list to local storage
+      localStorage.setItem("recipesList", JSON.stringify(updatedRecipes));
+
+      // Redirect to the new page to display the list
+      window.location.href = "../html/ingredient-list.html";
+    }
+  }
+
+  function removeFromList(recipeName) {
+    // Get the saved recipes from local storage
+    let savedRecipes = JSON.parse(localStorage.getItem("recipesList")) || [];
+
+    // Remove the recipe by filtering it out of the array
+    savedRecipes = savedRecipes.filter((recipe) => recipe.name !== recipeName);
+
+    // Update local storage with the new list
+    localStorage.setItem("recipesList", JSON.stringify(savedRecipes));
+
+    // Optionally, you could refresh the page or update the UI to reflect the removal
+    console.log(`${recipeName} removed from list.`);
+  }
+
+  function updateGreeting() {
+    const currentHour = new Date().getHours();
+    const greetingElement = document.getElementById("greeting");
+    let greeting;
+    if (currentHour < 12) {
+      greeting = `
+        <h1 class="page-label text-xl font-bold">
+            Good Morning <img src="https://img.icons8.com/?size=100&id=648&format=png&color=000000" class="w-6 h-6 ml-2 inline-block"/>
+        </h1>`;
+    } else if (currentHour < 18) {
+      greeting = `
+        <h1 class="page-label text-xl font-bold">
+            Good Afternoon <img src="https://img.icons8.com/?size=100&id=648&format=png&color=000000" class="w-6 h-6 ml-2 inline-block"/>
+        </h1>`;
+    } else {
+      greeting = `
+        <h1 class="page-label text-xl font-bold">
+            Good Evening <img src="https://img.icons8.com/?size=100&id=25031&format=png&color=000000" class="w-6 h-6 ml-2 inline-block"/>
+        </h1>`;
+    }
+    greetingElement.innerHTML = greeting;
+  }
+</script>
+
   </body>
 </html>
