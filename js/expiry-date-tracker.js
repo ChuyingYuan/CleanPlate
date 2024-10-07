@@ -125,7 +125,7 @@ document.addEventListener("DOMContentLoaded", function () {
     getAllProductsFromLocalStorage();
     console.log('Number of Existing Products: ', existingProducts.length);
 
-    // Function to store the user's data in the DynamoDB table
+    // Function to store user data from the database
     async function storeData(userID, products, groceries, score, totalWaste, co2Reduction, count) {
         const url = "https://rvtkdasc90.execute-api.ap-southeast-2.amazonaws.com/prod/user-data";
 

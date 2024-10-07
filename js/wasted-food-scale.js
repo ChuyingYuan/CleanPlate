@@ -45,7 +45,7 @@ if (localStorage.getItem('userID')) {
     isAuthenticated = true;
 }
 
-// Function to store the user's data in the DynamoDB table
+// Function to store user data from the database
 async function storeData(userID, products, groceries, score, totalWaste, co2Reduction, count) {
     const url = "https://rvtkdasc90.execute-api.ap-southeast-2.amazonaws.com/prod/user-data";
 
@@ -165,7 +165,7 @@ function canUseForBiofuel(answer) {
 
 // Function to display the final decision and feedback to the user
 function showFeedback(decision, message) {
-    // Store the data in DynamoDB if the user is signed in
+    // Store user data from the database if user is signed in
     if (isAuthenticated) {
         storeData(localStorage.getItem('userID'), existingProducts, existingGroceries, score, totalWaste.toFixed(2), co2Reduction.toFixed(2), count);
     }
@@ -245,7 +245,7 @@ async function logWaste() {
                 localStorage.setItem('co2Reduction', co2Reduction.toFixed(2));
                 localStorage.setItem('score', score);
 
-                // Store the data in DynamoDB if the user is signed in
+                // Store user data from the database if user is signed in
                 if (isAuthenticated) {
                     storeData(localStorage.getItem('userID'), existingProducts, existingGroceries, score, totalWaste.toFixed(2), co2Reduction.toFixed(2), count);
                 }

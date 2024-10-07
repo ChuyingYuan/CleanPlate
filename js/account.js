@@ -150,6 +150,7 @@ function fetchUserID(accessToken) {
     });
 }
 
+// Function to retrieve user data from the database
 async function retrieveUserData(userID) {
     console.log('Retrieving user data for:', userID);
     const url = "https://rvtkdasc90.execute-api.ap-southeast-2.amazonaws.com/prod/user-data/retrieve";
@@ -223,8 +224,8 @@ async function retrieveUserData(userID) {
 
                 const productKey = product.productKey;
                 localStorage.setItem(productKey, JSON.stringify(productInfo));
-            console.log(`Stored product ${product.productName} in local storage with key: ${productKey}`);
-            console.log(`Stored product ${product.productName} in local storage with key: ${productKey}`);
+                console.log(`Stored product ${product.productName} in local storage with key: ${productKey}`);
+                console.log(`Stored product ${product.productName} in local storage with key: ${productKey}`);
                 console.log(`Stored product ${product.productName} in local storage with key: ${productKey}`);
             });
         }
