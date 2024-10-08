@@ -299,37 +299,71 @@
               <div
                 class="flex flex-wrap items-center justify-center gap-3 mt-2"
               >
-                <!-- Supermarket and Grocery Stores -->
-                <span
-                  class="bg-red-600 text-black rounded-full px-4 py-2 text-xs max-w-xs supermarket"
+                <button
+                  class="text-black rounded-full px-4 py-2 text-xs max-w-xs supermarket"
+                  onclick="toggleFilter('Supermarket and Grocery Stores')"
+                >
+                  Supermarkets
+                </button>
+                <button
+                  class="text-black rounded-full px-4 py-2 text-xs max-w-xs meat-fish"
+                  onclick="toggleFilter('Fresh Meat, Fish and Poultry Retailing')"
+                >
+                  Meat & Fish
+                </button>
+                <button
+                  class="text-black rounded-full px-4 py-2 text-xs max-w-xs fruit-veg"
+                  onclick="toggleFilter('Fruit and Vegetable Retailing')"
+                >
+                  Fruits & Veggies
+                </button>
+
+                <!-- <button
+                  class="text-black rounded-full px-4 py-2 text-xs max-w-xs supermarket"
+                  data-type="Supermarket and Grocery Stores"
                 >
                   Supermarket
-                </span>
+                </button>
 
-                <!-- Fruit and Vegetable Retailing -->
-                <span
-                  class="bg-blue-600 text-black rounded-full px-4 py-2 text-xs max-w-xs fruit-veg"
+                <button
+                  class="text-black rounded-full px-4 py-2 text-xs max-w-xs fruit-veg"
+                  data-type="Fruit and Vegetable Retailing"
                 >
                   Fruit, Vegetable
-                </span>
+                </button>
 
-                <!-- Fresh Meat, Fish, and Poultry Retailing -->
-                <span
-                  class="bg-green-600 text-black rounded-full px-4 py-2 text-xs max-w-xs meat-fish"
+                <button
+                  class="text-black rounded-full px-4 py-2 text-xs max-w-xs meat-fish"
+                  data-type="Fresh Meat, Fish and Poultry Retailing"
                 >
                   Fresh Meat, Fish, Poultry
-                </span>
-
-                <!-- Others -->
-                <span
-                  class="bg-yellow-600 text-black rounded-full px-4 py-2 text-xs max-w-xs others"
-                >
-                  Others
-                </span>
+                </button> -->
               </div>
 
               <div class="map-view">
                 <div id="map"></div>
+              </div>
+
+              <!-- List View Container -->
+              <div id="listView" class="hidden">
+                <ul id="storeList" class="px-5"></ul>
+                <div id="pagination" class="flex justify-center mt-4">
+                  <button
+                    id="prevPage"
+                    class="px-4 py-2 bg-gray-200 rounded"
+                    disabled
+                  >
+                    Previous
+                  </button>
+                  <span id="pageInfo" class="mx-4">Page 1 of 1</span>
+                  <button
+                    id="nextPage"
+                    class="px-4 py-2 bg-gray-200 rounded"
+                    disabled
+                  >
+                    Next
+                  </button>
+                </div>
               </div>
             </div>
           </div>

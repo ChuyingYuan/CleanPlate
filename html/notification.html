@@ -344,8 +344,21 @@
             </form>
           </div>
           <div
-            class="col-span-1 flex justify-center lg:justify-end mb-4 lg:mb-0"
-          ></div>
+            class="col-span-1 flex justify-center lg:justify-end mb-4 lg:mb-0 items-center gap-4"
+          >
+            <button
+              class="text-xs px-4 py-2 rounded-full border border-gray-300 my-2 button bg-white"
+              onclick="window.location.href='../html/recipe.html'"
+            >
+              Search for Recipes
+            </button>
+            <button
+              class="text-xs px-2 py-2 rounded-full border border-gray-300 my-2 button bg-white"
+              onclick="window.location.href='../html/wasted-food-scale.html'"
+            >
+              Don't know how to handle leftover?
+            </button>
+          </div>
         </div>
       </div>
 
@@ -367,14 +380,18 @@
 
             <!-- Calendar View -->
             <div id="hideFromSearch">
-              <div
-                class="w-full max-w-7xl mx-auto bg-white rounded-lg p-4 mt-2 mb-2"
-                id="calendarView"
-              ></div>
+              <div class="wfs-container mt-1 mb-2">
+                <div
+                  class="w-full max-w-7xl mx-auto bg-white rounded-lg p-4 p-5"
+                  id="calendarView"
+                ></div>
+              </div>
             </div>
           </div>
           <!-- List View -->
-          <div class="col-span-1 mt-2 flex flex-col items-center">
+          <div
+            class="col-span-1 flex flex-col items-center wfs-container mt-1 mb-2"
+          >
             <div
               class="w-full max-w-7xl mx-auto bg-white rounded-lg p-4 justify-center"
             >

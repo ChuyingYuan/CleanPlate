@@ -69,10 +69,12 @@ groceries.forEach((grocery) => {
 });
 
 let map;
+let markers = [];
+let currentFilter = null;
 
 async function initMap() {
     const { Map } = await google.maps.importLibrary("maps");
-    const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+    const { AdvancedMarkerElement, PinElement } = await google.maps.importLibrary("marker");
 
     map = new Map(document.getElementById("map"), {
         zoom: 13,
@@ -84,7 +86,6 @@ async function initMap() {
     // Fetch data from the API
     fetch("https://rvtkdasc90.execute-api.ap-southeast-2.amazonaws.com/prod/grocery-store")
         .then((response) => {
-            // Check if the response is OK (status in the range 200-299)
             if (!response.ok) {
                 throw new Error("Network response was not ok");
             }
@@ -93,88 +94,122 @@ async function initMap() {
         .then(async (responseData) => {
             const data = JSON.parse(responseData.body);
 
-            // Check if the data is an array
             if (!Array.isArray(data)) {
                 console.error("Data is not an array:", data);
-                return; // Exit if data is not an array
+                return;
             }
 
-            // Loop through each store entry
             data.forEach((store) => {
-                // Check if Longitude and Latitude are defined
                 let lat = store.Latitude;
                 let lng = store.Longitude;
 
                 if (lat === null || lng === null) {
                     console.error("Missing coordinates for store:", store);
-                    return; // Skip this store
+                    return;
                 }
 
                 lat = parseFloat(lat);
                 lng = parseFloat(lng);
 
-                // Ensure the coordinates are valid numbers
                 if (isNaN(lat) || isNaN(lng)) {
                     console.error("Invalid coordinates for store:", store);
-                    return; // Skip this store
+                    return;
                 }
 
-                let type = store["Industry_ANZSIC4_description"];
+                let type = store["Industry_ANZSIC4_description"] || "Others";
 
-                // Default to "Others" if type is missing or unknown
-                if (!type) {
-                    type = "Others";
-                }
+                let backgroundColor, glyphText, borderColor;
 
-                let markerColor;
-
-                // Determine marker color based on store type
                 switch (type) {
-                    case "Supermarket and Grocery Stores":
-                        markerColor = "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
-                        break;
-                    case "Fruit and Vegetable Retailing":
-                        markerColor = "http://maps.google.com/mapfiles/ms/icons/blue-dot.png";
-                        break;
                     case "Fresh Meat, Fish and Poultry Retailing":
-                        markerColor = "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
+                    case "Meat, Poultry and Smallgoods Wholesaling":
+                        type = "Fresh Meat, Fish and Poultry Retailing";
+                        backgroundColor = "rgba(3, 227, 76, 0.5)";
+                        glyphText = "M";
+                        borderColor = "#03E34C";
                         break;
-                    case "Others": // Assign color for 'Others'
-                        markerColor = "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png";
+
+                    case "Supermarket and Grocery Stores":
+                        type = "Supermarket and Grocery Stores";
+                        backgroundColor = "rgba(253, 118, 103, 0.5)";
+                        glyphText = "S";
+                        borderColor = "#FD7667";
                         break;
+
+                    case "Fruit and Vegetable Retailing":
+                    case "Fruit and Vegetable Wholesaling":
+                        type = "Fruit and Vegetable Retailing";
+                        backgroundColor = "rgba(105, 145, 248, 0.5)";
+                        glyphText = "F";
+                        borderColor = "#6991F8";
+                        break;
+
                     default:
-                        markerColor = "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png";
-                        break;
+                        return;
                 }
 
-                if (markerColor) {
-                    const marker = new google.maps.Marker({
-                        position: { lat: lat, lng: lng },
-                        map: map,
-                        icon: markerColor,
-                        title: store.Building_Name || "Unknown Store",
-                    });
+                // Create the PinElement with custom background, border, and glyph color
+                const pinBackground = new PinElement({
+                    background: backgroundColor,
+                    glyph: glyphText,
+                    glyphColor: "white",
+                    borderColor: borderColor,
+                });
 
-                    const infoWindow = new google.maps.InfoWindow({
-                        content: `
-                            <div>
-                                <h4 class="font-bold">${store.Trading_name}</h4>
-                                <p>${store.Business_address}</p>
-                                <p>${store.CLUE_small_area}</p>
-                                <p>${store.Industry_ANZSIC4_description}</p>
-                            </div>
-                        `,
-                    });
+                // Create the AdvancedMarkerElement with the custom PinElement
+                const marker = new AdvancedMarkerElement({
+                    position: { lat: lat, lng: lng },
+                    map: map,
+                    content: pinBackground.element,
+                    title: store.Trading_name || "Unknown Store",
+                });
 
-                    marker.addListener("click", () => {
-                        infoWindow.open(map, marker);
-                    });
-                }
+                markers.push({ marker, type });
+
+                const infoWindow = new google.maps.InfoWindow({
+                    content: `
+                        <div>
+                            <h4 class="font-bold">${store.Trading_name}</h4>
+                            <p>${store.Business_address}</p>
+                            <p>${store.CLUE_small_area}</p>
+                            <p>${store.Industry_ANZSIC4_description}</p>
+                        </div>
+                    `,
+                });
+
+                // Add click event to show info window
+                marker.addListener("click", () => {
+                    infoWindow.open(map, marker);
+                });
             });
         })
         .catch((error) => {
             console.error("Error fetching data from API:", error);
         });
+
+    // Setup toggle filter function as a global function
+    window.toggleFilter = function toggleFilter(selectedType) {
+        const legendButtons = document.querySelectorAll("button");
+
+        // Check if the selected type is already the current filter
+        if (currentFilter === selectedType) {
+            currentFilter = null;
+            legendButtons.forEach(button => button.classList.remove("selected"));
+        } else {
+            currentFilter = selectedType;
+            legendButtons.forEach(button => button.classList.remove("selected"));
+            event.currentTarget.classList.add("selected");
+        }
+
+        // Show/hide markers based on the selected type
+        markers.forEach(({ marker, type }) => {
+            if (currentFilter) {
+                marker.setMap(type === currentFilter ? map : null);
+            } else {
+                marker.setMap(map);
+            }
+        });
+    }
 }
 
 initMap();

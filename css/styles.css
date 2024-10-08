@@ -550,14 +550,25 @@ footer {
   background: rgba(253, 118, 103, 0.5);
 }
 
+.supermarket:hover,
+.supermarket.selected {
+  background: rgba(253, 118, 103, 0.8);
+}
+
 .meat-fish {
   background: rgba(3, 227, 76, 0.5);
+}
+
+.meat-fish:hover,
+.meat-fish.selected {
+  background: rgba(3, 227, 76, 0.8);
 }
 
 .fruit-veg {
   background: rgba(105, 145, 248, 0.5);
 }
 
-.others {
-  background: rgba(252, 245, 105, 0.5);
+.fruit-veg:hover,
+.fruit-veg.selected {
+  background: rgba(105, 145, 248, 0.8);
 }
