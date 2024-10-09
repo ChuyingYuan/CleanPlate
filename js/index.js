@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function () {
         },
         'dashboard': {
             title: 'Dashboard',
-            description: ['Overview of Food Waste in Australia', 'Track WasteInsights on Waste Produced by Households', 'Estimated Melbourne Food Waste (Per Year)'],
+            description: ['Insights on Waste Produced by Households', 'Estimated Melbourne Food Waste (Per Year)', 'Overview of Food Waste in Australia'],
             link: '../html/dashboard.html',
             screenshot: '../static/dashboard.png'
         },
