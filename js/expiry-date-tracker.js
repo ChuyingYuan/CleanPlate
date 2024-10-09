@@ -341,9 +341,11 @@ document.addEventListener("DOMContentLoaded", function () {
                     console.log('Label:', label);
                     fetchProducts(label);
                 } else {
+                    resultElement.textContent = 'No food is recognized from the image.';
                     console.error('Invalid response body');
                 }
             } catch (error) {
+                resultElement.textContent = 'No food is recognized from the image.';
                 console.error('Error during upload or parsing response:', error);
             }
             event.target.value = '';

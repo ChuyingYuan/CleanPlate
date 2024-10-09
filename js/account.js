@@ -12,6 +12,20 @@ window.register = function register() {
     const username = document.getElementById("username").value;
     const password = document.getElementById("password").value;
 
+    if (username === "" || password === "") {
+        document.getElementById("message").textContent = "Email and password cannot be empty.";
+        return;
+    } else if (!username.includes("@")) {
+        document.getElementById("message").textContent = "Invalid email. Please try again.";
+        return;
+    } else if (password.length < 8) {
+        document.getElementById("message").textContent = "Password must be at least 8 characters long.";
+        return;
+    } else if (!/[a-z]/.test(password) || !/[A-Z]/.test(password) || !/[0-9]/.test(password)) {
+        document.getElementById("message").textContent = "Password must include at least one uppercase letter, one lowercase letter and one number.";
+        return;
+    }
+
     signUp(username, password, username);
 }
 
