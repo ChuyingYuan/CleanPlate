@@ -575,13 +575,13 @@ document.addEventListener("DOMContentLoaded", function () {
                         // console.log(product);
 
                         // Extract product information
-                        const productNameRaw = product.extractedName || "Not available";
+                        const productNameRaw = product.extracted_name || "Not available";
                         const productName = productNameRaw.charAt(0).toUpperCase() + productNameRaw.slice(1);
-                        const minShelfLife = product.DOP_Refrigerate_Min || "Not available";
-                        const maxShelfLife = product.DOP_Refrigerate_Max || "Not available";
-                        const metrics = product.DOP_Refrigerate_Metric || "Not available";
-                        const method = product.type || "Not available";
-                        const expirationDate = product.Expiration_Date || "As Soon As Possible";
+                        const minShelfLife = product.dop_min || "Not available";
+                        const maxShelfLife = product.dop_max || "Not available";
+                        const metrics = product.dop_metric_desc || "Not available";
+                        const method = product.preservation_type_desc || "Not available";
+                        const expirationDate = product.expiration_date || "As Soon As Possible";
                         const category = product.category || "others";
                         const recordDate = product.receipt_date || currentDate.toISOString().split('T')[0];
 
