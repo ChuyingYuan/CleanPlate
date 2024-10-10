@@ -5,6 +5,62 @@ window.onload = function () {
     document.getElementById("current-year").textContent = currentYear;
 };
 
+let score = 0;
+let totalWaste = 0;
+let co2Reduction = 0;
+let count = 0;
+let isAuthenticated = false;
+let existingProducts = [];
+let existingGroceries = [];
+
+// Retrieve stored values from local storage
+if (localStorage.getItem("count")) {
+    count = parseInt(localStorage.getItem("count"));
+}
+
+if (localStorage.getItem("score")) {
+    score = parseInt(localStorage.getItem("score"));
+}
+
+if (localStorage.getItem("totalWaste")) {
+    totalWaste = parseFloat(localStorage.getItem("totalWaste"));
+}
+
+if (localStorage.getItem("co2Reduction")) {
+    co2Reduction = parseFloat(localStorage.getItem("co2Reduction"));
+}
+
+if (localStorage.getItem("userID")) {
+    isAuthenticated = true;
+}
+
+// Retrieve all products from local storage
+function getAllProductsFromLocalStorage() {
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (
+            [
+                "co2Reduction",
+                "score",
+                "totalWaste",
+                "count",
+                "userID",
+                "currentUser",
+                "groceries",
+            ].includes(key)
+        ) {
+            continue;
+        }
+        const productInfo = JSON.parse(localStorage.getItem(key));
+        existingProducts.push({ productKey: key, ...productInfo });
+    }
+}
+
+function getGroceriesFromLocalStorage() {
+    const groceries = JSON.parse(localStorage.getItem("groceries")) || [];
+    existingGroceries = groceries;
+}
+
 function updateGreeting() {
     const currentHour = new Date().getHours();
     const greetingElement = document.getElementById("greeting");
@@ -59,14 +115,95 @@ groceries.forEach((grocery) => {
         ingredientList.appendChild(li);
     });
 
+    const removeButton = document.createElement("button");
+    removeButton.className =
+        "w-full lg:w-auto px-4 py-2 mt-2 rounded-full border border-red-500 text-xs font-medium bg-red-500 text-white";
+    removeButton.textContent = "Remove from List";
+    removeButton.addEventListener("click", () => {
+        removeFromList(grocery.name);
+    });
+
     const divider = document.createElement("hr");
     divider.className = "my-4 border-gray-300";
 
     recipeContainer.appendChild(recipeName);
     recipeContainer.appendChild(ingredientList);
+    recipeContainer.appendChild(removeButton);
     recipeContainer.appendChild(divider);
     ingredientsListContainer.appendChild(recipeContainer);
 });
+
+function removeFromList(recipeName) {
+    // Get the saved recipes from local storage
+    let savedRecipes = JSON.parse(localStorage.getItem("groceries")) || [];
+
+    // Remove the recipe by filtering it out of the array
+    savedRecipes = savedRecipes.filter(
+        (recipe) => recipe.name !== recipeName
+    );
+
+    // Update local storage with the new list
+    localStorage.setItem("groceries", JSON.stringify(savedRecipes));
+    getGroceriesFromLocalStorage();
+
+    if (isAuthenticated) {
+        storeData(
+            localStorage.getItem("userID"),
+            existingProducts,
+            existingGroceries,
+            score,
+            totalWaste,
+            co2Reduction,
+            count
+        );
+    }
+
+    // Optionally, you could refresh the page or update the UI to reflect the removal
+    location.reload();
+    console.log(`${recipeName} removed from list.`);
+}
+
+// Function to store user data from the database
+async function storeData(
+    userID,
+    products,
+    groceries,
+    score,
+    totalWaste,
+    co2Reduction,
+    count
+) {
+    const url =
+        "https://rvtkdasc90.execute-api.ap-southeast-2.amazonaws.com/prod/user-data";
+
+    const data = {
+        userID: userID,
+        products: products,
+        groceries: groceries,
+        score: score,
+        totalWaste: totalWaste,
+        co2Reduction: co2Reduction,
+        count: count,
+    };
+
+    try {
+        const response = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ body: JSON.stringify(data) }),
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        console.log("Data stored successfully:");
+    } catch (error) {
+        console.error("Error storing data:", error);
+    }
+}
 
 let map;
 let markers = [];
