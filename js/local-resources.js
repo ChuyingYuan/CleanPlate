@@ -2,6 +2,7 @@ window.onload = function () {
     updateGreeting();
     initMap();
     populateList();
+    switchView("map");
     const currentYear = new Date().getFullYear();
     document.getElementById("current-year").textContent = currentYear;
 };
@@ -46,6 +47,26 @@ async function fetchDataFromAPI() {
     }
 }
 
+// Function to switch between the list and map view
+window.switchView = function switchView(view) {
+    const listView = document.getElementById("donate-list");
+    const mapView = document.getElementById("donationMap");
+    const mapButton = document.getElementById("donationMapView")
+    const listButton = document.getElementById("donationListView")
+
+    if (view === "list") {
+        listView.style.display = "block";
+        mapView.style.display = "none";
+        listButton.classList.add('selected');
+        mapButton.classList.remove('selected');
+    } else if (view === "map") {
+        listView.style.display = "none";
+        mapView.style.display = "block";
+        mapButton.classList.add('selected');
+        listButton.classList.remove('selected');
+    }
+}
+
 // Function to render the donation list
 async function populateList() {
     const locations = await fetchDataFromAPI();
@@ -82,7 +103,7 @@ async function initMap() {
     const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
     const locations = await fetchDataFromAPI();
 
-    map = new Map(document.getElementById("map"), {
+    map = new Map(document.getElementById("donationMap"), {
         zoom: 12,
         center: { lat: -37.8136, lng: 144.9631 },
         mapTypeControl: false,

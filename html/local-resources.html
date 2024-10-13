@@ -271,29 +271,93 @@
     </nav>
 
     <main class="container mx-auto mt-2 px-4 sm:px-8 flex-grow">
-      <!-- Greeting -->
       <div class="mx-auto mt-10 sm:mt-16 sm:px-8">
+        <!-- Greeting -->
         <div class="grid grid-cols-1 md:grid-cols-3 items-center">
           <div id="greeting-container" class="flex items-center space-x-2">
             <div id="greeting" class="page-label text-xl font-bold"></div>
           </div>
         </div>
 
-        <div
-          class="grid grid-cols-1 gap-4 md:grid-cols-2 mt-4 mb-4"
-          id="donate"
-        >
-          <div class="col-span-1">
+        <!-- Local Resources -->
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-2 mt-4 mb-4">
+          <!-- Donation Locations -->
+          <div class="col-span-1" id="donate">
             <div class="wfs-container">
               <div class="list-view">
+                <div class="flex flex-col sm:flex-row gap-2 sm:gap-6 mb-4">
+                  <h2 class="text-xl font-bold">Donation Locations</h2>
+                  <button
+                    class="w-full lg:w-auto px-4 py-2 rounded-full border border-gray-300 text-sm font-medium"
+                    onclick="switchView('map')"
+                    id="donationMapView"
+                  >
+                    Map
+                  </button>
+                  <button
+                    class="w-full lg:w-auto px-4 py-2 rounded-full border border-gray-300 text-sm font-medium"
+                    onclick="switchView('list')"
+                    id="donationListView"
+                  >
+                    List
+                  </button>
+                </div>
                 <ul id="donate-list"></ul>
+                <div id="donationMap"></div>
               </div>
             </div>
           </div>
+
+          <!-- Compost -->
           <div class="col-span-1">
             <div class="wfs-container">
-              <div class="map-view">
-                <div id="map"></div>
+              <div class="list-view">
+                <h2 class="text-xl font-bold mb-4">Composting Resources</h2>
+                <div>
+                  <ul class="space-y-4">
+                    <li>
+                      <a
+                        href="https://www.melbourne.vic.gov.au/home-composting"
+                        target="_blank"
+                        class="hover:underline text-green-800"
+                        >Home Composting | City of Melbourne</a
+                      >
+                      <p class="text-gray-600">
+                        Learn how to start composting at home, with resources
+                        and tips provided by the City of Melbourne.
+                      </p>
+                      <hr class="h-px my-4 bg-gray-200 border-0" />
+                    </li>
+                    <li>
+                      <a
+                        href="https://www.melbourne.vic.gov.au/community-gardens-and-compost-hubs"
+                        target="_blank"
+                        class="hover:underline text-green-800"
+                        >Community Gardens and Compost Hubs | City of
+                        Melbourne</a
+                      >
+                      <p class="text-gray-600">
+                        Discover community gardens and compost hubs where you
+                        can drop off organic waste or join community composting
+                        efforts.
+                      </p>
+                      <hr class="h-px my-4 bg-gray-200 border-0" />
+                    </li>
+                    <li>
+                      <a
+                        href="https://compostrevolution.com.au/melbourne/"
+                        target="_blank"
+                        class="hover:underline text-green-800"
+                        >City of Melbourne's Compost Revolution</a
+                      >
+                      <p class="text-gray-600">
+                        Participate in the City of Melbourne's Compost
+                        Revolution program to get discounted composting tools
+                        and resources.
+                      </p>
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
           </div>

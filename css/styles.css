@@ -303,7 +303,11 @@ footer {
 .button404:hover,
 #foodRecognitionBtn.selected,
 #notification-link,
-.feature-card.selected {
+.feature-card.selected,
+#donationListView.selected,
+#donationMapView.selected,
+#donationListView:hover,
+#donationMapView:hover {
   background-color: #b7e72f;
 }
 
@@ -515,6 +519,12 @@ footer {
 #map {
   width: 100%;
   height: 62vh;
+  border-radius: 15px;
+}
+
+#donationMap {
+  width: 100%;
+  height: 53vh;
   border-radius: 15px;
 }
 

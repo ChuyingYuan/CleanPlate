@@ -112,6 +112,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Retrieve all products from local storage
     function getAllProductsFromLocalStorage() {
+        existingProducts = [];
         for (let i = 0; i < localStorage.length; i++) {
             const key = localStorage.key(i);
             if (['co2Reduction', 'score', 'totalWaste', 'count', 'userID', 'currentUser', 'groceries'].includes(key)) {
@@ -120,21 +121,33 @@ document.addEventListener("DOMContentLoaded", function () {
             const productInfo = JSON.parse(localStorage.getItem(key));
             existingProducts.push({ 'productKey': key, ...productInfo });
         }
+        console.log('Number of Existing Products: ', existingProducts.length);
     }
 
     function getGroceriesFromLocalStorage() {
+        existingGroceries = [];
         const groceries = JSON.parse(localStorage.getItem('groceries')) || [];
         existingGroceries = groceries;
+        console.log('Number of Existing Groceries: ', existingGroceries.length);
     }
 
     getAllProductsFromLocalStorage();
-    console.log('Number of Existing Products: ', existingProducts.length);
     getGroceriesFromLocalStorage();
-    console.log('Number of Existing Groceries: ', existingGroceries.length);
 
     // Function to store user data from the database
-    async function storeData(userID, products, groceries, score, totalWaste, co2Reduction, count) {
+    async function storeData() {
         const url = "https://rvtkdasc90.execute-api.ap-southeast-2.amazonaws.com/prod/user-data";
+
+        getAllProductsFromLocalStorage();
+        getGroceriesFromLocalStorage();
+
+        const userID = localStorage.getItem('userID');
+        const products = existingProducts;
+        const groceries = existingGroceries;
+        const count = parseInt(localStorage.getItem('count')) || 0;
+        const score = parseInt(localStorage.getItem('score')) || 0;
+        const totalWaste = parseFloat(localStorage.getItem('totalWaste')).toFixed(2) || 0;
+        const co2Reduction = parseFloat(localStorage.getItem('co2Reduction')).toFixed(2) || 0;
 
         const data = {
             userID: userID,
@@ -618,7 +631,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     }
                 }
                 if (isAuthenticated) {
-                    storeData(localStorage.getItem('userID'), existingProducts, existingGroceries, score, totalWaste.toFixed(2), co2Reduction.toFixed(2), count);
+                    storeData();
                 }
             })
     }
@@ -789,7 +802,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         localStorage.setItem(uniqueKey, JSON.stringify(productInfo));
                         existingProducts.push({ 'productKey': uniqueKey, ...productInfo });
                         if (isAuthenticated) {
-                            storeData(localStorage.getItem('userID'), existingProducts, existingGroceries, score, totalWaste.toFixed(2), co2Reduction.toFixed(2), count);
+                            storeData();
                         }
                         console.log(`Stored in local storage: ${uniqueKey}`, productInfo);
                     }
@@ -850,7 +863,7 @@ document.addEventListener("DOMContentLoaded", function () {
         localStorage.setItem(uniqueKey, JSON.stringify(productInfo));
         existingProducts.push({ 'productKey': uniqueKey, ...productInfo });
         if (isAuthenticated) {
-            storeData(localStorage.getItem('userID'), existingProducts, existingGroceries, score, totalWaste.toFixed(2), co2Reduction.toFixed(2), count);
+            storeData();
         }
         // console.log(`Stored in local storage: ${uniqueKey}`, productInfo);
         return storageInfo;
@@ -1267,7 +1280,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         existingProducts = existingProducts.filter(product => product.productKey !== key);
         if (isAuthenticated) {
-            storeData(localStorage.getItem('userID'), existingProducts, existingGroceries, score, totalWaste.toFixed(2), co2Reduction.toFixed(2), count);
+            storeData();
         }
 
         modal.classList.add('hidden');
@@ -1312,7 +1325,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         if (isAuthenticated) {
-            storeData(localStorage.getItem('userID'), existingProducts, existingGroceries, score, totalWaste.toFixed(2), co2Reduction.toFixed(2), count);
+            storeData();
         }
         modal.classList.add('hidden');
 
@@ -1542,7 +1555,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         if (isAuthenticated) {
-            storeData(localStorage.getItem('userID'), existingProducts, existingGroceries, score, totalWaste.toFixed(2), co2Reduction.toFixed(2), count);
+            storeData();
         }
 
         closeModal();

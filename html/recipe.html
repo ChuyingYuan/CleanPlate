@@ -345,6 +345,7 @@
 
       // Retrieve all products from local storage
       function getAllProductsFromLocalStorage() {
+        existingProducts = [];
         for (let i = 0; i < localStorage.length; i++) {
           const key = localStorage.key(i);
           if (
@@ -363,17 +364,18 @@
           const productInfo = JSON.parse(localStorage.getItem(key));
           existingProducts.push({ productKey: key, ...productInfo });
         }
+        console.log("Number of Existing Products: ", existingProducts.length);
       }
 
       function getGroceriesFromLocalStorage() {
+        existingGroceries = [];
         const groceries = JSON.parse(localStorage.getItem("groceries")) || [];
         existingGroceries = groceries;
+        console.log("Number of Existing Groceries: ", existingGroceries.length);
       }
 
       getAllProductsFromLocalStorage();
-      console.log("Number of Existing Products: ", existingProducts.length);
       getGroceriesFromLocalStorage();
-      console.log("Number of Existing Groceries: ", existingGroceries.length);
 
       window.onload = function () {
         updateGreeting();
@@ -520,17 +522,10 @@
           // Save the updated list to local storage
           localStorage.setItem("groceries", JSON.stringify(updatedRecipes));
           getGroceriesFromLocalStorage();
+          getAllProductsFromLocalStorage();
 
           if (isAuthenticated) {
-            storeData(
-              localStorage.getItem("userID"),
-              existingProducts,
-              existingGroceries,
-              score,
-              totalWaste,
-              co2Reduction,
-              count
-            );
+            storeData();
           }
 
           // Redirect to the new page to display the list
@@ -552,17 +547,10 @@
         // Update local storage with the new list
         localStorage.setItem("groceries", JSON.stringify(savedRecipes));
         getGroceriesFromLocalStorage();
+        getAllProductsFromLocalStorage();
 
         if (isAuthenticated) {
-          storeData(
-            localStorage.getItem("userID"),
-            existingProducts,
-            existingGroceries,
-            score,
-            totalWaste,
-            co2Reduction,
-            count
-          );
+          storeData();
         }
 
         // Optionally, you could refresh the page or update the UI to reflect the removal
@@ -570,17 +558,22 @@
       }
 
       // Function to store user data from the database
-      async function storeData(
-        userID,
-        products,
-        groceries,
-        score,
-        totalWaste,
-        co2Reduction,
-        count
-      ) {
+      async function storeData() {
         const url =
           "https://rvtkdasc90.execute-api.ap-southeast-2.amazonaws.com/prod/user-data";
+
+        getAllProductsFromLocalStorage();
+        getGroceriesFromLocalStorage();
+
+        const userID = localStorage.getItem("userID");
+        const products = existingProducts;
+        const groceries = existingGroceries;
+        const count = parseInt(localStorage.getItem("count")) || 0;
+        const score = parseInt(localStorage.getItem("score")) || 0;
+        const totalWaste =
+          parseFloat(localStorage.getItem("totalWaste")).toFixed(2) || 0;
+        const co2Reduction =
+          parseFloat(localStorage.getItem("co2Reduction")).toFixed(2) || 0;
 
         const data = {
           userID: userID,

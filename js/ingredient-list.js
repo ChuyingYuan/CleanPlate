@@ -36,30 +36,27 @@ if (localStorage.getItem("userID")) {
 
 // Retrieve all products from local storage
 function getAllProductsFromLocalStorage() {
+    existingProducts = [];
     for (let i = 0; i < localStorage.length; i++) {
         const key = localStorage.key(i);
-        if (
-            [
-                "co2Reduction",
-                "score",
-                "totalWaste",
-                "count",
-                "userID",
-                "currentUser",
-                "groceries",
-            ].includes(key)
-        ) {
+        if (['co2Reduction', 'score', 'totalWaste', 'count', 'userID', 'currentUser', 'groceries'].includes(key)) {
             continue;
         }
         const productInfo = JSON.parse(localStorage.getItem(key));
-        existingProducts.push({ productKey: key, ...productInfo });
+        existingProducts.push({ 'productKey': key, ...productInfo });
     }
+    console.log('Number of Existing Products: ', existingProducts.length);
 }
 
 function getGroceriesFromLocalStorage() {
-    const groceries = JSON.parse(localStorage.getItem("groceries")) || [];
+    existingGroceries = [];
+    const groceries = JSON.parse(localStorage.getItem('groceries')) || [];
     existingGroceries = groceries;
+    console.log('Number of Existing Groceries: ', existingGroceries.length);
 }
+
+getAllProductsFromLocalStorage();
+getGroceriesFromLocalStorage();
 
 function updateGreeting() {
     const currentHour = new Date().getHours();
@@ -144,18 +141,8 @@ function removeFromList(recipeName) {
 
     // Update local storage with the new list
     localStorage.setItem("groceries", JSON.stringify(savedRecipes));
-    getGroceriesFromLocalStorage();
-
     if (isAuthenticated) {
-        storeData(
-            localStorage.getItem("userID"),
-            existingProducts,
-            existingGroceries,
-            score,
-            totalWaste,
-            co2Reduction,
-            count
-        );
+        storeData();
     }
 
     // Optionally, you could refresh the page or update the UI to reflect the removal
@@ -164,17 +151,19 @@ function removeFromList(recipeName) {
 }
 
 // Function to store user data from the database
-async function storeData(
-    userID,
-    products,
-    groceries,
-    score,
-    totalWaste,
-    co2Reduction,
-    count
-) {
-    const url =
-        "https://rvtkdasc90.execute-api.ap-southeast-2.amazonaws.com/prod/user-data";
+async function storeData() {
+    const url = "https://rvtkdasc90.execute-api.ap-southeast-2.amazonaws.com/prod/user-data";
+
+    getAllProductsFromLocalStorage();
+    getGroceriesFromLocalStorage();
+
+    const userID = localStorage.getItem('userID');
+    const products = existingProducts;
+    const groceries = existingGroceries;
+    const count = parseInt(localStorage.getItem('count')) || 0;
+    const score = parseInt(localStorage.getItem('score')) || 0;
+    const totalWaste = parseFloat(localStorage.getItem('totalWaste')).toFixed(2) || 0;
+    const co2Reduction = parseFloat(localStorage.getItem('co2Reduction')).toFixed(2) || 0;
 
     const data = {
         userID: userID,
@@ -183,25 +172,25 @@ async function storeData(
         score: score,
         totalWaste: totalWaste,
         co2Reduction: co2Reduction,
-        count: count,
+        count: count
     };
 
     try {
         const response = await fetch(url, {
-            method: "POST",
+            method: 'POST',
             headers: {
-                "Content-Type": "application/json",
+                'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ body: JSON.stringify(data) }),
+            body: JSON.stringify({ body: JSON.stringify(data) })
         });
 
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        console.log("Data stored successfully:");
+        console.log('Data stored successfully:');
     } catch (error) {
-        console.error("Error storing data:", error);
+        console.error('Error storing data:', error);
     }
 }
 

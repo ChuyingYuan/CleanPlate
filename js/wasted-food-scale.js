@@ -26,6 +26,7 @@ if (localStorage.getItem('co2Reduction')) {
 
 // Retrieve all products from local storage
 function getAllProductsFromLocalStorage() {
+    existingProducts = [];
     for (let i = 0; i < localStorage.length; i++) {
         const key = localStorage.key(i);
         if (['co2Reduction', 'score', 'totalWaste', 'count', 'userID', 'currentUser', 'groceries'].includes(key)) {
@@ -34,17 +35,18 @@ function getAllProductsFromLocalStorage() {
         const productInfo = JSON.parse(localStorage.getItem(key));
         existingProducts.push({ 'productKey': key, ...productInfo });
     }
+    console.log('Number of Existing Products: ', existingProducts.length);
 }
 
 function getGroceriesFromLocalStorage() {
+    existingGroceries = [];
     const groceries = JSON.parse(localStorage.getItem('groceries')) || [];
     existingGroceries = groceries;
+    console.log('Number of Existing Groceries: ', existingGroceries.length);
 }
 
 getAllProductsFromLocalStorage();
-console.log('Number of Existing Products: ', existingProducts.length);
 getGroceriesFromLocalStorage();
-console.log('Number of Existing Groceries: ', existingGroceries.length);
 
 updateDashboard();
 
@@ -53,8 +55,19 @@ if (localStorage.getItem('userID')) {
 }
 
 // Function to store user data from the database
-async function storeData(userID, products, groceries, score, totalWaste, co2Reduction, count) {
+async function storeData() {
     const url = "https://rvtkdasc90.execute-api.ap-southeast-2.amazonaws.com/prod/user-data";
+
+    getAllProductsFromLocalStorage();
+    getGroceriesFromLocalStorage();
+
+    const userID = localStorage.getItem('userID');
+    const products = existingProducts;
+    const groceries = existingGroceries;
+    const count = parseInt(localStorage.getItem('count')) || 0;
+    const score = parseInt(localStorage.getItem('score')) || 0;
+    const totalWaste = parseFloat(localStorage.getItem('totalWaste')).toFixed(2) || 0;
+    const co2Reduction = parseFloat(localStorage.getItem('co2Reduction')).toFixed(2) || 0;
 
     const data = {
         userID: userID,
@@ -92,21 +105,20 @@ function isFoodEdible(answer) {
     if (answer === 'yes') {
         document.getElementById('planToConsume').classList.remove('hidden');
     } else {
-        document.getElementById('feedAnimalsCheck').classList.remove('hidden');
+        document.getElementById('compostCheck').classList.remove('hidden');
     }
 }
 
 // Function to handle the user's response to whether they plan to consume or donate the food
 function consumeOrDonate(decision) {
     document.getElementById('planToConsume').classList.add('hidden');
+    count += 1;
 
     if (decision === 'consume') {
-        score += 5;
-        count += 1;
+        score += 3;
         showFeedback(decision, "Great! Plan to eat it within your next meal(s) or use it in a recipe.");
     } else {
-        score += 4;
-        count += 1;
+        score += 2;
         showFeedback(decision, "Donate the food to a local food bank or community kitchen.");
     }
     navigateToRelatedPage(decision);
@@ -115,52 +127,15 @@ function consumeOrDonate(decision) {
     updateDashboard();
 }
 
-// Function to handle the user's response to whether they plan to compost or use for biofuel
-function compostOrBiofuel(decision) {
+// Function to handle the user's response to whether they plan to compost or dispose of the food
+function compostOrLandfill(decision) {
     document.getElementById('compostCheck').classList.add('hidden');
+    count += 1
 
     if (decision === 'compost') {
         score += 1;
-        count += 1
         showFeedback(decision, "Compost it at home or through community composting.");
     } else {
-        document.getElementById('biofuelCheck').classList.remove('hidden');
-    }
-    navigateToRelatedPage(decision);
-    localStorage.setItem('count', count);
-    localStorage.setItem('score', score);
-    updateDashboard();
-}
-
-// Function to handle the user's response to whether the food is suitable for animals
-function isFoodForAnimals(answer) {
-    document.getElementById('feedAnimalsCheck').classList.add('hidden');
-
-    if (answer === 'yes') {
-        score += 2;
-        count += 1;
-        showFeedback('Feed Animals', "Repurpose the food scraps for animal feed.");
-        navigateToRelatedPage('Feed Animals');
-    } else {
-        document.getElementById('compostCheck').classList.remove('hidden');
-    }
-    localStorage.setItem('count', count);
-    localStorage.setItem('score', score);
-    updateDashboard();
-}
-
-// Function to handle the user's response to whether the food can be used for anaerobic digestion
-function canUseForBiofuel(answer) {
-    document.getElementById('biofuelCheck').classList.add('hidden');
-    let decision = '';
-
-    if (answer === 'yes') {
-        score += 1;
-        count += 1;
-        decision = 'Anaerobic Digestion';
-        showFeedback(decision, "Participate in a local food waste-to-energy program (Anaerobic Digestion).");
-    } else {
-        count += 1;
         decision = 'landfill';
         showFeedback(decision, "Dispose of it properly and work on reducing waste in the future.");
     }
@@ -174,7 +149,7 @@ function canUseForBiofuel(answer) {
 function showFeedback(decision, message) {
     // Store user data from the database if user is signed in
     if (isAuthenticated) {
-        storeData(localStorage.getItem('userID'), existingProducts, existingGroceries, score, totalWaste.toFixed(2), co2Reduction.toFixed(2), count);
+        storeData();
     }
     document.getElementById('finalDecision').classList.remove('hidden');
     document.getElementById('finalDecisionText').textContent = message;
@@ -254,7 +229,7 @@ async function logWaste() {
 
                 // Store user data from the database if user is signed in
                 if (isAuthenticated) {
-                    storeData(localStorage.getItem('userID'), existingProducts, existingGroceries, score, totalWaste.toFixed(2), co2Reduction.toFixed(2), count);
+                    storeData();
                 }
                 updateDashboard();
                 restartTool();
@@ -283,8 +258,6 @@ function restartTool() {
     document.getElementById('wasteAmount').value = '';
     document.getElementById('navigating').classList.add('hidden');
     document.getElementById('navigateButton').classList.add('hidden');
-    document.getElementById('feedAnimalsCheck').classList.add('hidden');
-    document.getElementById('biofuelCheck').classList.add('hidden');
 
     updateDashboard();
 }
@@ -302,7 +275,7 @@ function updateDashboard() {
     document.getElementById('count').textContent = storedCount;
 
     if (count > 0) {
-        percent = (score / (count * 5)) * 100;
+        percent = (score / (count * 3)) * 100;
     } else {
         percent = 0;
     }

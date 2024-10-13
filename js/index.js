@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function () {
         displayExpiringItems();
 
         if (count > 0) {
-            percent = (score / (count * 5)) * 100;
+            percent = (score / (count * 3)) * 100;
         } else {
             percent = 0;
         }
